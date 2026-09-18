@@ -21,6 +21,8 @@ from __future__ import annotations
 
 from typing import Optional
 
+from enrichment.market_news import clean_security_name
+
 SYSTEM_PROMPT = """\
 You are an AI briefing assistant inside URO Advisor Pro, a wealth-advisory \
 platform. A wealth manager is about to call or meet a client, often on \
@@ -175,8 +177,8 @@ def _format_priorities(priorities: list[dict]) -> str:
             )
         elif item["type"] == "concentration":
             lines.append(
-                f"- {item.get('security_name')} makes up {item.get('weight'):.1%} "
-                f"of the portfolio — a concentrated single position."
+                f"- {clean_security_name(item.get('security_name', ''))} makes up "
+                f"{item.get('weight'):.1%} of the portfolio — a concentrated single position."
             )
     return "\n".join(lines)
 
@@ -189,7 +191,8 @@ def _format_risk_contributors(contributors: list[dict]) -> str:
     for c in contributors:
         share = c.get("share_of_portfolio_volatility")
         share_str = f"{share:.0%}" if share is not None else "an unknown share"
-        lines.append(f"- {c.get('SecurityName')}: {share_str} of portfolio risk (volatility contribution).")
+        name = clean_security_name(c.get("SecurityName", ""))
+        lines.append(f"- {name}: {share_str} of portfolio risk (volatility contribution).")
     return "\n".join(lines)
 
 

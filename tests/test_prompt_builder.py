@@ -121,6 +121,14 @@ def test_priorities_formats_saa_deviation_below():
 def test_priorities_formats_concentration():
     text = _format_priorities([{"type": "concentration", "security_name": "Nestle SA", "weight": 0.35}])
     assert "Nestle SA" in text
+
+
+def test_priorities_formats_concentration_cleans_raw_security_name():
+    text = _format_priorities(
+        [{"type": "concentration", "security_name": "Namen-Aktie Nestle SA", "weight": 0.35}]
+    )
+    assert "Namen-Aktie" not in text
+    assert "Nestle SA" in text
     assert "35.0%" in text
 
 
@@ -137,6 +145,14 @@ def test_risk_contributors_formats_share():
     )
     assert "Nestle SA" in text
     assert "22%" in text
+
+
+def test_risk_contributors_cleans_raw_security_name():
+    text = _format_risk_contributors(
+        [{"SecurityName": "Namen-Aktie Sika AG", "share_of_portfolio_volatility": 0.31}]
+    )
+    assert "Namen-Aktie" not in text
+    assert "Sika AG" in text
 
 
 def test_risk_contributors_handles_missing_share():

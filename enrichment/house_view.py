@@ -149,9 +149,19 @@ def compare_portfolio_to_house_view(
         if stance == "neutral" or deviation is None:
             relative_position = "not_applicable"
         elif stance == "overweight":
-            relative_position = "aligned" if deviation > 0 else "underexposed"
+            # Exactly on target (deviation == 0) counts as aligned, not
+            # underexposed — the client is already at least at the
+            # baseline the bank's overweight call would push them toward.
+            relative_position = "aligned" if deviation >= 0 else "underexposed"
         elif stance == "underweight":
-            relative_position = "aligned" if deviation < 0 else "overexposed"
+            # Symmetric fix: exactly on target counts as aligned, not
+            # overexposed — being at (not above) your own target is
+            # compliant with an underweight call, not a breach of it.
+            # (This also correctly handles a degenerate 0% actual vs. 0%
+            # target row — e.g. a category the portfolio's SAA doesn't
+            # meaningfully hold at all — as "aligned" rather than
+            # fabricating an "overexposed" claim out of two zeros.)
+            relative_position = "aligned" if deviation <= 0 else "overexposed"
         else:
             relative_position = "not_applicable"
 

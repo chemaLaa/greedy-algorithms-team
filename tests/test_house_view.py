@@ -66,3 +66,21 @@ def test_category_with_no_matching_saa_row_is_skipped():
 def test_empty_portfolio_returns_empty_list():
     result = compare_portfolio_to_house_view({}, TEST_HOUSE_VIEW)
     assert result == []
+
+
+def test_exact_zero_deviation_is_aligned_not_overexposed_for_underweight():
+    # Real bug found via a live client (Spock): actual=0.0%, target=0.0%
+    # for an "underweight" house view category incorrectly came back as
+    # "overexposed" — deviation is exactly 0, which strict "< 0" excludes.
+    portfolio = _portfolio(shares_dev=0.0, bonds_dev=0.0)
+    result = compare_portfolio_to_house_view(portfolio, TEST_HOUSE_VIEW)
+    bonds = next(r for r in result if r["category"] == "Bonds")
+    assert bonds["relative_position"] == "aligned"
+
+
+def test_exact_zero_deviation_is_aligned_not_underexposed_for_overweight():
+    # Symmetric case for "overweight" stance.
+    portfolio = _portfolio(shares_dev=0.0, bonds_dev=0.0)
+    result = compare_portfolio_to_house_view(portfolio, TEST_HOUSE_VIEW)
+    shares = next(r for r in result if r["category"] == "Shares")
+    assert shares["relative_position"] == "aligned"
