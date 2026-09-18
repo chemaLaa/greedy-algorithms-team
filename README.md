@@ -30,8 +30,8 @@ python3 run_tests.py          # zero dependencies, works anywhere
 pytest tests/                 # same test files, nicer output
 ```
 
-106 tests, covering `data_layer`, `analysis_layer`, `state`, and
-`enrichment`:
+147 tests, covering `data_layer`, `analysis_layer`, `state`, `enrichment`,
+and `synthesis`:
 - `loader.py` — valid/invalid file shapes
 - `reference_index.py` — id lookups, the plain→SAA category translation,
   the catch-all inference heuristic (including its ambiguous-refuses-to-guess
@@ -55,6 +55,10 @@ pytest tests/                 # same test files, nicer output
   coverage, locked in by a regression test), search-term selection including
   the fund→sector-theme fallback (see below); the actual network fetch is
   NOT covered by this suite (see `enrichment` section)
+- `synthesis/context_builder.py` — assembling every layer's output into
+  one `BriefingContext`, including the state-diff-vs-note-proxy fallback
+- `synthesis/prompt_builder.py` — every formatting function tested in
+  isolation, plus the house-view actionable-vs-aligned filtering logic
 
 `tests/test_real_data_regression.py` re-runs the checks we did by hand
 against the real 47-client dataset (all clients build without error, no
@@ -261,6 +265,54 @@ still works before a demo (APIs change): `pip install yfinance`, then fetch
 a few real cleaned security names and a few fund-derived sector names, check
 you're getting real articles back, not silent empty results. `FakeNewsProvider`
 exists for writing tests without hitting the network.
+
+## `synthesis` — turning facts into the actual briefing
+
+| File | Responsibility |
+|---|---|
+| `context_builder.py` | Assembles every upstream layer's output into one `BriefingContext` dict, per portfolio. Plain data, no prose. |
+| `prompt_builder.py` | Turns a `BriefingContext` into the actual `{system, messages}` prompt. This is where the case's "one coherent narrative, not stitched summaries" requirement is enforced. |
+| `briefing_generator.py` | *(not yet built)* — the actual model call. |
+
+```python
+from synthesis.context_builder import build_briefing_context
+from synthesis.prompt_builder import build_prompt
+
+context = build_briefing_context(client_view, priority_bundle, state_result, house_view_alignment, news_articles)
+prompt = build_prompt(context)
+# prompt["system"]  -> fixed instructions: 3 required sections, 4 required
+#                       questions, "one narrative" constraint, JSON output format
+# prompt["messages"] -> [{"role": "user", "content": "<all the client's facts, as prose>"}]
+```
+
+**Design**: `prompt_builder.py` is split into two testable pieces on purpose.
+`context_to_prose()` converts every part of the context into readable,
+labeled text fragments first — client/portfolio summary, performance,
+priorities, risk contributors, change since last interaction, house view,
+news — each with its own formatting function, each independently tested
+with zero LLM calls. `build_prompt()` then wraps those fragments with the
+fixed system instructions. Nothing here calls a model; that's
+`briefing_generator.py`'s job, next.
+
+**Two judgment calls baked into the system prompt, worth knowing:**
+- The model is explicitly told the priority list's ranking is a simple
+  rule-based sort (compliance severity), not a judgment call about what
+  actually matters most for this client — and told to use its own judgment
+  rather than just narrate the list in order. This was a known weak spot in
+  `analysis_layer/prioritize.py` (flat 20%-threshold concentration flag, no
+  weighting between issue types); rather than fix the ranking logic itself,
+  the fix is pushed to the layer that's actually meant to make judgment
+  calls.
+- House view alignment is filtered before it reaches the prompt: only
+  `underexposed`/`overexposed` categories (capped at 5) get full detail,
+  `aligned` categories are compressed into one summary line. Without this,
+  a portfolio with many SAA categories produced a house-view section longer
+  than the rest of the prompt combined — almost entirely "nothing to act on
+  here" content that would've buried the genuinely interesting divergences.
+
+**Validated against all 47 real clients**: no crashes, every prompt stays
+well under a sanity-checked length ceiling (max observed ~4.8K characters),
+client names and required section keys always present in the output.
 
 ## The one non-obvious piece: category translation
 
