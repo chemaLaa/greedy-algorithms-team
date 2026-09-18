@@ -198,3 +198,50 @@ def test_state_diff_detects_a_real_manufactured_change():
     diff = result2["portfolios"][portfolio_id]["diff"]
     assert resolved_code in diff["violations_resolved"]
     assert abs(diff["portfolio_value_change"]["change_pct"] - 0.08) < 1e-6
+
+
+def test_security_name_cleaner_coverage_on_real_data():
+    if not REAL_DATA_AVAILABLE:
+        print(f"SKIPPED: {SKIP_REASON}")
+        return
+    from enrichment.market_news import clean_security_name
+
+    _, reference, _ = _load_real()
+    names = [s["Name"] for s in reference["Securities"]]
+
+    unchanged = [n for n in names if clean_security_name(n) == n and " - " not in n]
+    coverage = 1 - (len(unchanged) / len(names))
+
+    # Known-good baseline from development: ~95.8% of real security names
+    # get meaningfully cleaned. A regression below 90% would mean a
+    # naming pattern the dataset actually uses broke silently.
+    assert coverage >= 0.90, (
+        f"security name cleaner coverage dropped to {coverage:.1%} "
+        f"(expected >= 90%) — {len(unchanged)} names now pass through unchanged"
+    )
+
+    # Never crashes, never returns an empty string for a non-empty input.
+    for n in names:
+        cleaned = clean_security_name(n)
+        assert cleaned.strip() != ""
+
+
+def test_house_view_comparison_runs_clean_across_all_47_clients():
+    if not REAL_DATA_AVAILABLE:
+        print(f"SKIPPED: {SKIP_REASON}")
+        return
+    from enrichment.house_view import compare_portfolio_to_house_view
+
+    clients, _, ref = _load_real()
+    seen_positions = set()
+    for c in clients:
+        view = build_client_view(c, ref)
+        for portfolio in view["portfolios"]:
+            result = compare_portfolio_to_house_view(portfolio)
+            for item in result:
+                seen_positions.add(item["relative_position"])
+
+    # All four outcomes should genuinely occur somewhere across 47 real
+    # clients — if only one or two ever show up, the comparison logic is
+    # probably not discriminating correctly.
+    assert seen_positions == {"aligned", "underexposed", "overexposed", "not_applicable"}
