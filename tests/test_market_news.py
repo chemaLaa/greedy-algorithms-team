@@ -74,6 +74,87 @@ def test_clean_security_name_never_returns_empty_string():
         assert isinstance(result, str)
 
 
+def test_relevant_search_terms_fund_with_industry_breakdown_uses_largest_sector():
+    from data_layer import ReferenceIndex
+
+    reference = {
+        "Securities": [
+            {"Id": 100, "Name": "Some Fund", "IsUnbundlingEnabled": True, "SAA_AssetClassName": "Shares"},
+            # anchors so IndustryName -> SAA_IndustryName is derivable
+            {"Id": 200, "IndustryName": "Financials", "SAA_IndustryName": "Financials"},
+            {"Id": 201, "IndustryName": "Health Care", "SAA_IndustryName": "Health Care"},
+        ],
+        "FundUnbundlingMappings": [
+            {"FundSecurityId": 100, "IndustryName": "Financials", "Weight": 70.0},
+            {"FundSecurityId": 100, "IndustryName": "Health Care", "Weight": 30.0},
+        ],
+    }
+    ref = ReferenceIndex(reference)
+    priorities_bundle = {
+        "top_risk_contributors": [
+            {
+                "SecurityId": 100,
+                "SecurityName": "Anteile -X- Some Issuer - Some Fund",
+                "share_of_portfolio_volatility": 0.3,
+            }
+        ],
+        "priorities": [],
+    }
+    terms = relevant_search_terms({}, priorities_bundle, ref=ref)
+    assert terms[0]["type"] == "sector"
+    assert terms[0]["query"] == "Financials"  # 70% > 30%, largest wins
+
+
+def test_relevant_search_terms_fund_without_breakdown_falls_back_to_asset_class():
+    from data_layer import ReferenceIndex
+
+    reference = {
+        "Securities": [
+            {"Id": 100, "Name": "Some Fund", "IsUnbundlingEnabled": True, "SAA_AssetClassName": "Bonds"}
+        ],
+        "FundUnbundlingMappings": [],
+    }
+    ref = ReferenceIndex(reference)
+    priorities_bundle = {
+        "top_risk_contributors": [
+            {"SecurityId": 100, "SecurityName": "Some Fund", "share_of_portfolio_volatility": 0.1}
+        ],
+        "priorities": [],
+    }
+    terms = relevant_search_terms({}, priorities_bundle, ref=ref)
+    assert terms[0]["type"] == "sector"
+    assert terms[0]["query"] == "Bonds"
+
+
+def test_relevant_search_terms_without_ref_uses_security_name_even_for_funds():
+    # No ref supplied — can't detect fund status, falls back to the old
+    # name-based behavior rather than erroring.
+    priorities_bundle = {
+        "top_risk_contributors": [
+            {"SecurityName": "Anteile -X- Some Fund", "share_of_portfolio_volatility": 0.1}
+        ],
+        "priorities": [],
+    }
+    terms = relevant_search_terms({}, priorities_bundle)
+    assert terms[0]["type"] == "security"
+
+
+def test_relevant_search_terms_non_fund_with_ref_still_uses_security_name():
+    from data_layer import ReferenceIndex
+
+    reference = {"Securities": [{"Id": 5, "Name": "Nestle SA", "IsUnbundlingEnabled": False}]}
+    ref = ReferenceIndex(reference)
+    priorities_bundle = {
+        "top_risk_contributors": [
+            {"SecurityId": 5, "SecurityName": "Namen-Aktie Nestle SA", "share_of_portfolio_volatility": 0.2}
+        ],
+        "priorities": [],
+    }
+    terms = relevant_search_terms({}, priorities_bundle, ref=ref)
+    assert terms[0]["type"] == "security"
+    assert terms[0]["query"] == "Nestle SA"
+
+
 def test_relevant_search_terms_uses_cleaned_names():
     priorities_bundle = {
         "top_risk_contributors": [

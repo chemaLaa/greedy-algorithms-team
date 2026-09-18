@@ -245,3 +245,34 @@ def test_house_view_comparison_runs_clean_across_all_47_clients():
     # clients — if only one or two ever show up, the comparison logic is
     # probably not discriminating correctly.
     assert seen_positions == {"aligned", "underexposed", "overexposed", "not_applicable"}
+
+
+def test_briefing_context_builder_runs_clean_across_all_47_clients():
+    if not REAL_DATA_AVAILABLE:
+        print(f"SKIPPED: {SKIP_REASON}")
+        return
+    import tempfile
+    from pathlib import Path
+
+    from analysis_layer import build_client_priorities
+    from enrichment.house_view import compare_portfolio_to_house_view
+    from state import refresh_client_state
+    from synthesis.context_builder import build_briefing_context
+
+    clients, _, ref = _load_real()
+    state_dir = Path(tempfile.mkdtemp())
+
+    for c in clients:
+        view = build_client_view(c, ref)
+        bundles = build_client_priorities(view, ref)
+        state_result = refresh_client_state(view, bundles, state_dir=state_dir)
+
+        for portfolio, bundle in zip(view["portfolios"], bundles):
+            portfolio_id = str(portfolio["PortfolioId"])
+            house_view = compare_portfolio_to_house_view(portfolio)
+            context = build_briefing_context(
+                view, bundle, state_result["portfolios"][portfolio_id], house_view, []
+            )
+            assert context["client"]["name"]
+            assert context["portfolio"]["portfolio_id"] == portfolio["PortfolioId"]
+            assert context["change_since_last_interaction"]["source"] == "state_diff"

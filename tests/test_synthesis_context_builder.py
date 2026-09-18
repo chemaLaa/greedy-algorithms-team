@@ -1,0 +1,86 @@
+from helpers import first_client
+from data_layer import build_client_view
+from analysis_layer import build_client_priorities
+from synthesis.context_builder import build_briefing_context
+
+
+def _view_and_bundle():
+    client, ref = first_client()
+    view = build_client_view(client, ref)
+    bundles = build_client_priorities(view, ref)
+    return view, bundles[0]
+
+
+def test_client_section_populated():
+    view, bundle = _view_and_bundle()
+    context = build_briefing_context(view, bundle)
+    assert context["client"]["name"] == "Anna Meier"
+    assert context["client"]["risk_profile"] == "Balanced"
+
+
+def test_client_section_handles_missing_risk_profile():
+    view, bundle = _view_and_bundle()
+    view = {**view, "risk_profile": None, "esg_profile": None}
+    context = build_briefing_context(view, bundle)
+    assert context["client"]["risk_profile"] is None
+    assert context["client"]["esg_profile"] is None
+
+
+def test_portfolio_section_matches_the_right_portfolio():
+    view, bundle = _view_and_bundle()
+    context = build_briefing_context(view, bundle)
+    assert context["portfolio"]["portfolio_id"] == bundle["portfolio_id"]
+    assert context["portfolio"]["portfolio_name"] == "Vorsorge Indiv"
+    assert context["portfolio"]["value"] == 500000
+
+
+def test_priorities_and_risk_contributors_passed_through():
+    view, bundle = _view_and_bundle()
+    context = build_briefing_context(view, bundle)
+    assert context["priorities"] == bundle["priorities"]
+    assert context["top_risk_contributors"] == bundle["top_risk_contributors"]
+
+
+def test_change_section_uses_state_diff_when_provided():
+    view, bundle = _view_and_bundle()
+    fake_state_result = {
+        "snapshot": {"portfolio_value": 500000},
+        "diff": {"is_first_interaction": True, "violations_new": ["X"]},
+    }
+    context = build_briefing_context(view, bundle, state_result=fake_state_result)
+    change = context["change_since_last_interaction"]
+    assert change["source"] == "state_diff"
+    assert change["is_first_interaction"] is True
+    assert change["details"]["violations_new"] == ["X"]
+
+
+def test_change_section_falls_back_to_note_proxy_without_state():
+    view, bundle = _view_and_bundle()
+    context = build_briefing_context(view, bundle, state_result=None)
+    change = context["change_since_last_interaction"]
+    assert change["source"] == "note_date_proxy"
+    assert change["is_first_interaction"] is None
+    assert change["details"] == bundle["change_since_last_interaction"]
+
+
+def test_house_view_and_news_default_to_empty_lists():
+    view, bundle = _view_and_bundle()
+    context = build_briefing_context(view, bundle)
+    assert context["house_view_alignment"] == []
+    assert context["market_news"] == []
+
+
+def test_house_view_and_news_pass_through_when_given():
+    view, bundle = _view_and_bundle()
+    house_view = [{"category": "Shares", "relative_position": "aligned"}]
+    news = [{"title": "Test"}]
+    context = build_briefing_context(view, bundle, house_view_alignment=house_view, news_articles=news)
+    assert context["house_view_alignment"] == house_view
+    assert context["market_news"] == news
+
+
+def test_missing_portfolio_id_does_not_crash():
+    view, bundle = _view_and_bundle()
+    bad_bundle = {**bundle, "portfolio_id": 999999}  # no matching portfolio
+    context = build_briefing_context(view, bad_bundle)
+    assert context["portfolio"]["value"] is None
