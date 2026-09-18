@@ -15,13 +15,25 @@ network access and ARE fully tested (see tests/test_market_news.py).
 `YahooFinanceNewsProvider`, at the bottom, makes real network calls via
 yfinance and has NOT been executed against a live network in this
 environment (no network access here) — test it on your own machine
-before relying on it. See its docstring for a known resolution risk
-(company name -> ticker) worth checking early.
+before relying on it.
+
+VERIFIED ON REAL NETWORK (by Hamza, not in this sandbox): individual
+operating companies (e.g. "Novartis AG", "Sandoz Group AG") return real
+news reliably. Fund/ETF/index names (e.g. "CSIF (CH) Equity Switzerland
+Large Cap Blue", "MSCI World Socially Responsible UCITS ETF") return
+NOTHING — 0/6 in manual testing — because they aren't "story" securities
+with their own news coverage, unlike an operating company. Since a large
+share of this dataset's holdings are funds, `relevant_search_terms()`
+below detects a fund position (via IsUnbundlingEnabled, when a
+ReferenceIndex is supplied) and searches its largest underlying sector
+exposure instead of its own name — both more likely to return real news,
+and arguably more relevant to the case's "connection to the portfolio"
+requirement than company news about the ETF issuer would be anyway.
 """
 from __future__ import annotations
 
 import re
-from typing import Protocol
+from typing import Optional, Protocol
 
 
 def clean_security_name(raw_name: str) -> str:
@@ -137,7 +149,31 @@ class NewsProvider(Protocol):
         ...
 
 
-def relevant_search_terms(portfolio: dict, priorities_bundle: dict, top_n: int = 3) -> list[dict]:
+def _fund_theme_query(security_id: int, ref) -> Optional[str]:
+    """
+    For a fund/ETF position, picks a sector-level search theme instead of
+    the fund's own name: its single largest underlying Industry exposure
+    (via data_layer.fund_lookthrough.fund_breakdown), falling back to the
+    fund's own SAA_AssetClassName (e.g. "Shares") if no Industry
+    breakdown is available for it. Returns None if neither is available
+    (security not found, or genuinely no breakdown data at all).
+    """
+    from data_layer.fund_lookthrough import fund_breakdown
+
+    breakdown = fund_breakdown(security_id, "Industry", ref)
+    if breakdown:
+        return max(breakdown, key=lambda pair: pair[1])[0]  # largest weight wins
+
+    security = ref.security(security_id)
+    if security and security.get("SAA_AssetClassName"):
+        return security["SAA_AssetClassName"]
+
+    return None
+
+
+def relevant_search_terms(
+    portfolio: dict, priorities_bundle: dict, ref=None, top_n: int = 3
+) -> list[dict]:
     """
     Picks WHAT to search news for, grounded in the portfolio's own
     analysis output rather than anything generic. Combines:
@@ -145,6 +181,13 @@ def relevant_search_terms(portfolio: dict, priorities_bundle: dict, top_n: int =
         from analysis_layer.performance.top_risk_contributors)
       - concentration flags and SAA breaches already surfaced in the
         priority list (from analysis_layer.prioritize.build_client_priorities)
+
+    `ref` (a data_layer.ReferenceIndex) is optional but recommended: when
+    supplied, a top risk contributor that's a FUND gets a sector-theme
+    query instead of its own name (see module docstring for why — fund
+    names verified to return no news on the real API). Without `ref`,
+    every contributor falls back to its cleaned security name regardless
+    of type, matching the older behavior.
 
     Returns [{"type": "security"|"sector", "query": str, "reason": str}],
     de-duplicated by query, ordered by the priority list's own severity
@@ -157,13 +200,35 @@ def relevant_search_terms(portfolio: dict, priorities_bundle: dict, top_n: int =
         name = contributor.get("SecurityName")
         if not name:
             continue
+
         share = contributor.get("share_of_portfolio_volatility")
-        reason = (
-            f"top portfolio risk contributor ({share:.0%} of portfolio volatility)"
-            if share is not None
-            else "top portfolio risk contributor"
+        share_str = f" ({share:.0%} of portfolio volatility)" if share is not None else ""
+
+        security_id = contributor.get("SecurityId")
+        security = ref.security(security_id) if (ref is not None and security_id is not None) else None
+
+        if security and security.get("IsUnbundlingEnabled"):
+            theme = _fund_theme_query(security_id, ref)
+            if theme:
+                terms.append(
+                    {
+                        "type": "sector",
+                        "query": theme,
+                        "reason": (
+                            f"largest sector exposure within {clean_security_name(name)}, "
+                            f"a top portfolio risk contributor{share_str}"
+                        ),
+                    }
+                )
+                continue  # skip the fund-name query — verified low value on real API
+
+        terms.append(
+            {
+                "type": "security",
+                "query": clean_security_name(name),
+                "reason": f"top portfolio risk contributor{share_str}",
+            }
         )
-        terms.append({"type": "security", "query": clean_security_name(name), "reason": reason})
 
     for item in priorities_bundle.get("priorities", []):
         if item["type"] == "concentration":

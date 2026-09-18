@@ -1,22 +1,26 @@
-# uro_briefing/data_layer
+# uro_briefing
 
-Loads `clients.json` + `reference.json`, resolves every ID reference between
-them, and produces one clean, fully-joined object per client. This is the
-first layer of the pipeline — pure data loading and joining, no LLM calls, no
-"what matters" judgment. That comes later.
+Backend pipeline for the UnRiskOmega "From Ping to Pitch" briefing assistant:
+loads the case data, joins and normalizes it, ranks what matters, compares it
+to a mock bank house view, pulls relevant market news, and tracks client
+state across calls so "what changed" is exact, not guessed. No LLM yet — this
+is everything the synthesis (prompt + model call) layer will consume once
+it's built.
+
+**Layers, in dependency order:**
+`data_layer` → `analysis_layer` → `state` / `enrichment` → *(not yet built)* `synthesis`
 
 ## Install / run
 
-No dependencies beyond the Python standard library.
+No dependencies beyond the Python standard library, **except**
+`enrichment/market_news.py`'s live fetch, which needs `pip install yfinance`
+(see the `enrichment` section below).
 
 ```bash
 cd uro_briefing
-python3 run_example.py
+python3 run_example.py            # data_layer against the synthetic fixture
+python3 run_analysis_example.py   # analysis_layer against the synthetic fixture
 ```
-
-`run_example.py` runs the pipeline against the synthetic fixtures in
-`test_fixtures/` and prints the resolved output, useful as a quick sanity
-check that the code still works after an edit.
 
 ## Testing
 
@@ -26,7 +30,8 @@ python3 run_tests.py          # zero dependencies, works anywhere
 pytest tests/                 # same test files, nicer output
 ```
 
-77 tests, covering `data_layer`, `analysis_layer`, and `state`:
+106 tests, covering `data_layer`, `analysis_layer`, `state`, and
+`enrichment`:
 - `loader.py` — valid/invalid file shapes
 - `reference_index.py` — id lookups, the plain→SAA category translation,
   the catch-all inference heuristic (including its ambiguous-refuses-to-guess
@@ -43,14 +48,23 @@ pytest tests/                 # same test files, nicer output
 - `state/snapshot.py`, `diff.py`, `store.py`, `refresh.py` — snapshot
   persistence, diffing (including a manufactured-real-change check), and
   the empty-diff-on-repeat-call guarantee
+- `enrichment/house_view.py` — mock house-view comparison, all four outcomes
+  (`aligned`/`underexposed`/`overexposed`/`not_applicable`) verified to occur
+  across real clients
+- `enrichment/market_news.py` — security-name cleaning (95.8% real-data
+  coverage, locked in by a regression test), search-term selection including
+  the fund→sector-theme fallback (see below); the actual network fetch is
+  NOT covered by this suite (see `enrichment` section)
 
 `tests/test_real_data_regression.py` re-runs the checks we did by hand
 against the real 47-client dataset (all clients build without error, no
 stray untranslated SAA categories anywhere, the specific `CASE-002` numbers
 that caught the fund-translation bug, the `CASE-008` orphaned-proposal edge
-case). It's skipped — not failed — if the real files aren't present; point
+case, house-view outcome diversity, security-name-cleaner coverage). It's
+skipped — not failed — if the real files aren't present; point
 `UNRISKOMEGA_DATA_DIR` at a folder containing `clients.json` and
-`reference.json` to run it (defaults to `/mnt/user-data/uploads`).
+`reference.json` to run it (defaults to `data/core-case/portfolio-data/`,
+this team's repo layout).
 
 ## Usage
 
@@ -74,7 +88,7 @@ for client in clients:
   out
 - proposals, transactions, tags, notes
 
-## Files
+## `data_layer` — files
 
 | File | Responsibility |
 |---|---|
@@ -179,6 +193,75 @@ generated for this client," not "since the last real phone call." A
 production version might instead snapshot only when an advisor explicitly
 confirms the call happened — noted here rather than silently assumed.
 
+## `enrichment` — house view comparison and market news
+
+| File | Responsibility |
+|---|---|
+| `house_view.py` | Mock bank CIO tactical view (11 calls across the real dataset's actual SAA categories) + `compare_portfolio_to_house_view()`, which tells you exactly how a client's current position relates to it. |
+| `market_news.py` | Decides WHAT to search news for (`relevant_search_terms()`), cleans messy Swiss/German security names into usable queries (`clean_security_name()`), and fetches/tags articles (`fetch_relevant_news()`). Split deliberately — see below. |
+
+### House view
+
+```python
+from enrichment.house_view import compare_portfolio_to_house_view
+
+result = compare_portfolio_to_house_view(portfolio)
+# [{"category": "Shares", "house_view_stance": "overweight",
+#   "relative_position": "aligned" | "underexposed" | "overexposed" | "not_applicable",
+#   "client_actual": 0.52, "client_target": 0.50, ...}, ...]
+```
+
+`HOUSE_VIEW` in `house_view.py` is mock data (the case brief explicitly
+allows this), not a real market forecast — category names match the real
+dataset's `SAA_*` vocabulary exactly, verified against `reference.json`, so
+no translation step is needed to compare against `data_layer`'s
+`saa_deviations` output directly.
+
+### Market news — network-dependent, split into testable and untested parts
+
+**Fully tested, no network needed:**
+- `clean_security_name()` — this dataset's security names follow Swiss/German
+  banking conventions (`"Namen-Aktie Nestle SA"`, `"Anteile -FB- Credit
+  Suisse... - CSIF (CH) Bond Switzerland AAA-AA Blue"`, `"0.7 % John Deere
+  Capital Corp 2021-01.11.28..."`) and are unusable as search queries as-is.
+  Validated against all 504 real securities: **95.8% clean correctly**
+  (locked in by a regression test — a drop below 90% fails CI). The
+  remaining ~4% are structured products/derivatives and a handful of
+  apparently-truncated `Name` values in the source data itself — a small,
+  bounded, documented limitation, not a silent failure.
+- `relevant_search_terms()` — picks what to search for from the portfolio's
+  own top risk contributors and priority flags, not anything generic.
+
+**Verified on the real API (by Hamza, not in this sandbox — no network
+access here):** individual operating companies (e.g. `"Novartis AG"`,
+`"Sandoz Group AG"`) return real news reliably. **Fund/ETF/index names
+return nothing** (0/6 in testing) — they aren't "story" securities with
+their own coverage. Since a large share of this dataset's holdings are
+funds, `relevant_search_terms()` detects a fund position (via
+`IsUnbundlingEnabled`, when a `ReferenceIndex` is passed as `ref=`) and
+searches its **largest underlying sector exposure** instead of its own name:
+
+```python
+from enrichment.market_news import relevant_search_terms, fetch_relevant_news, YahooFinanceNewsProvider
+
+terms = relevant_search_terms(portfolio, priorities_bundle, ref=ref)
+# a fund position generates a "sector" term (e.g. "Health Care") instead of
+# a "security" term with its own unsearchable name
+
+articles = fetch_relevant_news(terms, YahooFinanceNewsProvider())
+```
+
+This is not just a workaround for a bad hit rate — sector-level news is
+arguably *more* relevant to the case's "connection to the portfolio"
+requirement than company news about an ETF issuer would be anyway, since
+that's what actually explains a diversified fund position's performance.
+
+**`YahooFinanceNewsProvider` has genuine network dependency** — confirm it
+still works before a demo (APIs change): `pip install yfinance`, then fetch
+a few real cleaned security names and a few fund-derived sector names, check
+you're getting real articles back, not silent empty results. `FakeNewsProvider`
+exists for writing tests without hitting the network.
+
 ## The one non-obvious piece: category translation
 
 `FundUnbundlingMappings` only gives a fund's breakdown in **plain, fine-grained**
@@ -212,6 +295,11 @@ direct holdings anywhere in the dataset.
   touching proposals should be ready for a link that doesn't resolve.
 - Dates are shifted forward by a constant offset; only relative
   ordering/spacing is meaningful, except `PriceDateUtc` / `FactoryDateUtc`.
+- `"Alcon AG"` (a genuine, well-known global company) returned no news via
+  `YahooFinanceNewsProvider` in testing, unlike other similarly plain
+  Swiss company names that worked fine. Not yet investigated — worth a look
+  before assuming every plain company name resolves reliably.
+
 ## Git
 
 Add `.state/` to your `.gitignore` — it's local, per-machine persisted
