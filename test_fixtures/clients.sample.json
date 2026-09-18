@@ -1,0 +1,129 @@
+[
+  {
+    "ClientId": 501,
+    "ClientRef": "CASE-001",
+    "FirstName": "Anna",
+    "LastName": "Meier",
+    "IsClientACompany": false,
+    "IsEmployee": false,
+    "RegulatoryClientTypeId": 1,
+    "RegulatoryClientTypeName": "Private client",
+    "ReportingCurrency": "CHF",
+    "RiskProfileId": 5,
+    "RiskProfileName": "Balanced",
+    "Birthday": "1975-04-12",
+    "ProfilingDateUtc": "2026-01-10T00:00:00Z",
+    "AssetsUnderManagementInDefaultCurrency": 500000,
+    "LiquidityInDefaultCurrency": 25000,
+    "Tags": [
+      { "TagName": "Switzerland", "TagTypeName": "Region", "Scope": "Client" },
+      { "TagName": "Health Care", "TagTypeName": "Industry", "Scope": "Client" }
+    ],
+    "ClientNotes": [
+      { "Note": "Client plans a property purchase next year.", "CreatedByDateUTC": "2026-06-01T00:00:00Z" }
+    ],
+    "Portfolios": [
+      {
+        "PortfolioId": 9001,
+        "PublicGuid": "11111111-1111-1111-1111-111111111111",
+        "PortfolioNr": "CASE-001-01",
+        "Name": "Vorsorge Indiv",
+        "PortfolioCurrency": "CHF",
+        "StrategicAssetAllocationId": 42,
+        "InvestmentServiceId": 1,
+        "InvestmentServiceName": "Investment Advisory",
+        "StrategyId": 1,
+        "StrategyName": "Investor profile 5",
+        "ReferenceCurrency": "CHF",
+        "AssetsUnderManagementInDefaultCurrency": 500000,
+        "LiquidityInDefaultCurrency": 25000,
+        "Volatility": 0.081,
+        "ExpectedReturn": 0.045,
+        "ValueAtRisk": 0.06,
+        "PerformanceYTD": -0.032,
+        "FactoryDateUtc": "2026-09-17T00:00:00Z",
+        "SecurityPositions": [
+          {
+            "SecurityId": 1001,
+            "Isin": "CH0001",
+            "Valor": "1000001",
+            "SecurityName": "Nestle SA",
+            "Quantity": 1500,
+            "PricePerUnit": 95.4,
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 143100,
+            "PortfolioValuePercentage": 0.35,
+            "MarginalContributionToRisk": 0.02,
+            "ContributionVolatility": 0.007
+          },
+          {
+            "SecurityId": 2002,
+            "Isin": "LU0002",
+            "Valor": "2000002",
+            "SecurityName": "Global Balanced Fund",
+            "Quantity": 1000,
+            "PricePerUnit": 110.2,
+            "Currency": "USD",
+            "TotalAmountInPortfolioCurrency": 100000,
+            "PortfolioValuePercentage": 0.25,
+            "MarginalContributionToRisk": 0.015,
+            "ContributionVolatility": 0.004
+          }
+        ],
+        "AccountPositions": [
+          {
+            "AccountName": "Privatkonto CHF",
+            "IBAN": "CH00 0000 0000 0000 0000 0",
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 25000,
+            "PortfolioValuePercentage": 0.05,
+            "MarginalContributionToRisk": 0.0,
+            "ContributionVolatility": 0.0
+          },
+          {
+            "AccountName": "Crypto Wallet",
+            "Currency": "BTC",
+            "TotalAmountInPortfolioCurrency": 15000,
+            "PortfolioValuePercentage": 0.03,
+            "MarginalContributionToRisk": 0.01,
+            "ContributionVolatility": 0.003
+          }
+        ],
+        "PerformanceHistory": [
+          { "Date": "2026-07-01", "Value": 520000 },
+          { "Date": "2026-08-01", "Value": 510000 },
+          { "Date": "2026-09-01", "Value": 500000 }
+        ]
+      }
+    ],
+    "Proposals": [],
+    "Transactions": [],
+    "SuitabilityViolations": [
+      {
+        "Id": 7001,
+        "RuleCode": "MAX_SINGLE_POSITION",
+        "RuleDescription": "Einzelposition ueberschreitet Limite",
+        "ErrorLevel": 1,
+        "Severity": "Warning",
+        "PortfolioId": 9001,
+        "LastViolatedDateUTC": "2026-09-10T00:00:00Z",
+        "SecurityIsin": "CH0001"
+      },
+      {
+        "Id": 7002,
+        "RuleCode": "CURRENCY_CONCENTRATION",
+        "RuleDescription": "Waehrungskonzentration zu hoch",
+        "ErrorLevel": 2,
+        "Severity": "Error",
+        "PortfolioId": 9001,
+        "LastViolatedDateUTC": "2026-09-05T00:00:00Z"
+      }
+    ],
+    "IndividualRuleOverrides": [
+      {
+        "RuleCode": "CURRENCY_CONCENTRATION",
+        "RuleDescription": "Waehrungskonzentration zu hoch"
+      }
+    ]
+  }
+]

@@ -1,0 +1,96 @@
+{
+  "Securities": [
+    {
+      "Id": 1001,
+      "Isin": "CH0001",
+      "Valor": "1000001",
+      "Name": "Nestle SA",
+      "SecurityTypeId": 1,
+      "SecurityTypeName": "Shares",
+      "Currency": "CHF",
+      "Assetclass": 11,
+      "AssetClassName": "Equities Switzerland",
+      "CountryId": 1,
+      "CountryName": "Switzerland",
+      "CurrencyGroupName": "Swiss Franc",
+      "CountryGroupName": "Equities Switzerland",
+      "SAA_AssetClassName": "Shares",
+      "SAA_CurrencyGroupName": "Swiss Franc",
+      "SAA_CountryGroupName": "Switzerland",
+      "SAA_IndustryName": "Consumer Staples",
+      "IsUnbundlingEnabled": false,
+      "EndOfDayPrice": 95.4,
+      "PriceDateUtc": "2026-09-15T00:00:00Z",
+      "PRC": 3
+    },
+    {
+      "Id": 2002,
+      "Isin": "LU0002",
+      "Valor": "2000002",
+      "Name": "Global Balanced Fund",
+      "SecurityTypeId": 2,
+      "SecurityTypeName": "Investment fund",
+      "Currency": "USD",
+      "Assetclass": 20,
+      "AssetClassName": "Mixed Fund",
+      "SAA_AssetClassName": "Mixed",
+      "IsUnbundlingEnabled": true,
+      "EndOfDayPrice": 110.2,
+      "PriceDateUtc": "2026-09-15T00:00:00Z",
+      "PRC": 3
+    },
+    {
+      "Id": 3003,
+      "Isin": "CH0003",
+      "Valor": "3000003",
+      "Name": "1.0 % Sample Bond AG 2020-2028",
+      "SecurityTypeId": 119,
+      "SecurityTypeName": "Bonds, debt register claims",
+      "Currency": "CHF",
+      "Assetclass": 82,
+      "AssetClassName": "Bonds CHF domestic",
+      "SAA_AssetClassName": "Bonds",
+      "IsUnbundlingEnabled": false,
+      "EndOfDayPrice": 0.99,
+      "PriceDateUtc": "2026-09-15T00:00:00Z",
+      "PRC": 2
+    }
+  ],
+  "FundUnbundlingMappings": [
+    { "FundSecurityId": 2002, "AssetClassName": "Equities Switzerland", "Weight": 60.0 },
+    { "FundSecurityId": 2002, "AssetClassName": "Bonds CHF domestic", "Weight": 40.0 }
+  ],
+  "RiskProfiles": [
+    { "Id": 5, "Name": "Balanced", "Description": "Balanced risk", "RiskLevel": 3, "MaxVola": 0.12, "MaxPRC": 4, "EquityQuoteInPercent": 50 }
+  ],
+  "StrategicAssetAllocations": [
+    {
+      "Id": 42,
+      "Name": "Balanced CHF",
+      "ReferenceCurrency": "CHF",
+      "Mappings": [
+        { "Dimension": "AssetClass", "Category": "Shares", "MinPercentage": 0.40, "TargetPercentage": 0.50, "MaxPercentage": 0.60 },
+        { "Dimension": "AssetClass", "Category": "Bonds", "MinPercentage": 0.30, "TargetPercentage": 0.40, "MaxPercentage": 0.50 },
+        { "Dimension": "AssetClass", "Category": "Mixed", "MinPercentage": 0.0, "TargetPercentage": 0.0, "MaxPercentage": 0.10 }
+      ]
+    }
+  ],
+  "SuitabilityRules": [
+    { "Id": 1, "RuleCode": "MAX_SINGLE_POSITION", "Description": "Einzelposition ueberschreitet Limite", "Level": 1, "IsIndividual": true },
+    { "Id": 2, "RuleCode": "CURRENCY_CONCENTRATION", "Description": "Waehrungskonzentration zu hoch", "Level": 1, "IsIndividual": true }
+  ],
+  "Tags": [
+    { "Id": 1, "Name": "Switzerland", "TagTypeName": "Region" },
+    { "Id": 2, "Name": "North America", "TagTypeName": "Region" },
+    { "Id": 3, "Name": "Health Care", "TagTypeName": "Industry" }
+  ],
+  "ProposalStatuses": [
+    { "Id": 9, "Name": "Finalized", "IsArchived": false, "AllowTransactionSubmit": true }
+  ],
+  "AdvisoryTypes": [
+    { "Id": 3, "Name": "Advisory Mandate", "IsProposal": true, "IsPortfolioReview": false }
+  ],
+  "RecommendationLists": [
+    { "Id": 1, "Name": "Recommendation list free assets", "Securities": [ { "SecurityId": 1001, "Isin": "CH0001" } ] }
+  ]
+}
