@@ -12,9 +12,10 @@ it's built.
 
 ## Install / run
 
-No dependencies beyond the Python standard library, **except**
-`enrichment/market_news.py`'s live fetch, which needs `pip install yfinance`
-(see the `enrichment` section below).
+No dependencies beyond the Python standard library, **except**:
+- `enrichment/market_news.py`'s live fetch: `pip install yfinance`
+- `synthesis/briefing_generator.py`'s model call: `pip install anthropic`
+  + an `ANTHROPIC_API_KEY` environment variable
 
 ```bash
 cd uro_briefing
@@ -30,7 +31,7 @@ python3 run_tests.py          # zero dependencies, works anywhere
 pytest tests/                 # same test files, nicer output
 ```
 
-147 tests, covering `data_layer`, `analysis_layer`, `state`, `enrichment`,
+167 tests, covering `data_layer`, `analysis_layer`, `state`, `enrichment`,
 and `synthesis`:
 - `loader.py` — valid/invalid file shapes
 - `reference_index.py` — id lookups, the plain→SAA category translation,
@@ -59,6 +60,9 @@ and `synthesis`:
   one `BriefingContext`, including the state-diff-vs-note-proxy fallback
 - `synthesis/prompt_builder.py` — every formatting function tested in
   isolation, plus the house-view actionable-vs-aligned filtering logic
+- `synthesis/briefing_generator.py` — response parsing, markdown-fence
+  stripping, missing-key/error handling, all against a fake client (no
+  network); the real API call is NOT covered by this suite (see below)
 
 `tests/test_real_data_regression.py` re-runs the checks we did by hand
 against the real 47-client dataset (all clients build without error, no
@@ -313,6 +317,45 @@ fixed system instructions. Nothing here calls a model; that's
 **Validated against all 47 real clients**: no crashes, every prompt stays
 well under a sanity-checked length ceiling (max observed ~4.8K characters),
 client names and required section keys always present in the output.
+
+### `briefing_generator.py` — the actual model call
+
+```python
+from synthesis.briefing_generator import generate_briefing
+
+briefing = generate_briefing(context)
+# {"recent_development": str, "health_check": str, "outlook_and_actions": str,
+#  "read_time_estimate_seconds": int, "raw_model_response": str}
+```
+
+Defaults to Anthropic's API (`DEFAULT_MODEL = "claude-sonnet-5"` — **verify
+this model string is still current for your API key before a demo**, model
+names change). Requires `pip install anthropic` and an `ANTHROPIC_API_KEY`
+environment variable, or pass `client=` explicitly for custom auth/config.
+
+**Network limitation, same as `enrichment/market_news.py`'s live fetch**:
+this sandbox has no network access and `anthropic` isn't installed here, so
+the real API call has never actually been executed. Everything else —
+prompt assembly, response parsing, markdown-fence stripping (models
+sometimes wrap JSON in ` ```json ` despite being told not to), missing-key
+detection, read-time estimation, error handling — is fully tested against a
+fake client that mimics `anthropic.Anthropic()`'s interface, no network
+needed. Verify the real call on your machine:
+
+```bash
+pip install anthropic
+export ANTHROPIC_API_KEY=...
+```
+```python
+from synthesis.briefing_generator import generate_briefing
+briefing = generate_briefing(context)  # context from build_briefing_context()
+print(briefing)
+```
+
+Raises `BriefingGenerationError` (never a raw exception) on any failure —
+API call, invalid JSON, or a response missing a required section key. A
+demo should surface this loudly rather than silently show a broken
+briefing.
 
 ## The one non-obvious piece: category translation
 
