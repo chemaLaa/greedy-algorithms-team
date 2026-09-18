@@ -18,6 +18,33 @@ python3 run_example.py
 `test_fixtures/` and prints the resolved output, useful as a quick sanity
 check that the code still works after an edit.
 
+## Testing
+
+```bash
+python3 run_tests.py          # zero dependencies, works anywhere
+# or, if you have pytest installed:
+pytest tests/                 # same test files, nicer output
+```
+
+34 tests, covering:
+- `loader.py` — valid/invalid file shapes
+- `reference_index.py` — id lookups, the plain→SAA category translation,
+  the catch-all inference heuristic (including its ambiguous-refuses-to-guess
+  case)
+- `fund_lookthrough.py` — weight normalization, translation applied correctly
+- `saa.py` — actual exposure aggregation (direct + fund positions combined),
+  target comparison, breach flags
+- `violations.py` — per-client override filtering
+- `flatten.py` — the full `build_client_view()` output shape
+
+`tests/test_real_data_regression.py` re-runs the checks we did by hand
+against the real 47-client dataset (all clients build without error, no
+stray untranslated SAA categories anywhere, the specific `CASE-002` numbers
+that caught the fund-translation bug, the `CASE-008` orphaned-proposal edge
+case). It's skipped — not failed — if the real files aren't present; point
+`UNRISKOMEGA_DATA_DIR` at a folder containing `clients.json` and
+`reference.json` to run it (defaults to `/mnt/user-data/uploads`).
+
 ## Usage
 
 ```python
