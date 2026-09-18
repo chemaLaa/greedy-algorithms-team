@@ -276,3 +276,43 @@ def test_briefing_context_builder_runs_clean_across_all_47_clients():
             assert context["client"]["name"]
             assert context["portfolio"]["portfolio_id"] == portfolio["PortfolioId"]
             assert context["change_since_last_interaction"]["source"] == "state_diff"
+
+
+def test_prompt_builder_runs_clean_across_all_47_clients():
+    if not REAL_DATA_AVAILABLE:
+        print(f"SKIPPED: {SKIP_REASON}")
+        return
+    import tempfile
+    from pathlib import Path
+
+    from analysis_layer import build_client_priorities
+    from enrichment.house_view import compare_portfolio_to_house_view
+    from state import refresh_client_state
+    from synthesis.context_builder import build_briefing_context
+    from synthesis.prompt_builder import build_prompt
+
+    clients, _, ref = _load_real()
+    state_dir = Path(tempfile.mkdtemp())
+
+    max_length = 0
+    for c in clients:
+        view = build_client_view(c, ref)
+        bundles = build_client_priorities(view, ref)
+        state_result = refresh_client_state(view, bundles, state_dir=state_dir)
+
+        for portfolio, bundle in zip(view["portfolios"], bundles):
+            portfolio_id = str(portfolio["PortfolioId"])
+            house_view = compare_portfolio_to_house_view(portfolio)
+            context = build_briefing_context(
+                view, bundle, state_result["portfolios"][portfolio_id], house_view, []
+            )
+            prompt = build_prompt(context)
+            assert "system" in prompt and "messages" in prompt
+            content = prompt["messages"][0]["content"]
+            assert view["display_name"] in content
+            max_length = max(max_length, len(content))
+
+    # Sanity guard against runaway prompt growth (e.g. an unbounded loop
+    # over priorities/house-view items for a pathological client) — the
+    # longest real prompt observed during development was ~4.8K chars.
+    assert max_length < 15000, f"prompt length grew unexpectedly large: {max_length} chars"
