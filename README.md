@@ -41,11 +41,12 @@ from `GET /api/clients` on page load, sorted alphabetically. The adjacent
 **Portfolio** dropdown is populated automatically from the selected client's
 portfolios.
 
-To change the client that is pre-selected on first load, edit `DEFAULT_CLIENT_ID`
+By default the picker opens on the first alphabetical client in the loaded database.
+To pre-select a specific client on first load, set `DEFAULT_CLIENT_ID`
 in the `CONFIG` block at the top of `demo/static/index.html`:
 
 ```js
-const DEFAULT_CLIENT_ID = '49388';   // any ClientId from clients.json
+const DEFAULT_CLIENT_ID = '';   // set to any ClientId from clients.json, or leave empty for first client
 ```
 
 The client with the most ranked priorities and SAA deviations in the core
