@@ -63,6 +63,21 @@ Critical rules:
   or news detail that wasn't given to you. If information is limited (a \
   first-ever briefing for this client, no relevant news found), say so \
   briefly rather than filling the gap with something plausible-sounding.
+- Only attribute a change in portfolio value to a specific cause (a \
+  holding, a sector, a market move) when the facts you were given actually \
+  support that link. The "DATA AVAILABILITY FOR ATTRIBUTING THIS CHANGE" \
+  section tells you directly when holdings-based data is thin or absent — \
+  e.g. a heavily liquid/cash portfolio, or no security-level risk \
+  contributors at all. When the value change isn't explained by the data \
+  provided, say plainly that the cause isn't identifiable from the \
+  available data and recommend the advisor check cash flows, fees, and \
+  currency movements with the client, rather than inventing a \
+  plausible-sounding explanation. A portfolio's "top contributors to \
+  portfolio risk" are ranked by their contribution to volatility (a \
+  forward-looking risk measure) — they are NOT a confirmed explanation of \
+  what actually drove the recent value change, and must not be presented \
+  as one unless another fact you were given actually supports that \
+  specific link.
 - Write in fluent English throughout, even where a source fact was in \
   German — translate rather than mixing languages in your output.
 - Plain prose, no markdown headers or bullet lists inside each section.
@@ -82,6 +97,7 @@ def context_to_prose(context: dict) -> dict[str, str]:
     return {
         "client_and_portfolio": _format_client_and_portfolio(context),
         "performance": _format_performance(context["portfolio"].get("performance_trend")),
+        "attribution_caveat": _format_attribution_caveat(context.get("attribution_caveat")),
         "priorities": _format_priorities(context.get("priorities", [])),
         "risk_contributors": _format_risk_contributors(context.get("top_risk_contributors", [])),
         "change_since_last_interaction": _format_change(context.get("change_since_last_interaction")),
@@ -101,6 +117,7 @@ def build_prompt(context: dict) -> dict:
     user_message = (
         f"{fragments['client_and_portfolio']}\n\n"
         f"RECENT PERFORMANCE:\n{fragments['performance']}\n\n"
+        f"DATA AVAILABILITY FOR ATTRIBUTING THIS CHANGE:\n{fragments['attribution_caveat']}\n\n"
         f"CURRENT ISSUES AND RISKS (ranked by rule-based severity, not necessarily by "
         f"real-world importance — use your own judgment):\n{fragments['priorities']}\n\n"
         f"TOP CONTRIBUTORS TO PORTFOLIO RISK:\n{fragments['risk_contributors']}\n\n"
@@ -159,6 +176,49 @@ def _format_performance(trend: Optional[dict]) -> str:
     )
 
 
+def _format_attribution_caveat(caveat: Optional[dict]) -> str:
+    """
+    Surfaces, as an explicit fact rather than something the model has to
+    infer, whether this portfolio's data can actually support blaming its
+    value change on a specific cause. Always returns something (never an
+    empty string) so this section never silently disappears from the
+    prompt.
+    """
+    if not caveat:
+        return "No data-availability information provided for this portfolio."
+
+    lines = []
+
+    liquidity_ratio = caveat.get("liquidity_ratio")
+    if liquidity_ratio is not None and liquidity_ratio >= 0.5:
+        lines.append(
+            f"- {liquidity_ratio:.0%} of this portfolio's AUM is currently liquid (cash) — "
+            f"a value change of this size may not be attributable to security holdings at all."
+        )
+
+    if not caveat.get("has_holdings_based_drivers"):
+        lines.append(
+            "- No security-level risk-contribution data is available for this portfolio. "
+            "Do not attribute the value change to a specific holding, sector, or market move "
+            "unless another fact below actually supports that link."
+        )
+
+    fx_exposure = caveat.get("non_base_currency_exposure")
+    if fx_exposure is not None and fx_exposure >= 0.3:
+        lines.append(
+            f"- {fx_exposure:.0%} of this portfolio's weight is held in a currency other than "
+            f"its own reporting currency. Currency movements are a plausible unexplained factor, "
+            f"but this dataset has no FX-rate history — do not estimate or state a specific FX "
+            f"contribution, only note currency movements as a possible factor worth the advisor "
+            f"checking."
+        )
+
+    if not lines:
+        return "No specific data-availability caveats for this portfolio's performance attribution."
+
+    return "\n".join(lines)
+
+
 def _format_priorities(priorities: list[dict]) -> str:
     if not priorities:
         return "No active compliance issues, allocation breaches, or concentration flags."
@@ -192,7 +252,11 @@ def _format_risk_contributors(contributors: list[dict]) -> str:
     if not contributors:
         return "No risk-contribution data available."
 
-    lines = []
+    lines = [
+        "(Forward-looking risk/volatility contribution, not a confirmed explanation of the "
+        "recent value change — do not present these as the cause of recent performance unless "
+        "another fact supports that specific link.)"
+    ]
     for c in contributors:
         share = c.get("share_of_portfolio_volatility")
         share_str = f"{share:.0%}" if share is not None else "an unknown share"

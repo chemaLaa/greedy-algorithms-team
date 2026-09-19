@@ -51,6 +51,40 @@ def dimension_concentration(portfolio: dict, dimension: str, ref: "ReferenceInde
     ]
 
 
+def non_base_currency_exposure(portfolio: dict) -> Optional[float]:
+    """
+    Fraction of the portfolio (by absolute weight) held in a position whose
+    own `Currency` differs from the portfolio's own `PortfolioCurrency`.
+
+    This is a genuine, code-computed currency-EXPOSURE fact — NOT an FX
+    return-attribution number. The schema has no historical FX-rate table,
+    so the actual contribution of currency movements to a given value
+    change can't be computed from this data, and must never be estimated
+    by the LLM either; this figure only tells you how much of the
+    portfolio COULD plausibly be affected by FX moves, not by how much it
+    actually was.
+
+    Returns None if `PortfolioCurrency` itself is missing — there's no
+    base to compare position currencies against, so classifying any
+    position as "non-base" would be a guess, not a fact.
+    """
+    base_currency = portfolio.get("PortfolioCurrency")
+    if not base_currency:
+        return None
+
+    exposure = 0.0
+    for pos in (portfolio.get("SecurityPositions") or []) + (portfolio.get("AccountPositions") or []):
+        if not isinstance(pos, dict):
+            continue
+        weight = pos.get("PortfolioValuePercentage")
+        currency = pos.get("Currency")
+        if not _finite(weight) or not currency:
+            continue
+        if currency != base_currency:
+            exposure += abs(float(weight))
+    return exposure
+
+
 def concentration_snapshot(
     portfolio: dict,
     ref: "ReferenceIndex | None" = None,
@@ -59,7 +93,11 @@ def concentration_snapshot(
     n_categories: int = 3,
     dimensions: tuple[str, ...] = ("AssetClass", "CurrencyGroup", "CountryGroup", "Industry"),
 ) -> dict:
-    result = {"largest_positions": largest_single_positions(portfolio, n=n_positions), "dimensions": {}}
+    result = {
+        "largest_positions": largest_single_positions(portfolio, n=n_positions),
+        "dimensions": {},
+        "non_base_currency_exposure": non_base_currency_exposure(portfolio),
+    }
     if ref is not None:
         for dimension in dimensions:
             result["dimensions"][dimension] = dimension_concentration(portfolio, dimension, ref, n=n_categories)

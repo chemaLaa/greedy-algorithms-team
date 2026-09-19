@@ -1,6 +1,7 @@
 from synthesis.prompt_builder import (
     build_prompt,
     context_to_prose,
+    _format_attribution_caveat,
     _format_client_and_portfolio,
     _format_performance,
     _format_priorities,
@@ -33,6 +34,11 @@ def _minimal_context(**overrides):
         "change_since_last_interaction": {"source": "state_diff", "is_first_interaction": True, "details": {}},
         "house_view_alignment": [],
         "market_news": [],
+        "attribution_caveat": {
+            "liquidity_ratio": 0.05,
+            "has_holdings_based_drivers": True,
+            "non_base_currency_exposure": 0.0,
+        },
     }
     base.update(overrides)
     return base
@@ -85,6 +91,57 @@ def test_performance_handles_none():
 
 def test_performance_handles_insufficient_history():
     assert "No prior performance history" in _format_performance({"change_since_previous_point": None})
+
+
+# --- _format_attribution_caveat ---
+
+
+def test_attribution_caveat_none_returns_placeholder_not_empty():
+    text = _format_attribution_caveat(None)
+    assert text
+    assert "No data-availability" in text
+
+
+def test_attribution_caveat_flags_high_liquidity():
+    text = _format_attribution_caveat(
+        {"liquidity_ratio": 0.95, "has_holdings_based_drivers": True, "non_base_currency_exposure": 0.0}
+    )
+    assert "95%" in text
+    assert "liquid" in text.lower()
+
+
+def test_attribution_caveat_flags_no_holdings_based_drivers():
+    text = _format_attribution_caveat(
+        {"liquidity_ratio": 0.05, "has_holdings_based_drivers": False, "non_base_currency_exposure": 0.0}
+    )
+    assert "No security-level risk-contribution data" in text
+    assert "unless another fact" in text
+
+
+def test_attribution_caveat_flags_material_fx_exposure_without_claiming_an_effect():
+    text = _format_attribution_caveat(
+        {"liquidity_ratio": 0.05, "has_holdings_based_drivers": True, "non_base_currency_exposure": 0.6}
+    )
+    assert "60%" in text
+    assert "do not estimate" in text.lower()
+
+
+def test_attribution_caveat_low_liquidity_and_holdings_present_has_no_caveats():
+    text = _format_attribution_caveat(
+        {"liquidity_ratio": 0.05, "has_holdings_based_drivers": True, "non_base_currency_exposure": 0.0}
+    )
+    assert "No specific data-availability caveats" in text
+
+
+def test_attribution_caveat_fully_liquid_and_no_drivers_flags_both():
+    # The exact scenario this whole mechanism exists for: a heavily liquid
+    # portfolio with no security-level data to blame a decline on.
+    text = _format_attribution_caveat(
+        {"liquidity_ratio": 1.0, "has_holdings_based_drivers": False, "non_base_currency_exposure": None}
+    )
+    assert "100%" in text
+    assert "liquid" in text.lower()
+    assert "No security-level risk-contribution data" in text
 
 
 # --- _format_priorities ---
@@ -145,6 +202,14 @@ def test_risk_contributors_formats_share():
     )
     assert "Nestle SA" in text
     assert "22%" in text
+
+
+def test_risk_contributors_warns_against_treating_as_a_return_cause():
+    # This is co-located with the fact itself (not just stated once in the
+    # system prompt) precisely so a model summarizing this section can't
+    # miss it.
+    text = _format_risk_contributors([{"SecurityName": "Nestle SA", "share_of_portfolio_volatility": 0.22}])
+    assert "not a confirmed explanation" in text
 
 
 def test_risk_contributors_cleans_raw_security_name():
@@ -346,8 +411,8 @@ def test_news_distinguishes_fetch_failed_from_no_news_found():
 def test_context_to_prose_has_all_expected_keys():
     fragments = context_to_prose(_minimal_context())
     assert set(fragments.keys()) == {
-        "client_and_portfolio", "performance", "priorities", "risk_contributors",
-        "change_since_last_interaction", "house_view", "news",
+        "client_and_portfolio", "performance", "attribution_caveat", "priorities",
+        "risk_contributors", "change_since_last_interaction", "house_view", "news",
     }
 
 
@@ -364,6 +429,32 @@ def test_build_prompt_system_mentions_required_sections():
     assert "recent_development" in system
     assert "health_check" in system
     assert "outlook_and_actions" in system
+
+
+def test_build_prompt_system_forbids_unsupported_attribution():
+    # Normalize whitespace: SYSTEM_PROMPT wraps long bullets across source
+    # lines with backslash-continuation, which leaves literal double
+    # spaces at each wrap point — irrelevant to the model, but a trap for
+    # a naive exact-substring test.
+    system = " ".join(build_prompt(_minimal_context())["system"].split())
+    assert "isn't identifiable from the available data" in system
+    assert "cash flows, fees, and currency movements" in system
+
+
+def test_build_prompt_user_message_includes_attribution_caveat_section():
+    prompt = build_prompt(
+        _minimal_context(
+            attribution_caveat={
+                "liquidity_ratio": 1.0,
+                "has_holdings_based_drivers": False,
+                "non_base_currency_exposure": None,
+            }
+        )
+    )
+    content = prompt["messages"][0]["content"]
+    assert "DATA AVAILABILITY FOR ATTRIBUTING THIS CHANGE" in content
+    assert "100%" in content
+    assert "No security-level risk-contribution data" in content
 
 
 def test_build_prompt_user_message_contains_client_name():

@@ -402,6 +402,40 @@ fixed system instructions. Nothing here calls a model; that's
 well under a sanity-checked length ceiling (max observed ~4.8K characters),
 client names and required section keys always present in the output.
 
+**Guarding against fabricated causal attribution.** An LLM asked to
+"identify the main drivers" of a value change will do so even when the
+data provides no legitimate explanation — e.g. a heavily liquid/cash
+portfolio still losing value, with no security-level risk contributors to
+blame it on. Note the schema itself has **no cash-flow ledger, no fee
+schedule, and no historical FX-rate table** — so those causes can never be
+confirmed or quantified from this data either, only flagged as plausible
+gaps worth an advisor's follow-up.
+
+- `analysis_layer.concentration.non_base_currency_exposure()` computes a
+  real, code-derived currency-EXPOSURE fact (share of the portfolio held
+  in a currency other than `PortfolioCurrency`) — explicitly NOT an FX
+  return-attribution number, since there's no rate history to compute one.
+- `context_builder.py`'s `attribution_caveat` bundles this, the portfolio's
+  liquidity ratio, and whether any risk contributors exist at all into one
+  plain-data fact — computed in code, not inferred by the model.
+- `prompt_builder.py` surfaces it as its own `DATA AVAILABILITY FOR
+  ATTRIBUTING THIS CHANGE` prompt section, and `SYSTEM_PROMPT` has an
+  explicit rule: when the value change isn't explained by the data
+  provided, say the cause isn't identifiable and recommend checking cash
+  flows, fees, and currency movements — never invent a plausible-sounding
+  story. The risk-contributors section also states inline that volatility
+  contribution is a forward-looking risk measure, not a confirmed
+  explanation of a realized value change.
+- `tests/test_attribution_regression.py` is a live, OPENAI_API_KEY-gated
+  regression test (skipped, not failed, without a key) that builds a
+  100%-liquid, declining-value portfolio with zero holdings data and calls
+  the real model, checking the response for fabricated-cause phrases
+  (negation-aware, since "not attributable to..." is the correct, desired
+  hedge, not a violation). Confirmed live: `gpt-4o` correctly responded
+  "this change in value is not attributable to investment holdings... may
+  be due to... cash flows, fees, or currency movements" for exactly this
+  fixture.
+
 ### `briefing_generator.py` — the actual model call
 
 ```python

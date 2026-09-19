@@ -75,6 +75,7 @@ def build_briefing_context(
         "house_view_alignment": house_view_alignment or [],
         "market_news": market_news,
         "market_news_status": market_news_status,
+        "attribution_caveat": _attribution_caveat_section(priority_bundle),
     }
 
 
@@ -95,6 +96,32 @@ def _portfolio_section(client_view: dict, portfolio: Optional[dict], priority_bu
         "value": portfolio.get("AssetsUnderManagementInDefaultCurrency") if portfolio else None,
         "reporting_currency": client_view.get("reporting_currency"),
         "performance_trend": priority_bundle.get("performance"),
+    }
+
+
+def _attribution_caveat_section(priority_bundle: dict) -> dict:
+    """
+    Plain, code-computed facts about whether this portfolio's data can
+    actually support attributing its value change to a specific cause —
+    NOT a judgment call about what the cause is. Built from figures
+    analysis_layer already computed (liquidity ratio, risk contributors,
+    look-through currency exposure); nothing here is inferred or guessed.
+
+    Exists because an LLM asked to "identify the main drivers" of a value
+    change will do so even when the data doesn't support any driver at
+    all — e.g. a heavily liquid/cash portfolio with no security-level risk
+    contributors still losing value. Handing the model these facts
+    directly (rather than making it infer "is this explainable" itself)
+    is what lets prompt_builder.py's SYSTEM_PROMPT rule tell it, in a
+    fact-grounded way, when to say "the cause isn't identifiable from the
+    available data" instead of inventing a plausible-sounding story.
+    """
+    liquidity = priority_bundle.get("liquidity") or {}
+    concentrations = priority_bundle.get("concentrations") or {}
+    return {
+        "liquidity_ratio": liquidity.get("liquidity_ratio"),
+        "has_holdings_based_drivers": bool(priority_bundle.get("top_risk_contributors")),
+        "non_base_currency_exposure": concentrations.get("non_base_currency_exposure"),
     }
 
 

@@ -4,7 +4,12 @@ from .performance import (
     risk_contributor_analysis,
     top_risk_contributors,
 )
-from .concentration import concentration_snapshot, dimension_concentration, largest_single_positions
+from .concentration import (
+    concentration_snapshot,
+    dimension_concentration,
+    largest_single_positions,
+    non_base_currency_exposure,
+)
 from .material_changes import change_since_last_interaction, last_interaction_date, resolve_interaction_date
 from .prioritize import build_client_priorities, build_portfolio_priorities
 from .validation import (
@@ -30,6 +35,7 @@ __all__ = [
     "largest_single_positions",
     "dimension_concentration",
     "concentration_snapshot",
+    "non_base_currency_exposure",
     "last_interaction_date",
     "resolve_interaction_date",
     "change_since_last_interaction",

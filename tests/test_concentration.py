@@ -1,5 +1,9 @@
 from helpers import first_client
-from analysis_layer.concentration import largest_single_positions, dimension_concentration
+from analysis_layer.concentration import (
+    dimension_concentration,
+    largest_single_positions,
+    non_base_currency_exposure,
+)
 
 
 def _portfolio_and_ref():
@@ -34,3 +38,41 @@ def test_dimension_concentration_respects_n():
     ranked = dimension_concentration(portfolio, "AssetClass", ref, n=1)
     assert len(ranked) == 1
     assert ranked[0]["category"] == "Shares"  # the largest bucket
+
+
+# --- non_base_currency_exposure ---
+
+
+def test_non_base_currency_exposure_sums_positions_in_other_currencies():
+    portfolio = {
+        "PortfolioCurrency": "CHF",
+        "SecurityPositions": [
+            {"SecurityId": 1, "Currency": "CHF", "PortfolioValuePercentage": 0.6},
+            {"SecurityId": 2, "Currency": "USD", "PortfolioValuePercentage": 0.3},
+        ],
+        "AccountPositions": [
+            {"AccountName": "EUR cash", "Currency": "EUR", "PortfolioValuePercentage": 0.1},
+        ],
+    }
+    assert abs(non_base_currency_exposure(portfolio) - 0.4) < 1e-9
+
+
+def test_non_base_currency_exposure_all_base_currency_is_zero():
+    portfolio = {
+        "PortfolioCurrency": "CHF",
+        "SecurityPositions": [{"SecurityId": 1, "Currency": "CHF", "PortfolioValuePercentage": 1.0}],
+    }
+    assert non_base_currency_exposure(portfolio) == 0.0
+
+
+def test_non_base_currency_exposure_none_without_portfolio_currency():
+    portfolio = {"SecurityPositions": [{"SecurityId": 1, "Currency": "USD", "PortfolioValuePercentage": 1.0}]}
+    assert non_base_currency_exposure(portfolio) is None
+
+
+def test_non_base_currency_exposure_uses_absolute_weight_for_short_positions():
+    portfolio = {
+        "PortfolioCurrency": "CHF",
+        "SecurityPositions": [{"SecurityId": 1, "Currency": "USD", "PortfolioValuePercentage": -0.2}],
+    }
+    assert non_base_currency_exposure(portfolio) == 0.2

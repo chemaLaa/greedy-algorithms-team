@@ -107,3 +107,31 @@ def test_missing_portfolio_id_does_not_crash():
     bad_bundle = {**bundle, "portfolio_id": 999999}  # no matching portfolio
     context = build_briefing_context(view, bad_bundle)
     assert context["portfolio"]["value"] is None
+
+
+# --- attribution_caveat ---
+
+
+def test_attribution_caveat_reflects_real_bundle_facts():
+    view, bundle = _view_and_bundle()
+    context = build_briefing_context(view, bundle)
+    caveat = context["attribution_caveat"]
+    assert caveat["liquidity_ratio"] == bundle["liquidity"]["liquidity_ratio"]
+    assert caveat["has_holdings_based_drivers"] == bool(bundle["top_risk_contributors"])
+    assert caveat["non_base_currency_exposure"] == bundle["concentrations"]["non_base_currency_exposure"]
+
+
+def test_attribution_caveat_no_holdings_based_drivers_when_contributors_empty():
+    view, bundle = _view_and_bundle()
+    empty_bundle = {**bundle, "top_risk_contributors": []}
+    context = build_briefing_context(view, empty_bundle)
+    assert context["attribution_caveat"]["has_holdings_based_drivers"] is False
+
+
+def test_attribution_caveat_handles_missing_liquidity_and_concentrations():
+    view, bundle = _view_and_bundle()
+    sparse_bundle = {k: v for k, v in bundle.items() if k not in ("liquidity", "concentrations")}
+    context = build_briefing_context(view, sparse_bundle)
+    caveat = context["attribution_caveat"]
+    assert caveat["liquidity_ratio"] is None
+    assert caveat["non_base_currency_exposure"] is None
