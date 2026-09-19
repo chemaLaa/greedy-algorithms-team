@@ -1,0 +1,79 @@
+{
+  "client": {
+    "name": "Travis Bickle",
+    "id": "125070",
+    "type": "Individual",
+    "profile": "Anlageprofil 6",
+    "assets_chf": "CHF 697,652",
+    "age": null
+  },
+  "headline": "Travis Bickle's portfolio experienced a 0.8% decline in value over the past month.",
+  "attention": [
+    {
+      "level": "critical",
+      "title": "Volatility Range Undershot",
+      "detail": "The portfolio's risk level is currently too low, not matching the client's risk profile.",
+      "source": "Error"
+    },
+    {
+      "level": "warning",
+      "title": "Underweight in Consumer Staples",
+      "detail": "The portfolio is underweight by more than 5% in the Consumer Staples sector compared to the benchmark.",
+      "source": "saa_deviations.AssetClass"
+    },
+    {
+      "level": "warning",
+      "title": "Underweight in Health Care",
+      "detail": "The portfolio is underweight by more than 5% in the Health Care sector compared to the benchmark.",
+      "source": "saa_deviations.AssetClass"
+    },
+    {
+      "level": "warning",
+      "title": "Overweight in Industrials",
+      "detail": "The portfolio is overweight by more than 10% in the Industrials sector compared to the benchmark.",
+      "source": "saa_deviations.AssetClass"
+    }
+  ],
+  "since_last": [
+    "First briefing generated for this client."
+  ],
+  "talking_points": [
+    "Discuss the portfolio's current underweight positions in Consumer Staples and Health Care.",
+    "Evaluate the overweight position in Industrials and its alignment with the client's risk profile.",
+    "Consider adjustments to align with the bank's overweight view on North America and Information Technology.",
+    "Review the impact of iShares Listed Private Equity UCITS ETF on portfolio risk.",
+    "Assess the portfolio's overall risk level and potential adjustments needed."
+  ],
+  "sources": [
+    {
+      "section": "Suitability violations",
+      "field": "active_violations",
+      "detail": "4 active \u2014 1 Error, 3 Warning"
+    },
+    {
+      "section": "SAA target deviations",
+      "field": "saa_target_deviations",
+      "detail": "5 dimensions out of band; largest: Others +28.1 pp"
+    },
+    {
+      "section": "Risk contributors",
+      "field": "risk_attribution",
+      "detail": "Top 3 positions by contribution volatility; largest: Anteile - iShares II PLC  - iShares Listed Private Equity UCITS ETF (13.3% of portfolio vol)"
+    },
+    {
+      "section": "Performance history",
+      "field": "PerformanceHistory",
+      "detail": "58 data points (2021-10-01 to 2026-07-01)"
+    },
+    {
+      "section": "House view",
+      "field": "house_view",
+      "detail": "11 asset-class stances, as of 2026-09-01 (mock)"
+    },
+    {
+      "section": "Client notes",
+      "field": "ClientNotes",
+      "detail": "3 notes, latest 2026-08-22"
+    }
+  ]
+}

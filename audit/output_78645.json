@@ -1,0 +1,73 @@
+{
+  "client": {
+    "name": "Vito Corleone",
+    "id": "78645",
+    "type": "Individual",
+    "profile": "Anlageprofil 5",
+    "assets_chf": "CHF 503,466",
+    "age": null
+  },
+  "headline": "Portfolio value decreased by 5.3% from June to July 2026.",
+  "attention": [
+    {
+      "level": "info",
+      "title": "No Compliance Issues",
+      "detail": "There are no active compliance issues, allocation breaches, or concentration flags.",
+      "source": "ISSUES AND RISKS"
+    },
+    {
+      "level": "info",
+      "title": "High Portfolio Risk Contributors",
+      "detail": "MSCI ACWI SF UCITS ETF and iShares Core SPI(R) ETF each contribute 19% to portfolio risk.",
+      "source": "TOP RISK CONTRIBUTORS"
+    },
+    {
+      "level": "warning",
+      "title": "Underweight in Health Care",
+      "detail": "Client's Health Care allocation is 4.5% vs. target 24.3%, opposite to bank's overweight view.",
+      "source": "HOUSE VIEW COMPARISON"
+    }
+  ],
+  "since_last": [
+    "First briefing generated for this client."
+  ],
+  "talking_points": [
+    "Discuss the recent 5.3% portfolio value decrease.",
+    "Consider aligning Health Care allocation with bank's overweight view.",
+    "Evaluate the high risk contribution from MSCI ACWI SF UCITS ETF.",
+    "Review the client's ESG preferences in light of current holdings.",
+    "Discuss potential adjustments in Information Technology allocation."
+  ],
+  "sources": [
+    {
+      "section": "SAA target deviations",
+      "field": "saa_target_deviations",
+      "detail": "5 dimensions out of band; largest: Swiss francs +36.5 pp"
+    },
+    {
+      "section": "Risk contributors",
+      "field": "risk_attribution",
+      "detail": "Top 3 positions by contribution volatility; largest: Anteile -A- Hedged CHF UBS (Irl) Fund  Solutions PLC - MSCI ACWI SF UCITS ETF (19.1% of portfolio vol)"
+    },
+    {
+      "section": "Performance history",
+      "field": "PerformanceHistory",
+      "detail": "58 data points (2021-10-01 to 2026-07-01)"
+    },
+    {
+      "section": "House view",
+      "field": "house_view",
+      "detail": "11 asset-class stances, as of 2026-09-01 (mock)"
+    },
+    {
+      "section": "Client notes",
+      "field": "ClientNotes",
+      "detail": "2 notes, latest 2026-08-22"
+    },
+    {
+      "section": "Client interest tags",
+      "field": "Tags",
+      "detail": "Materials, Industrials"
+    }
+  ]
+}

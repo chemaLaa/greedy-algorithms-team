@@ -1,0 +1,79 @@
+{
+  "client": {
+    "name": "Ralph Kramden",
+    "id": "181997",
+    "type": "Individual",
+    "profile": "Anlageprofil 6",
+    "assets_chf": "CHF 172,265",
+    "age": null
+  },
+  "headline": "Ralph Kramden's portfolio value decreased by 7.6% in June 2026.",
+  "attention": [
+    {
+      "level": "critical",
+      "title": "Portfolio Volatility Exceeds Limit",
+      "detail": "The portfolio's volatility exceeds the maximum allowed for the client's risk profile.",
+      "source": "F\u00fcr Privatkunden mit Finanzdienstleistung Umfassende Anlageberatung oder Verm\u00f6gensverwaltung muss PF Vola < max Kundenprofil Vola sein."
+    },
+    {
+      "level": "critical",
+      "title": "Missing Knowledge & Experience",
+      "detail": "Knowledge and Experience data is required but missing for the client.",
+      "source": "F\u00fcr Privatkunden mit Finanzdienstleistung Umfassende Anlageberatung oder trx basierte Anlageberatung muss K&E vorhanden sein."
+    },
+    {
+      "level": "warning",
+      "title": "Underweight in Asia/Pacific Stocks",
+      "detail": "The portfolio is underweight in the Asia/Pacific (ex Japan) stock region compared to the benchmark.",
+      "source": "saa_deviations.AssetClass"
+    },
+    {
+      "level": "info",
+      "title": "High Portfolio Liquidity",
+      "detail": "Portfolio liquidity is 22.6% of AUM, which may require discussion.",
+      "source": "Portfolio liquidity"
+    }
+  ],
+  "since_last": [
+    "Portfolio value changed +0.0% (from 172,265 to 172,265) since the last briefing."
+  ],
+  "talking_points": [
+    "Discuss the portfolio's volatility exceeding the client's risk profile limits.",
+    "Address the missing Knowledge & Experience data requirement.",
+    "Consider rebalancing to align with the bank's overweight position in shares.",
+    "Evaluate the high liquidity level and its implications for the portfolio.",
+    "Review the underweight positions in Asia/Pacific and Health Care sectors."
+  ],
+  "sources": [
+    {
+      "section": "Suitability violations",
+      "field": "active_violations",
+      "detail": "12 active \u2014 4 Error, 8 Warning"
+    },
+    {
+      "section": "SAA target deviations",
+      "field": "saa_target_deviations",
+      "detail": "5 dimensions out of band; largest: Shares -24.4 pp"
+    },
+    {
+      "section": "Risk contributors",
+      "field": "risk_attribution",
+      "detail": "Top 3 positions by contribution volatility; largest: Units -A CHF- RP Investment Funds - GSC Green Tech ESG Fund (19.2% of portfolio vol)"
+    },
+    {
+      "section": "Performance history",
+      "field": "PerformanceHistory",
+      "detail": "58 data points (2021-10-01 to 2026-07-01)"
+    },
+    {
+      "section": "House view",
+      "field": "house_view",
+      "detail": "11 asset-class stances, as of 2026-09-01 (mock)"
+    },
+    {
+      "section": "Client notes",
+      "field": "ClientNotes",
+      "detail": "5 notes, latest 2026-09-14"
+    }
+  ]
+}

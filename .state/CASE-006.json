@@ -1,0 +1,105 @@
+{
+  "snapshots": {
+    "375": {
+      "portfolio_id": 375,
+      "captured_at": "2026-09-19T06:34:39.686644+00:00",
+      "portfolio_value": 477342.29951,
+      "allocation": {
+        "AssetClass": {
+          "Bonds": 0.0,
+          "Liquidity": 0.0,
+          "Real estate": 0.0,
+          "Shares": 0.85842,
+          "Specialties andCommodities": 0.0
+        },
+        "CurrencyGroup": {
+          "Euro": 0.13009,
+          "Swiss francs": 0.7283299999999999
+        },
+        "CountryGroup": {
+          "Rest of Europe": 0.13009,
+          "Switzerland": 0.7283299999999999
+        },
+        "Industry": {
+          "Consumer Discretionary": 0.08760000000000001,
+          "Consumer Staples": 0.27425,
+          "Financials": 0.16253,
+          "Health Care": 0.13478,
+          "Industrials": 0.03372,
+          "Materials": 0.16554
+        }
+      },
+      "top_positions": [
+        {
+          "SecurityId": 644,
+          "SecurityName": "Namen-Aktie Nestle SA",
+          "weight": 0.25327
+        },
+        {
+          "SecurityId": 4908,
+          "SecurityName": "Namen-Aktie Sika AG",
+          "weight": 0.16554
+        },
+        {
+          "SecurityId": 230,
+          "SecurityName": "Namen-Aktie Zurich Insurance Group AG",
+          "weight": 0.16253
+        },
+        {
+          "SecurityId": 261,
+          "SecurityName": "Genussschein Roche Holding AG",
+          "weight": 0.10233
+        },
+        {
+          "SecurityId": 11087,
+          "SecurityName": "Namen-Aktie adidas AG",
+          "weight": 0.07666
+        }
+      ],
+      "violations": []
+    },
+    "376": {
+      "portfolio_id": 376,
+      "captured_at": "2026-09-19T06:34:39.686663+00:00",
+      "portfolio_value": 20015.55134,
+      "allocation": {
+        "AssetClass": {
+          "Bonds": 0.0,
+          "Liquidity": 0.0,
+          "Real estate": 0.0,
+          "Shares": 0.0,
+          "Specialties andCommodities": 0.0
+        },
+        "CurrencyGroup": {},
+        "CountryGroup": {},
+        "Industry": {}
+      },
+      "top_positions": [],
+      "violations": []
+    },
+    "377": {
+      "portfolio_id": 377,
+      "captured_at": "2026-09-19T06:34:39.686671+00:00",
+      "portfolio_value": 202747.75,
+      "allocation": {
+        "AssetClass": {
+          "Bonds": 0.0,
+          "Liquidity": 0.0,
+          "Real estate": 0.0,
+          "Shares": 0.0,
+          "Specialties andCommodities": 0.0
+        },
+        "CurrencyGroup": {},
+        "CountryGroup": {},
+        "Industry": {}
+      },
+      "top_positions": [],
+      "violations": []
+    }
+  },
+  "events": [
+    "2026-09-19T06:34:39.686644+00:00: first briefing generated for this client",
+    "2026-09-19T06:34:39.686663+00:00: first briefing generated for this client",
+    "2026-09-19T06:34:39.686671+00:00: first briefing generated for this client"
+  ]
+}

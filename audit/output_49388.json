@@ -1,0 +1,83 @@
+{
+  "client": {
+    "name": "Pikachu",
+    "id": "49388",
+    "type": "Individual",
+    "profile": "Anlageprofil 7",
+    "assets_chf": "CHF 698,978",
+    "age": null
+  },
+  "headline": "Portfolio has a critical concentration risk with Comet Holding AG at 21.9% of total value.",
+  "attention": [
+    {
+      "level": "critical",
+      "title": "Concentration in Comet Holding AG",
+      "detail": "Comet Holding AG makes up 21.9% of the portfolio, posing a significant concentration risk.",
+      "source": "SecurityPositions"
+    },
+    {
+      "level": "critical",
+      "title": "Overweight in Swiss Equities",
+      "detail": "The portfolio is significantly overweight in the Swiss equities region, deviating from the SAA benchmark.",
+      "source": "saa_deviations.AssetClass"
+    },
+    {
+      "level": "critical",
+      "title": "Underweight in North American Equities",
+      "detail": "The portfolio is significantly underweight in North American equities, deviating from the SAA benchmark.",
+      "source": "saa_deviations.AssetClass"
+    },
+    {
+      "level": "warning",
+      "title": "Non-Monitored Shares",
+      "detail": "Some shares are not part of the investment universe and are therefore not monitored.",
+      "source": "SuitabilityViolations"
+    }
+  ],
+  "since_last": [
+    "Portfolio value changed +0.0% (from 698,978 to 698,978) since the last briefing."
+  ],
+  "talking_points": [
+    "Discuss reducing concentration in Comet Holding AG to mitigate risk.",
+    "Consider rebalancing to address the overweight in Swiss equities.",
+    "Explore opportunities to increase exposure to North American equities.",
+    "Review non-monitored shares for potential risks or adjustments."
+  ],
+  "sources": [
+    {
+      "section": "Suitability violations",
+      "field": "active_violations",
+      "detail": "13 active \u2014 7 Error, 6 Warning"
+    },
+    {
+      "section": "SAA target deviations",
+      "field": "saa_target_deviations",
+      "detail": "5 dimensions out of band; largest: Swiss francs +23.7 pp"
+    },
+    {
+      "section": "Risk contributors",
+      "field": "risk_attribution",
+      "detail": "Top 3 positions by contribution volatility; largest: Namen-Aktie Comet Holding AG (48.6% of portfolio vol)"
+    },
+    {
+      "section": "Performance history",
+      "field": "PerformanceHistory",
+      "detail": "58 data points (2021-10-01 to 2026-07-01)"
+    },
+    {
+      "section": "House view",
+      "field": "house_view",
+      "detail": "11 asset-class stances, as of 2026-09-01 (mock)"
+    },
+    {
+      "section": "Client notes",
+      "field": "ClientNotes",
+      "detail": "3 notes, latest 2026-09-04"
+    },
+    {
+      "section": "Client interest tags",
+      "field": "Tags",
+      "detail": "Consumer Staples, Japan, North America"
+    }
+  ]
+}

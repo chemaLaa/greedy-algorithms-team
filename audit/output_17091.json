@@ -1,0 +1,73 @@
+{
+  "client": {
+    "name": "Spock",
+    "id": "17091",
+    "type": "Individual",
+    "profile": "Anlageprofil 5",
+    "assets_chf": "CHF 477,342",
+    "age": null
+  },
+  "headline": "Portfolio value decreased by 1.7% from June to July 2026.",
+  "attention": [
+    {
+      "level": "critical",
+      "title": "High Concentration in Nestle SA",
+      "detail": "Nestle SA constitutes 25.3% of the portfolio, indicating a concentrated single position risk.",
+      "source": "SecurityPositions"
+    },
+    {
+      "level": "warning",
+      "title": "Low Portfolio Liquidity",
+      "detail": "Portfolio liquidity is at 14.2% of AUM, which may need to be addressed.",
+      "source": "SecurityPositions"
+    },
+    {
+      "level": "info",
+      "title": "Sika AG Risk Contribution",
+      "detail": "Sika AG contributes 31% to the portfolio's risk, the highest among holdings.",
+      "source": "saa_deviations.AssetClass"
+    }
+  ],
+  "since_last": [
+    "First briefing generated for this client."
+  ],
+  "talking_points": [
+    "Discuss the high concentration risk due to Nestle SA.",
+    "Evaluate the current liquidity level and potential adjustments.",
+    "Consider diversifying to mitigate Sika AG's risk contribution.",
+    "Review alignment with the house view on shares.",
+    "Ensure the portfolio remains within the client's risk profile."
+  ],
+  "sources": [
+    {
+      "section": "SAA target deviations",
+      "field": "saa_target_deviations",
+      "detail": "5 dimensions out of band; largest: Shares +85.8 pp"
+    },
+    {
+      "section": "Risk contributors",
+      "field": "risk_attribution",
+      "detail": "Top 3 positions by contribution volatility; largest: Namen-Aktie Sika AG (31.2% of portfolio vol)"
+    },
+    {
+      "section": "Performance history",
+      "field": "PerformanceHistory",
+      "detail": "58 data points (2021-10-01 to 2026-07-01)"
+    },
+    {
+      "section": "House view",
+      "field": "house_view",
+      "detail": "7 asset-class stances, as of 2026-09-01 (mock)"
+    },
+    {
+      "section": "Client notes",
+      "field": "ClientNotes",
+      "detail": "3 notes, latest 2026-07-27"
+    },
+    {
+      "section": "Client interest tags",
+      "field": "Tags",
+      "detail": "Great Britain, Real Estate"
+    }
+  ]
+}
