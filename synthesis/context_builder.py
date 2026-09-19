@@ -13,6 +13,12 @@ from __future__ import annotations
 
 from typing import Optional
 
+# "A small pool of advisory notes" per DATA.md (today: 5-6 per client) —
+# capped anyway rather than assuming that stays true of tomorrow's data,
+# matching this codebase's pattern of explicit budgets everywhere else
+# (market_news's BUDGET_MAX_* constants, house_view's max_actionable).
+CLIENT_NOTES_MAX = 5
+
 
 def build_briefing_context(
     client_view: dict,
@@ -68,6 +74,7 @@ def build_briefing_context(
 
     return {
         "client": _client_section(client_view),
+        "client_notes": _client_notes_section(client_view),
         "portfolio": _portfolio_section(client_view, portfolio, priority_bundle),
         "priorities": priority_bundle.get("priorities", []),
         "top_risk_contributors": priority_bundle.get("top_risk_contributors", []),
@@ -97,6 +104,35 @@ def _portfolio_section(client_view: dict, portfolio: Optional[dict], priority_bu
         "reporting_currency": client_view.get("reporting_currency"),
         "performance_trend": priority_bundle.get("performance"),
     }
+
+
+def _client_notes_section(client_view: dict, max_notes: int = CLIENT_NOTES_MAX) -> list[dict]:
+    """
+    CRM-style advisory notes (ClientNotes[].Note) — free text an advisor
+    has recorded about this client's circumstances, preferences, and
+    exclusions (e.g. "no direct positions in fossil fuels", "prefers a
+    cash reserve for medical expenses", "power of attorney for a family
+    member's portfolio"). Previously loaded into client_view["notes"] by
+    data_layer but only ever consulted for its DATE (as an interaction-date
+    proxy elsewhere) — the actual text never reached the model. This is
+    the seam that fixes that: real client-specific circumstances, plain
+    data, most-recent-first, capped at max_notes.
+
+    A note missing its own text is skipped rather than surfaced as an
+    empty bullet the model would have to guess the meaning of.
+    """
+    notes = client_view.get("notes") or []
+    parsed = []
+    for note in notes:
+        if not isinstance(note, dict):
+            continue
+        text = note.get("Note")
+        if not text:
+            continue
+        parsed.append({"date": note.get("CreatedByDateUTC"), "text": text})
+
+    parsed.sort(key=lambda n: n["date"] or "", reverse=True)
+    return parsed[:max_notes]
 
 
 def _attribution_caveat_section(priority_bundle: dict) -> dict:

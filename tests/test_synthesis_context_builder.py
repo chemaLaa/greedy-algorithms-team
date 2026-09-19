@@ -135,3 +135,64 @@ def test_attribution_caveat_handles_missing_liquidity_and_concentrations():
     caveat = context["attribution_caveat"]
     assert caveat["liquidity_ratio"] is None
     assert caveat["non_base_currency_exposure"] is None
+
+
+# --- client_notes ---
+
+
+def test_client_notes_surfaces_the_fixture_client_note():
+    # The shared fixture (test_fixtures/clients.sample.json) already has a
+    # real ClientNotes entry — confirms build_briefing_context() actually
+    # surfaces note CONTENT, not just a date, for a client built through
+    # the normal data_layer -> analysis_layer pipeline.
+    view, bundle = _view_and_bundle()
+    context = build_briefing_context(view, bundle)
+    assert context["client_notes"] == [
+        {"date": "2026-06-01T00:00:00Z", "text": "Client plans a property purchase next year."}
+    ]
+
+
+def test_client_notes_sorted_most_recent_first():
+    view, bundle = _view_and_bundle()
+    view_with_notes = {
+        **view,
+        "notes": [
+            {"Note": "Oldest.", "CreatedByDateUTC": "2024-01-01T00:00:00"},
+            {"Note": "Newest.", "CreatedByDateUTC": "2026-09-01T00:00:00"},
+            {"Note": "Middle.", "CreatedByDateUTC": "2025-05-01T00:00:00"},
+        ],
+    }
+    context = build_briefing_context(view_with_notes, bundle)
+    texts = [n["text"] for n in context["client_notes"]]
+    assert texts == ["Newest.", "Middle.", "Oldest."]
+
+
+def test_client_notes_skips_entries_with_no_text():
+    view, bundle = _view_and_bundle()
+    view_with_notes = {
+        **view,
+        "notes": [
+            {"Note": "", "CreatedByDateUTC": "2026-01-01T00:00:00"},
+            {"CreatedByDateUTC": "2026-01-02T00:00:00"},  # missing "Note" entirely
+            {"Note": "Real note.", "CreatedByDateUTC": "2026-01-03T00:00:00"},
+        ],
+    }
+    context = build_briefing_context(view_with_notes, bundle)
+    assert len(context["client_notes"]) == 1
+    assert context["client_notes"][0]["text"] == "Real note."
+
+
+def test_client_notes_capped_at_max():
+    view, bundle = _view_and_bundle()
+    view_with_notes = {
+        **view,
+        "notes": [
+            {"Note": f"Note {i}", "CreatedByDateUTC": f"2026-01-{i + 1:02d}T00:00:00"} for i in range(10)
+        ],
+    }
+    context = build_briefing_context(view_with_notes, bundle)
+    from synthesis.context_builder import CLIENT_NOTES_MAX
+
+    assert len(context["client_notes"]) == CLIENT_NOTES_MAX
+    # And it kept the most recent ones, not an arbitrary slice.
+    assert context["client_notes"][0]["text"] == "Note 9"

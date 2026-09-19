@@ -3,6 +3,7 @@ from synthesis.prompt_builder import (
     context_to_prose,
     _format_attribution_caveat,
     _format_client_and_portfolio,
+    _format_client_notes,
     _format_performance,
     _format_priorities,
     _format_risk_contributors,
@@ -29,6 +30,7 @@ def _minimal_context(**overrides):
                 "previous_date": "2026-08-01",
             },
         },
+        "client_notes": [],
         "priorities": [],
         "top_risk_contributors": [],
         "change_since_last_interaction": {"source": "state_diff", "is_first_interaction": True, "details": {}},
@@ -72,6 +74,38 @@ def test_client_and_portfolio_handles_missing_value():
     context["portfolio"]["value"] = None
     text = _format_client_and_portfolio(context)
     assert "unavailable" in text
+
+
+# --- _format_client_notes ---
+
+
+def test_client_notes_empty():
+    assert "No advisory notes" in _format_client_notes([])
+
+
+def test_client_notes_formats_date_and_text():
+    text = _format_client_notes([{"date": "2026-09-05T09:16:32", "text": "No direct positions in fossil fuels, please."}])
+    assert "2026-09-05" in text
+    assert "No direct positions in fossil fuels" in text
+    # The time-of-day component is noise for the model, not signal.
+    assert "09:16:32" not in text
+
+
+def test_client_notes_lists_most_recent_first_as_given():
+    # context_builder is responsible for sorting; this formatter just
+    # renders in the order it's handed, so this locks in that contract.
+    notes = [
+        {"date": "2026-09-12T13:25:53", "text": "Newest note."},
+        {"date": "2024-09-17T09:16:32", "text": "Oldest note."},
+    ]
+    text = _format_client_notes(notes)
+    assert text.index("Newest note.") < text.index("Oldest note.")
+
+
+def test_client_notes_handles_non_iso_date_gracefully():
+    text = _format_client_notes([{"date": "unparseable", "text": "Something the advisor wrote."}])
+    assert "unparseable" in text
+    assert "Something the advisor wrote." in text
 
 
 # --- _format_performance ---
@@ -411,8 +445,8 @@ def test_news_distinguishes_fetch_failed_from_no_news_found():
 def test_context_to_prose_has_all_expected_keys():
     fragments = context_to_prose(_minimal_context())
     assert set(fragments.keys()) == {
-        "client_and_portfolio", "performance", "attribution_caveat", "priorities",
-        "risk_contributors", "change_since_last_interaction", "house_view", "news",
+        "client_and_portfolio", "client_notes", "performance", "attribution_caveat",
+        "priorities", "risk_contributors", "change_since_last_interaction", "house_view", "news",
     }
 
 
@@ -455,6 +489,21 @@ def test_build_prompt_user_message_includes_attribution_caveat_section():
     assert "DATA AVAILABILITY FOR ATTRIBUTING THIS CHANGE" in content
     assert "100%" in content
     assert "No security-level risk-contribution data" in content
+
+
+def test_build_prompt_user_message_includes_client_notes_section():
+    prompt = build_prompt(
+        _minimal_context(client_notes=[{"date": "2026-09-12", "text": "No direct positions in fossil fuels, please."}])
+    )
+    content = prompt["messages"][0]["content"]
+    assert "CLIENT NOTES / CIRCUMSTANCES" in content
+    assert "No direct positions in fossil fuels" in content
+
+
+def test_build_prompt_system_mentions_client_circumstances_and_staleness_judgment():
+    system = " ".join(build_prompt(_minimal_context())["system"].split())
+    assert "CLIENT NOTES" in system
+    assert "still applies" in system or "still relevant" in system
 
 
 def test_build_prompt_user_message_contains_client_name():

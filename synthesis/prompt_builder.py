@@ -31,9 +31,10 @@ short notice, and needs to walk in already understanding the situation.
 
 You will be given facts about one client's portfolio: recent performance, \
 current risks and compliance issues, how the portfolio compares to the \
-bank's tactical house view, relevant market news, and what has changed \
-since the advisor last looked at this client. All of these facts are \
-labeled by source in the message below.
+bank's tactical house view, relevant market news, notes an advisor has \
+recorded about this client's own circumstances and preferences, and what \
+has changed since the advisor last looked at this client. All of these \
+facts are labeled by source in the message below.
 
 Your job is to write ONE coherent briefing that an advisor can read in \
 about 60 seconds (roughly 150-220 words total). It must answer, in this \
@@ -78,6 +79,15 @@ Critical rules:
   what actually drove the recent value change, and must not be presented \
   as one unless another fact you were given actually supports that \
   specific link.
+- "CLIENT NOTES / CIRCUMSTANCES" are an advisor's own free-text \
+  observations about this specific client — preferences, exclusions, \
+  life events, personality — not portfolio data. Treat a stated \
+  preference or exclusion (e.g. "no fossil fuel positions", "wants a \
+  cash reserve on hand") as something the rest of the briefing should \
+  respect or reference where relevant, not as a fact to just repeat. \
+  Notes carry a date; use judgment about whether an old note still \
+  applies rather than presenting it as current fact, and never invent a \
+  circumstance beyond what a note actually says.
 - Write in fluent English throughout, even where a source fact was in \
   German — translate rather than mixing languages in your output.
 - Plain prose, no markdown headers or bullet lists inside each section.
@@ -96,6 +106,7 @@ def context_to_prose(context: dict) -> dict[str, str]:
     """
     return {
         "client_and_portfolio": _format_client_and_portfolio(context),
+        "client_notes": _format_client_notes(context.get("client_notes", [])),
         "performance": _format_performance(context["portfolio"].get("performance_trend")),
         "attribution_caveat": _format_attribution_caveat(context.get("attribution_caveat")),
         "priorities": _format_priorities(context.get("priorities", [])),
@@ -116,6 +127,7 @@ def build_prompt(context: dict) -> dict:
 
     user_message = (
         f"{fragments['client_and_portfolio']}\n\n"
+        f"CLIENT NOTES / CIRCUMSTANCES (from CRM, most recent first):\n{fragments['client_notes']}\n\n"
         f"RECENT PERFORMANCE:\n{fragments['performance']}\n\n"
         f"DATA AVAILABILITY FOR ATTRIBUTING THIS CHANGE:\n{fragments['attribution_caveat']}\n\n"
         f"CURRENT ISSUES AND RISKS (ranked by rule-based severity, not necessarily by "
@@ -157,6 +169,26 @@ def _format_client_and_portfolio(context: dict) -> str:
         portfolio_line = f"Portfolio: {portfolio_name} (current value unavailable)."
 
     return f"{client_line}\n{portfolio_line}"
+
+
+def _format_client_notes(notes: list[dict]) -> str:
+    """
+    CRM-style advisory notes (synthesis.context_builder's client_notes),
+    most-recent-first. This is the ONE place a client's own recorded
+    circumstances/preferences/exclusions reach the model as content, not
+    just as a date used elsewhere for interaction-recency — see
+    context_builder._client_notes_section for why that content was
+    previously dropped entirely.
+    """
+    if not notes:
+        return "No advisory notes on file for this client."
+
+    lines = []
+    for note in notes:
+        date = note.get("date")
+        date_str = date.split("T")[0] if isinstance(date, str) and "T" in date else (date or "unknown date")
+        lines.append(f"- ({date_str}) {note.get('text')}")
+    return "\n".join(lines)
 
 
 def _format_performance(trend: Optional[dict]) -> str:
