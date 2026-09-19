@@ -34,6 +34,13 @@ from typing import Optional
 from .prompt_builder import build_prompt
 
 DEFAULT_MODEL = "claude-sonnet-5"
+# 1024 was tried first and proved too tight in practice — a real model
+# response got cut off mid-sentence before finishing the JSON structure
+# (three ~150-220 word sections plus JSON syntax overhead adds up).
+# 4096 leaves real headroom; still fails loudly and specifically (see the
+# stop_reason check in generate_briefing) if a model ever runs long
+# enough to hit even this.
+DEFAULT_MAX_TOKENS = 4096
 REQUIRED_KEYS = ("recent_development", "health_check", "outlook_and_actions")
 
 # ~200 words/minute is a commonly cited average adult silent-reading
@@ -51,18 +58,24 @@ class BriefingGenerationError(Exception):
     """
 
 
-def generate_briefing(context: dict, model: str = DEFAULT_MODEL, client=None) -> dict:
+def generate_briefing(
+    context: dict, model: str = DEFAULT_MODEL, client=None, max_tokens: int = DEFAULT_MAX_TOKENS
+) -> dict:
     """
     context: a BriefingContext (synthesis.context_builder.build_briefing_context() output)
     model: the Anthropic model string to use (see DEFAULT_MODEL note above)
     client: an already-constructed client object exposing
         `.messages.create(model=, max_tokens=, system=, messages=)` and
         returning an object with a `.content` list of blocks each having
-        `.type` and `.text` — matches anthropic.Anthropic()'s interface.
-        Pass one explicitly for custom auth/timeout config, for tests
-        (a fake client), or leave None to construct a default
-        anthropic.Anthropic() from the ANTHROPIC_API_KEY environment
-        variable.
+        `.type` and `.text`, and a `.stop_reason` attribute — matches
+        anthropic.Anthropic()'s interface. Pass one explicitly for custom
+        auth/timeout config, for tests (a fake client), or leave None to
+        construct a default anthropic.Anthropic() from the
+        ANTHROPIC_API_KEY environment variable.
+    max_tokens: passed straight through to the API call. Raise this if
+        you see a "truncated" BriefingGenerationError (see below) —
+        that's the model running out of room mid-response, not a bug in
+        this code.
 
     Returns:
         {
@@ -73,8 +86,9 @@ def generate_briefing(context: dict, model: str = DEFAULT_MODEL, client=None) ->
           "raw_model_response": str,
         }
 
-    Raises BriefingGenerationError on any failure — API call, JSON
-    parsing, or missing required keys.
+    Raises BriefingGenerationError on any failure — API call, a response
+    truncated by hitting max_tokens, JSON parsing, or missing required
+    keys.
     """
     prompt = build_prompt(context)
 
@@ -84,7 +98,7 @@ def generate_briefing(context: dict, model: str = DEFAULT_MODEL, client=None) ->
     try:
         response = client.messages.create(
             model=model,
-            max_tokens=1024,
+            max_tokens=max_tokens,
             system=prompt["system"],
             messages=prompt["messages"],
         )
@@ -92,6 +106,15 @@ def generate_briefing(context: dict, model: str = DEFAULT_MODEL, client=None) ->
         raise
     except Exception as e:
         raise BriefingGenerationError(f"Model call failed: {e!r}") from e
+
+    stop_reason = getattr(response, "stop_reason", None)
+    if stop_reason == "max_tokens":
+        raise BriefingGenerationError(
+            f"Model response was truncated — it hit the max_tokens limit ({max_tokens}) "
+            f"before finishing. This is not a JSON-formatting bug; increase max_tokens "
+            f"(generate_briefing(..., max_tokens=...)) and retry. "
+            f"Partial response: {_extract_text(response)!r}"
+        )
 
     raw_text = _extract_text(response)
     parsed = _parse_json_response(raw_text)
@@ -143,9 +166,21 @@ def _parse_json_response(raw_text: str) -> dict:
     """
     Models sometimes wrap JSON in a markdown code fence (```json ... ```)
     despite being told not to — stripped here before parsing rather than
-    failing on a purely cosmetic wrapper. Raises BriefingGenerationError
-    (not json.JSONDecodeError) on genuinely invalid JSON, so callers only
-    need to catch one exception type from this module.
+    failing on a purely cosmetic wrapper.
+
+    strict=False: a model writing multi-paragraph prose inside a JSON
+    string value sometimes emits a literal newline character instead of
+    an escaped "\\n" — technically invalid JSON (json.loads raises
+    "Invalid control character" on this by default), but a real,
+    non-rare failure mode for LLM-generated JSON specifically. Python's
+    json module's strict=False mode allows raw control characters inside
+    strings without otherwise loosening the grammar, which is exactly
+    the right trade-off here — confirmed against a real truncated-newline
+    response seen in testing.
+
+    Raises BriefingGenerationError (not json.JSONDecodeError) on
+    genuinely invalid JSON, so callers only need to catch one exception
+    type from this module.
     """
     text = raw_text.strip()
     if text.startswith("```"):
@@ -155,6 +190,6 @@ def _parse_json_response(raw_text: str) -> dict:
         text = text.strip()
 
     try:
-        return json.loads(text)
+        return json.loads(text, strict=False)
     except json.JSONDecodeError as e:
         raise BriefingGenerationError(f"Model response was not valid JSON: {raw_text!r}") from e

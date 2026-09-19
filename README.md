@@ -353,8 +353,13 @@ print(briefing)
 ```
 
 Raises `BriefingGenerationError` (never a raw exception) on any failure —
-API call, invalid JSON, or a response missing a required section key. A
-demo should surface this loudly rather than silently show a broken
+API call, invalid JSON, a response missing a required section key, or a
+response **truncated by hitting `max_tokens`** (this happened in real
+testing at the original `1024` limit — three ~150-220 word sections plus
+JSON syntax overhead added up to more than that; `DEFAULT_MAX_TOKENS` is
+now `4096`, and a truncation is detected via `stop_reason` and reported
+clearly rather than surfacing as a confusing "invalid JSON" error). A demo
+should surface any of these loudly rather than silently show a broken
 briefing.
 
 ## The one non-obvious piece: category translation

@@ -17,26 +17,30 @@ class _FakeTextBlock:
 
 
 class _FakeResponse:
-    def __init__(self, blocks):
+    def __init__(self, blocks, stop_reason="end_turn"):
         self.content = blocks
+        self.stop_reason = stop_reason
 
 
 class _FakeMessages:
-    def __init__(self, response_text=None, raise_error=None):
+    def __init__(self, response_text=None, raise_error=None, stop_reason="end_turn"):
         self._response_text = response_text
         self._raise_error = raise_error
+        self._stop_reason = stop_reason
         self.last_call_kwargs = None
 
     def create(self, **kwargs):
         self.last_call_kwargs = kwargs
         if self._raise_error is not None:
             raise self._raise_error
-        return _FakeResponse([_FakeTextBlock(self._response_text)])
+        return _FakeResponse([_FakeTextBlock(self._response_text)], stop_reason=self._stop_reason)
 
 
 class _FakeClient:
-    def __init__(self, response_text=None, raise_error=None):
-        self.messages = _FakeMessages(response_text=response_text, raise_error=raise_error)
+    def __init__(self, response_text=None, raise_error=None, stop_reason="end_turn"):
+        self.messages = _FakeMessages(
+            response_text=response_text, raise_error=raise_error, stop_reason=stop_reason
+        )
 
 
 VALID_JSON_RESPONSE = json.dumps(
@@ -150,6 +154,37 @@ def test_generate_briefing_raises_when_api_call_fails():
         assert "connection refused" in str(e)
 
 
+def test_generate_briefing_raises_clear_error_when_truncated_by_max_tokens():
+    # Real bug found via live testing: a genuine response got cut off
+    # mid-sentence because max_tokens was too low, producing an
+    # "Unterminated string" JSON error that didn't explain the real
+    # cause. This must be caught explicitly and reported as truncation,
+    # not surfaced as a generic JSON-parsing failure.
+    truncated_json = '{"recent_development": "This got cut off mid-sen'
+    client = _FakeClient(response_text=truncated_json, stop_reason="max_tokens")
+    try:
+        generate_briefing(_minimal_context(), client=client, max_tokens=500)
+        assert False, "expected BriefingGenerationError"
+    except BriefingGenerationError as e:
+        assert "truncated" in str(e)
+        assert "max_tokens" in str(e)
+        assert "500" in str(e)
+
+
+def test_generate_briefing_passes_custom_max_tokens_to_client():
+    client = _FakeClient(response_text=VALID_JSON_RESPONSE)
+    generate_briefing(_minimal_context(), client=client, max_tokens=8000)
+    assert client.messages.last_call_kwargs["max_tokens"] == 8000
+
+
+def test_generate_briefing_default_max_tokens_has_real_headroom():
+    from synthesis.briefing_generator import DEFAULT_MAX_TOKENS
+
+    # Regression guard against reintroducing the original 1024 ceiling
+    # that caused a real truncated response in testing.
+    assert DEFAULT_MAX_TOKENS >= 2048
+
+
 # --- _extract_text ---
 
 
@@ -189,6 +224,17 @@ def test_parse_json_response_raises_briefing_error_not_json_error():
         assert False, "expected BriefingGenerationError"
     except BriefingGenerationError:
         pass
+
+
+def test_parse_json_response_handles_literal_newline_in_string_value():
+    # Real bug found via live testing: a genuine model response contained
+    # a literal newline character inside a JSON string value instead of
+    # an escaped "\n" — invalid strict JSON, but a real LLM output
+    # pattern, not a rare edge case.
+    text = '{"recent_development": "First paragraph.\n\nSecond paragraph.", "health_check": "x", "outlook_and_actions": "y"}'
+    result = _parse_json_response(text)
+    assert "First paragraph." in result["recent_development"]
+    assert "Second paragraph." in result["recent_development"]
 
 
 # --- _default_client ---
