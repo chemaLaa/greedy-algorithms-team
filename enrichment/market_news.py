@@ -44,7 +44,11 @@ from __future__ import annotations
 
 import concurrent.futures
 import re
+import urllib.parse
+import urllib.request
+import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
+from email.utils import parsedate_to_datetime
 from typing import Optional, Protocol
 
 # --- budgets ---
@@ -475,6 +479,54 @@ def _article_key(article: dict) -> tuple:
     return ("title_publisher", article.get("title"), article.get("publisher"))
 
 
+def _merge_duplicate_articles_with_providers(articles: list[dict]) -> list[dict]:
+    """
+    Like _merge_duplicate_articles(), but also tracks which distinct provider
+    names found each article (via the temporary `_provider_name` field tagged
+    by fetch_relevant_news_bundle). The `_provider_name` field is stripped
+    from the output.
+    """
+    merged: dict[tuple, dict] = {}
+    order: list[tuple] = []
+
+    for article in articles:
+        key = _article_key(article)
+        if key not in merged:
+            base = {
+                k: v
+                for k, v in article.items()
+                if k not in ("matched_query", "match_reason", "match_type", "fact_id", "_provider_name")
+            }
+            merged[key] = {
+                **base,
+                "matched_queries": [],
+                "match_reasons": [],
+                "match_types": [],
+                "fact_ids": [],
+                "providers": [],
+            }
+            order.append(key)
+
+        entry = merged[key]
+        query = article.get("matched_query")
+        if query is not None and query not in entry["matched_queries"]:
+            entry["matched_queries"].append(query)
+        reason = article.get("match_reason")
+        if reason is not None and reason not in entry["match_reasons"]:
+            entry["match_reasons"].append(reason)
+        match_type = article.get("match_type")
+        if match_type is not None and match_type not in entry["match_types"]:
+            entry["match_types"].append(match_type)
+        fact_id = article.get("fact_id")
+        if fact_id is not None and fact_id not in entry["fact_ids"]:
+            entry["fact_ids"].append(fact_id)
+        provider_name = article.get("_provider_name")
+        if provider_name is not None and provider_name not in entry["providers"]:
+            entry["providers"].append(provider_name)
+
+    return [merged[key] for key in order]
+
+
 def _merge_duplicate_articles(articles: list[dict]) -> list[dict]:
     """
     Merges articles that matched more than one search query into a single
@@ -513,14 +565,15 @@ def _merge_duplicate_articles(articles: list[dict]) -> list[dict]:
 
 def fetch_relevant_news_bundle(
     terms: list[dict],
-    provider: "NewsProvider",
+    provider: "NewsProvider" = None,
     max_per_term: int = BUDGET_MAX_ARTICLES_PER_SUBJECT,
     max_total: int = BUDGET_MAX_RETAINED_ARTICLES,
     now: Optional[datetime] = None,
     max_workers: int = MAX_CONCURRENT_FETCHES,
+    providers: Optional[list] = None,
 ) -> dict:
     """
-    Fetches news for each search term via the given provider CONCURRENTLY
+    Fetches news for each search term via the given provider(s) CONCURRENTLY
     (a ThreadPoolExecutor — these are small, independent, I/O-bound HTTP
     calls, not CPU work, so threads are the right tool and the GIL isn't a
     bottleneck here), applies the freshness window, merges cross-query
@@ -554,11 +607,28 @@ def fetch_relevant_news_bundle(
     `max_total` cut, so behavior is otherwise identical to a sequential
     fetch.
 
+    `providers` (optional list): when given, ALL subjects are fetched from
+    ALL providers in one concurrent submission. Deduplication then merges
+    articles across providers by link (or title+publisher), tracking which
+    distinct providers found each article. Each term_result entry gains a
+    `source_count` field (how many distinct providers returned at least one
+    article for that subject) and the bundle gains a `corroboration` list
+    (subjects with source_count >= 2). When `providers` is None, falls back
+    to the single `provider` argument (backward-compatible).
+
     `reasons` (a list of strings, same pattern as analysis_layer.validation)
     always explains a non-"ok" status, and `term_results` gives a per-term
     breakdown for debugging, in the same order as `terms`. `now` is
     injectable for deterministic tests; defaults to the real current time.
     """
+    # Resolve provider list: `providers` parameter wins over legacy `provider`.
+    if providers is None:
+        if provider is None:
+            provider = YahooFinanceNewsProvider()
+        active_providers = [provider]
+    else:
+        active_providers = providers
+
     now = now or datetime.now(timezone.utc)
 
     if not terms:
@@ -568,41 +638,100 @@ def fetch_relevant_news_bundle(
             "articles": [],
             "term_results": [],
             "freshness_window_used": None,
+            "corroboration": [],
         }
 
+    # Build all (term_index, provider) fetch tasks at once so all providers
+    # run concurrently rather than sequentially per provider.
+    task_list: list[tuple[int, object]] = [
+        (i, p)
+        for i in range(len(terms))
+        for p in active_providers
+    ]
+
+    # per_term_provider_articles[i][provider_name] = list[dict]
+    per_term_provider_articles: list[dict[str, list[dict]]] = [
+        {} for _ in terms
+    ]
     term_results: list[Optional[dict]] = [None] * len(terms)
-    per_term_articles: list[list[dict]] = [[] for _ in terms]
     any_success = False
     any_error = False
 
-    with concurrent.futures.ThreadPoolExecutor(max_workers=min(len(terms), max_workers)) as executor:
-        future_to_index = {
-            executor.submit(provider.fetch, term["query"], max_results=max_per_term): i
-            for i, term in enumerate(terms)
+    num_workers = min(len(task_list), max_workers) if task_list else 1
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=num_workers) as executor:
+        future_to_task = {
+            executor.submit(p.fetch, terms[i]["query"], max_results=max_per_term): (i, p)
+            for i, p in task_list
         }
-        for future in concurrent.futures.as_completed(future_to_index):
-            i = future_to_index[future]
+        for future in concurrent.futures.as_completed(future_to_task):
+            i, p = future_to_task[future]
+            provider_name = getattr(p, "provider_name", type(p).__name__)
             term = terms[i]
             try:
                 fetched = future.result()
             except Exception as e:  # provider/network failure — never silently swallowed
                 any_error = True
-                term_results[i] = {"query": term["query"], "status": "error", "error": f"{type(e).__name__}: {e}"}
+                # Record error for this (term, provider) pair; don't overwrite
+                # an existing ok result from another provider.
+                if term_results[i] is None:
+                    term_results[i] = {
+                        "query": term["query"],
+                        "status": "error",
+                        "error": f"{type(e).__name__}: {e}",
+                    }
                 continue
 
             any_success = True
             fetched = fetched[:max_per_term]
-            term_results[i] = {"query": term["query"], "status": "ok", "article_count": len(fetched)}
-            per_term_articles[i] = [
-                {
-                    **article,
-                    "matched_query": term["query"],
-                    "match_reason": term["reason"],
-                    "match_type": term["type"],
-                    "fact_id": term.get("fact_id"),
-                }
-                for article in fetched
-            ]
+            # Only record this provider's contribution if it actually returned
+            # at least one article — source_count tracks providers that found
+            # something, not providers that merely answered.
+            if fetched:
+                bucket = per_term_provider_articles[i]
+                if provider_name not in bucket:
+                    bucket[provider_name] = []
+                bucket[provider_name].extend(fetched)
+
+    # Build term_results from per_term_provider_articles
+    for i, term in enumerate(terms):
+        provider_buckets = per_term_provider_articles[i]
+        if provider_buckets:
+            total_articles = sum(len(v) for v in provider_buckets.values())
+            source_count = len(provider_buckets)
+            term_results[i] = {
+                "query": term["query"],
+                "status": "ok",
+                "article_count": total_articles,
+                "source_count": source_count,
+                "providers": list(provider_buckets.keys()),
+            }
+        elif term_results[i] is None:
+            # No articles and no error recorded — provider returned nothing
+            term_results[i] = {
+                "query": term["query"],
+                "status": "ok",
+                "article_count": 0,
+                "source_count": 0,
+                "providers": [],
+            }
+
+    # Flatten articles per term preserving order, tagging each with its provider
+    per_term_articles: list[list[dict]] = [[] for _ in terms]
+    for i, term in enumerate(terms):
+        provider_buckets = per_term_provider_articles[i]
+        for provider_name, fetched in provider_buckets.items():
+            for article in fetched:
+                per_term_articles[i].append(
+                    {
+                        **article,
+                        "_provider_name": provider_name,
+                        "matched_query": term["query"],
+                        "match_reason": term["reason"],
+                        "match_type": term["type"],
+                        "fact_id": term.get("fact_id"),
+                    }
+                )
 
     raw_articles: list[dict] = [article for bucket in per_term_articles for article in bucket]
 
@@ -630,7 +759,7 @@ def fetch_relevant_news_bundle(
             if raw_articles:
                 reasons.append("all_articles_older_than_14d_or_undated")
 
-    merged = _merge_duplicate_articles(candidates)[:max_total]
+    merged = _merge_duplicate_articles_with_providers(candidates)[:max_total]
 
     if merged:
         status = "partial" if any_error else "ok"
@@ -648,12 +777,24 @@ def fetch_relevant_news_bundle(
         if not raw_articles:
             reasons.append("no_articles_returned_by_provider")
 
+    # Build corroboration list: subjects where >= 2 providers returned articles
+    corroboration = []
+    for i, term in enumerate(terms):
+        tr = term_results[i]
+        if tr and tr.get("source_count", 0) >= 2:
+            corroboration.append({
+                "subject": term["query"],
+                "source_count": tr["source_count"],
+                "providers": tr["providers"],
+            })
+
     return {
         "status": status,
         "reasons": reasons,
         "articles": merged,
         "term_results": term_results,
         "freshness_window_used": freshness_window_used,
+        "corroboration": corroboration,
     }
 
 
@@ -678,6 +819,8 @@ class FakeNewsProvider:
     tested with zero network access. Not meant for real use.
     """
 
+    provider_name: str = "FakeNewsProvider"
+
     def __init__(self, canned: dict[str, list[dict]] = None):
         self.canned = canned or {}
 
@@ -695,8 +838,71 @@ class FailingNewsProvider:
     def __init__(self, error: Exception = None):
         self.error = error or ConnectionError("simulated provider failure")
 
-    def fetch(self, query: str, max_results: int = 5) -> list[dict]:
+    def fetch(self, query: str, max_results: int = 5) -> list[dict]:  # noqa: ARG002
         raise self.error
+
+
+class GoogleRSSNewsProvider:
+    """
+    News provider that fetches from the Google News RSS feed.
+    No API key required. Parses results using Python's built-in
+    xml.etree.ElementTree.
+
+    NOT TESTED AGAINST A LIVE NETWORK in this environment — see the
+    YahooFinanceNewsProvider docstring for the general caveat about
+    network-dependent providers in this codebase.
+
+    Deliberately does NOT catch its own exceptions: a network/provider
+    failure must propagate up to fetch_relevant_news_bundle(), which is
+    what turns it into an explicit "fetch_failed" status instead of a
+    silently-empty result indistinguishable from "no news found".
+    """
+
+    _RSS_BASE = "https://news.google.com/rss/search"
+    provider_name: str = "GoogleRSSNewsProvider"
+
+    def fetch(self, query: str, max_results: int = 5) -> list[dict]:
+        params = urllib.parse.urlencode({"q": query, "hl": "en", "gl": "US", "ceid": "US:en"})
+        url = f"{self._RSS_BASE}?{params}"
+
+        with urllib.request.urlopen(url, timeout=10) as response:
+            raw_xml = response.read()
+
+        root = ET.fromstring(raw_xml)
+        channel = root.find("channel")
+        if channel is None:
+            return []
+
+        articles = []
+        for item in channel.findall("item")[:max_results]:
+            title = item.findtext("title") or ""
+            link = item.findtext("link") or ""
+            pub_date_raw = item.findtext("pubDate")
+
+            # Parse RFC 2822 date from <pubDate>
+            published_at: Optional[str] = None
+            if pub_date_raw:
+                try:
+                    dt = parsedate_to_datetime(pub_date_raw)
+                    published_at = dt.astimezone(timezone.utc).isoformat()
+                except Exception:
+                    published_at = pub_date_raw
+
+            # Publisher from <source> element
+            source_el = item.find("source")
+            publisher = source_el.text if source_el is not None else None
+
+            articles.append(
+                {
+                    "title": title,
+                    "publisher": publisher,
+                    "link": link,
+                    "published_at": published_at,
+                    "summary": "",
+                }
+            )
+
+        return articles
 
 
 class YahooFinanceNewsProvider:

@@ -11,9 +11,16 @@ ReferenceIndex, a client file, or a network call.
 """
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Optional
 
+from correlation.shock_propagation import (
+    FACTOR_TO_SAA_CATEGORY,
+    SHOCK_SIZE_BY_FACTOR,
+    apply_factor_shock,
+)
 from enrichment.market_news import clean_security_name
+from state.counterfactual import check_pattern_history
 
 # "A small pool of advisory notes" per DATA.md (today: 5-6 per client) —
 # capped anyway rather than assuming that stays true of tomorrow's data,
@@ -29,6 +36,8 @@ def build_briefing_context(
     house_view_alignment: Optional[list[dict]] = None,
     news_articles: Optional[list[dict]] = None,
     news_bundle: Optional[dict] = None,
+    client_ref: Optional[str] = None,
+    state_dir: Optional[Path] = None,
 ) -> dict:
     """
     client_view: data_layer.build_client_view() output
@@ -82,6 +91,14 @@ def build_briefing_context(
 
     current_risk_return = _current_risk_return_section(priority_bundle)
 
+    watch_for = _watch_for_section(
+        portfolio=portfolio,
+        priority_bundle=priority_bundle,
+        priorities=priorities,
+        client_ref=client_ref or client_view.get("client_ref"),
+        state_dir=state_dir,
+    )
+
     return {
         "client": _client_section(client_view),
         "client_notes": client_notes,
@@ -95,6 +112,7 @@ def build_briefing_context(
         "market_news": market_news,
         "market_news_status": market_news_status,
         "attribution_caveat": _attribution_caveat_section(priority_bundle),
+        "watch_for": watch_for,
         "sources": _sources_section(
             priorities=priorities,
             top_risk_contributors=top_risk_contributors,
@@ -354,6 +372,81 @@ def _attribution_caveat_section(priority_bundle: dict) -> dict:
         "liquidity_ratio": liquidity.get("liquidity_ratio"),
         "has_holdings_based_drivers": bool(priority_bundle.get("top_risk_contributors")),
         "non_base_currency_exposure": concentrations.get("non_base_currency_exposure"),
+    }
+
+
+def _watch_for_section(
+    portfolio: Optional[dict],
+    priority_bundle: dict,
+    priorities: list[dict],
+    client_ref: Optional[str],
+    state_dir: Optional[Path],
+) -> Optional[dict]:
+    """
+    Finds the highest-priority item that maps to a known shock factor,
+    runs apply_factor_shock() and check_pattern_history(), and returns a
+    watch_for dict — or None if no factor-relevant priority exists.
+
+    Factor mapping:
+      - saa_breach: match item["dimension"] + item["category"] against
+        FACTOR_TO_SAA_CATEGORY values
+      - violation / single_position_concentration / high_liquidity: no
+        direct factor mapping → skip
+
+    Uses a best-effort pattern: never crashes — any exception from the
+    shock or pattern-history computation returns None so the briefing
+    pipeline isn't blocked by an error in this optional enrichment.
+    """
+    if portfolio is None:
+        return None
+
+    # Build a reverse lookup: (dimension, category) → factor
+    _category_to_factor = {
+        (dim, cat): factor
+        for factor, (dim, cat) in FACTOR_TO_SAA_CATEGORY.items()
+    }
+
+    # Find the highest-priority saa_breach that maps to a known factor
+    factor: Optional[str] = None
+    signal_type: Optional[str] = None
+
+    for item in priorities:
+        if item.get("type") == "saa_breach":
+            key = (item.get("dimension"), item.get("category"))
+            if key in _category_to_factor:
+                factor = _category_to_factor[key]
+                signal_type = "saa_breach"
+                break
+
+    if factor is None:
+        return None
+
+    try:
+        shock_result = apply_factor_shock(
+            portfolio_view=portfolio,
+            priority_bundle=priority_bundle,
+            factor=factor,
+            shock_pct=SHOCK_SIZE_BY_FACTOR[factor],
+        )
+    except Exception:
+        shock_result = None
+
+    pattern_result = None
+    if client_ref and signal_type:
+        try:
+            effective_state_dir = state_dir if state_dir is not None else Path(".state")
+            pattern_result = check_pattern_history(
+                client_ref=client_ref,
+                signal_type=signal_type,
+                state_dir=effective_state_dir,
+            )
+        except Exception:
+            pattern_result = None
+
+    return {
+        "factor": factor,
+        "shock": shock_result,
+        "pattern_history": pattern_result,
     }
 
 

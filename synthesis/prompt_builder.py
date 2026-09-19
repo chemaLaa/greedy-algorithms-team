@@ -132,6 +132,7 @@ def context_to_prose(context: dict) -> dict[str, str]:
         "change_since_last_interaction": _format_change(context.get("change_since_last_interaction")),
         "house_view": _format_house_view(context.get("house_view_alignment", [])),
         "news": _format_news(context.get("market_news", []), context.get("market_news_status")),
+        "watch_for": _format_watch_for(context.get("watch_for")),
     }
 
 
@@ -158,6 +159,7 @@ def build_prompt(context: dict) -> dict:
         f"WHAT'S CHANGED SINCE THE LAST INTERACTION:\n{fragments['change_since_last_interaction']}\n\n"
         f"BANK HOUSE VIEW COMPARISON:\n{fragments['house_view']}\n\n"
         f"RELEVANT MARKET NEWS:\n{fragments['news']}\n\n"
+        f"WATCH FOR (single-factor approximation):\n{fragments['watch_for']}\n\n"
         f"Write the briefing now, following all instructions above."
     )
 
@@ -492,6 +494,48 @@ def _format_house_view(alignment: list[dict], max_actionable: int = 5) -> str:
         lines.append("(This house view is MOCK data for demonstration purposes, not a real bank publication.)")
 
     return "\n".join(lines)
+
+
+def _format_watch_for(watch_for: Optional[dict]) -> str:
+    """
+    Formats the watch_for section (correlation/shock_propagation +
+    state/counterfactual output) for inclusion in the model prompt.
+
+    Always prepends the single-factor approximation caveat so the model
+    never treats the CHF impact figure as a reliable forecast.
+    """
+    caveat = (
+        "NOTE: The following is a linear single-factor approximation only "
+        "— not a guarantee or a multi-factor forecast."
+    )
+
+    if watch_for is None:
+        return f"{caveat}\nNo factor-relevant finding to report."
+
+    factor = watch_for.get("factor") or "unknown"
+    shock = watch_for.get("shock") or {}
+    pattern = watch_for.get("pattern_history") or {}
+
+    shock_pct = shock.get("shock_pct")
+    exposure = shock.get("exposure")
+    chf_impact = shock.get("chf_impact")
+
+    shock_pct_str = f"{shock_pct:+.0%}" if shock_pct is not None else "N/A"
+    exposure_str = f"{exposure:.1%}" if exposure is not None else "N/A"
+    chf_impact_str = f"CHF {chf_impact:+,.0f}" if chf_impact is not None else "unavailable"
+
+    occurrences = pattern.get("occurrences", 0)
+    if occurrences > 0:
+        history_str = f"This signal has appeared {occurrences} time{'s' if occurrences != 1 else ''} in prior snapshots."
+    else:
+        history_str = "No prior history in available snapshots."
+
+    return (
+        f"{caveat}\n"
+        f"Factor: {factor} | Shock size: {shock_pct_str} | "
+        f"Portfolio exposure: {exposure_str} | Estimated CHF impact: {chf_impact_str}\n"
+        f"Pattern history: {history_str}"
+    )
 
 
 def _format_news(articles: list[dict], status: Optional[dict] = None) -> str:

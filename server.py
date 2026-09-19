@@ -101,21 +101,28 @@ class SourceRef(BaseModel):
     detail: str    # what was in it, e.g. "13 active — 7 Error, 6 Warning"
 
 
+class ReadOutput(BaseModel):
+    text: str
+    cites: list[str]
+
+
 class BriefingResponse(BaseModel):
     client: ClientInfo
     headline: str
     attention: list[AttentionItem]
     since_last: list[str]
     talking_points: list[str]
+    read: ReadOutput
     sources: list[SourceRef]
 
 
 class _ModelOutput(BaseModel):
-    """Validates the four keys the model must return (client info added server-side)."""
+    """Validates the five keys the model must return (client info added server-side)."""
     headline: str
     attention: list[AttentionItem]
     since_last: list[str]
     talking_points: list[str]
+    read: ReadOutput
 
 
 # ── system prompt for the /api/briefing shape ─────────────────────────────
@@ -123,7 +130,7 @@ _SYSTEM = """\
 You are an AI briefing assistant for URO Advisor Pro, a wealth-management platform.
 Produce a structured JSON briefing for a wealth advisor preparing for a client call.
 
-Return exactly one valid JSON object with these four keys:
+Return exactly one valid JSON object with these five keys:
   "headline"       : one sentence (max 20 words) — the single most important thing right now
   "attention"      : array of 2-4 objects, each with:
                        "level"  : "critical", "warning", or "info"
@@ -139,6 +146,20 @@ Return exactly one valid JSON object with these four keys:
   "talking_points" : array of 3-5 short strings — specific actionable points to raise on the call;
                      each MUST include a number, percentage, or named position/security;
                      MUST NOT start with Consider, Discuss, Evaluate, Review, or Look into
+  "read"           : object with two keys — a short synthesis paragraph and citations:
+                       "text"  : string, under 150 words — one coherent synthesis paragraph
+                       "cites" : array of 1-3 short strings naming the facts being connected
+
+READ rules (hard constraints for "read.text"):
+- NUMBER-ANCHORING: every number in "text" must already appear in one of the other sections
+  above (headline, attention, since_last, talking_points). Never compute a new number.
+- Sentence 1: name ONE structural link between two facts from different sections above
+  (e.g. a risk contributor is also the source of an SAA breach).
+- Sentences 2-3: state what to watch for, using only the WATCH FOR section provided —
+  restate the factor, shock size, and CHF impact as given; do not alter or invent figures.
+- Use "could", "would", "if this continues" — NEVER "will" (unless "will not").
+- Never present the bank's ExpectedReturn as your own conclusion; if cited, attribute it to the bank.
+- If no genuine link exists between two facts, say so plainly rather than manufacturing one.
 
 Rules — follow exactly:
 - Use ONLY the data provided. Never invent a number, security name, date, or event.
@@ -196,6 +217,35 @@ def _check_output(out: dict) -> list[str]:
     # talking_points: no hard digit requirement — qualitative but client-specific
     # points (e.g. ESG alternatives, proposal follow-up) are valid without a number.
     # The system prompt encourages quantification; we don't retry on omissions here.
+
+    # READ checks
+    read = out.get("read") or {}
+    read_text = read.get("text") or ""
+    if read_text:
+        # Collect all numbers already present in the non-read sections
+        existing_nums = re.findall(r"[\d,]+\.?\d*", " ".join(filter(None, [
+            out.get("headline"),
+            *[f"{a.get('title','')} {a.get('detail','')}" for a in (out.get("attention") or [])],
+            *((out.get("since_last") or [])),
+            *((out.get("talking_points") or [])),
+        ])))
+        existing_num_set = {n.replace(",", "") for n in existing_nums}
+        for num in re.findall(r"[\d,]+\.?\d*", read_text):
+            clean = num.replace(",", "")
+            if clean and not any(clean in e or e in clean for e in existing_num_set):
+                issues.append(
+                    f"read.text contains number {num!r} not found in other sections"
+                )
+                break  # one report per response is enough
+
+        # "will" not preceded/followed by "not" within ~3 words
+        for m in re.finditer(r"\bwill\b", read_text, re.IGNORECASE):
+            window = read_text[max(0, m.start() - 20): m.end() + 20]
+            if "not" not in window.lower():
+                issues.append(
+                    f"read.text contains bare 'will' (use 'could'/'would' instead): {window!r}"
+                )
+                break
 
     # No vague word without a nearby digit
     all_text = " ".join(filter(None, [
@@ -262,6 +312,7 @@ def _generate(context: dict, max_attempts: int = 3) -> dict:
         f"CHANGES SINCE LAST INTERACTION:\n{fragments['change_since_last_interaction']}\n\n"
         f"HOUSE VIEW COMPARISON:\n{fragments['house_view']}\n\n"
         f"MARKET NEWS:\n{fragments['news']}\n\n"
+        f"WATCH FOR (single-factor approximation):\n{fragments['watch_for']}\n\n"
         f"Respond with the JSON briefing object now."
     )
 
@@ -270,7 +321,7 @@ def _generate(context: dict, max_attempts: int = 3) -> dict:
         try:
             response = anthropic_client.chat.completions.create(
                 model=BRIEFING_MODEL,
-                max_tokens=800,
+                max_tokens=1200,
                 temperature=0.2,
                 messages=[
                     {"role": "system", "content": _SYSTEM},
@@ -441,6 +492,22 @@ def briefing(req: BriefingRequest, fresh: bool = False) -> BriefingResponse:
             section="Client interest tags",
             field="Tags",
             detail=", ".join(tags),
+        ))
+
+    watch_for = context.get("watch_for") or {}
+    if watch_for:
+        factor    = watch_for.get("factor", "")
+        shock_pct = watch_for.get("shock_pct")
+        chf_impact = watch_for.get("chf_impact")
+        detail_parts = [f"factor: {factor}"]
+        if shock_pct is not None:
+            detail_parts.append(f"shock: {shock_pct:+.0%}")
+        if chf_impact is not None:
+            detail_parts.append(f"CHF impact: {chf_impact:,.0f}")
+        sources.append(SourceRef(
+            section="Watch for (shock propagation)",
+            field="watch_for",
+            detail="; ".join(detail_parts),
         ))
 
     result = BriefingResponse(client=client_info, sources=sources, **model_out)

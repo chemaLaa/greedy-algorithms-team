@@ -440,17 +440,27 @@ plain max would let a small long position beat a much larger short one
 just because of sign:
 
 ```python
-from enrichment.market_news import relevant_search_terms, fetch_relevant_news_bundle, YahooFinanceNewsProvider
+from enrichment.market_news import relevant_search_terms, fetch_relevant_news_bundle, YahooFinanceNewsProvider, GoogleRSSNewsProvider
 
 terms = relevant_search_terms(portfolio, priorities_bundle, ref=ref)
 # a fund position generates a "sector" term (e.g. "Health Care") instead of
 # a "security" term with its own unsearchable name
 
-bundle = fetch_relevant_news_bundle(terms, YahooFinanceNewsProvider())
+bundle = fetch_relevant_news_bundle(terms)
 # {"status": "ok" | "partial" | "no_news_found" | "fetch_failed",
 #  "reasons": [...], "articles": [...], "term_results": [...],
-#  "freshness_window_used": "preferred_7d" | "fallback_14d" | "none"}
+#  "freshness_window_used": "preferred_7d" | "fallback_14d" | "none",
+#  "corroboration": [...]}   ← articles covered by ≥2 providers
 ```
+
+**Dual news source.** `fetch_relevant_news_bundle()` fetches from both
+`YahooFinanceNewsProvider` (yfinance) and `GoogleRSSNewsProvider` (Google
+News RSS, parsed with `xml.etree.ElementTree` — no extra dependency) concurrently,
+across all subjects × both providers in one `ThreadPoolExecutor` pass. Articles
+are deduplicated by link/title+publisher; the `source_count` per term tracks how
+many providers returned it; articles covered by ≥2 providers are listed in
+`corroboration`. This gives the model corroborating-source signal without inflating
+the article budget.
 
 This is not just a workaround for a bad hit rate — sector-level news is
 arguably *more* relevant to the case's "connection to the portfolio"
@@ -462,6 +472,57 @@ still works before a demo (APIs change): `pip install yfinance`, then fetch
 a few real cleaned security names and a few fund-derived sector names, check
 you're getting real articles back, not silent empty results. `FakeNewsProvider`
 exists for writing tests without hitting the network.
+
+## `correlation/` — single-factor shock propagation
+
+`correlation/shock_propagation.py` computes a linear approximation of how a
+macro-factor shock would affect a portfolio, given the client's current SAA
+deviation for that factor's category.
+
+```python
+from correlation.shock_propagation import apply_factor_shock, FACTORS
+
+result = apply_factor_shock(portfolio_view, priority_bundle, factor="tech", shock_pct=-0.20)
+# {"factor": "tech", "shock_pct": -0.20, "exposure": 0.26,
+#  "chf_impact": -234000, "baseline_return": 0.054, "status": "ok"}
+```
+
+Six factors are supported: `rates`, `usd`, `tech`, `health_care`, `energy`, `em`.
+Each maps to an `(AssetClass | CurrencyGroup | Industry | CountryGroup, name)` pair
+in the SAA deviations. `chf_impact = exposure × shock_pct × portfolio_value`.
+This is a single-factor linear approximation — not a covariance model. The output
+is explicitly labelled as an approximation everywhere it appears (in prompts and
+in `read.text`).
+
+## `state/counterfactual.py` — pattern history lookup
+
+`state/counterfactual.py` queries the rolling per-client event log (written by
+`state/events.py`) to check whether a given signal type has occurred before for
+this client.
+
+```python
+from state.counterfactual import check_pattern_history
+
+result = check_pattern_history(client_ref, signal_type="saa_breach")
+# {"occurred_before": True, "occurrences": 3, "total_snapshots_checked": 8,
+#  "sample": ["2026-07-14: saa_breach — Swiss francs +23.7 pp", ...]}
+```
+
+Signal types: `violation_new`, `saa_breach`, `concentration`, `liquidity`,
+`position_entered_top`, `position_exited_top`.
+
+### `watch_for` — shock + pattern wired into the briefing
+
+`synthesis/context_builder.py` builds a `watch_for` section by finding the
+highest-priority SAA-breach factor among the client's deviations, calling
+`apply_factor_shock()` for that factor, and calling `check_pattern_history()`
+for `saa_breach`. The result is formatted by `synthesis/prompt_builder.py` into
+a `WATCH FOR (single-factor approximation):` section sent to the model with an
+explicit caveat about the linear approximation.
+
+The model is required (by `_SYSTEM`) to restate the factor, shock size, and CHF
+impact verbatim in `read.text`, using only "could"/"would" language — never
+projecting it as a certainty.
 
 ## `synthesis` — turning facts into the actual briefing
 
@@ -626,6 +687,10 @@ Orchestrates every layer and exposes three JSON endpoints plus the demo front en
   ],
   "since_last":     ["… (each entry must contain a date, CHF amount, or non-zero % change; [] if nothing changed)"],
   "talking_points": ["… (each must contain a number or named position)"],
+  "read": {
+    "text":  "Under 150-word synthesis paragraph connecting facts across sections; every number must already appear in another section above.",
+    "cites": ["fact A", "fact B"]
+  },
   "sources": [
     {"section": "Suitability violations", "field": "active_violations", "detail": "13 active — 7 Error, 6 Warning"},
     {"section": "SAA target deviations",  "field": "saa_target_deviations", "detail": "5 dimensions out of band; largest: Swiss francs +23.7 pp"},
@@ -666,6 +731,9 @@ HOUSE VIEW COMPARISON:
 
 MARKET NEWS:
 {news}
+
+WATCH FOR (single-factor approximation):
+{watch_for}   ← highest-priority SAA-breach factor shock + counterfactual pattern history
 ```
 
 Four fragments built by `context_to_prose()` — `client_notes`,
@@ -686,7 +754,8 @@ section is the reverse: it is unique to `_generate()` (not in
 - No vague words (significant, substantial, major, etc.) without a number within 6 words
 - `since_last` entries must contain a date, CHF amount, or non-zero % / pp change; return `[]` if nothing changed
 - Each talking point must contain a number or named position
-- Total output under 150 words
+- `read.text` — NUMBER-ANCHORING: every number must already appear in another section above; sentences 2-3 must restate watch_for factor/shock/CHF as given; never use bare "will"
+- Total output under 150 words (headline + attention + since_last + talking_points combined)
 - Use only provided data; never invent numbers, names, or events
 
 **Post-generation quality gate — `_check_output()`** runs after every model
@@ -694,16 +763,17 @@ response and triggers a retry (up to 3 attempts) if any rule is violated:
 - Digit check on every attention item
 - Zero-change (`+0.0%`) rejection in `since_last`
 - Date/amount anchor check on every `since_last` entry
-- Digit check on every talking point
 - Vague-word-without-number scan across all output text
+- `read.text` number-anchoring: any number in `read.text` not found elsewhere triggers a retry
+- `read.text` bare-"will" check: "will" not preceded/followed by "not" within ~3 words triggers a retry
 
 **`_generate()` vs `generate_briefing()`:** `server.py` defines its own
 `_generate()` that calls OpenAI Chat Completions directly (same `_default_client()`
 and `response_format={"type":"json_object"}` from `briefing_generator.py`, but
-a different system prompt targeting the `headline/attention/since_last/talking_points`
-schema above). The `generate_briefing()` function in `briefing_generator.py`
-uses a three-section prose schema and is used by standalone scripts and tests,
-not by the API.
+a different system prompt targeting the five-key schema above — `max_tokens=1200`
+to accommodate the `read` synthesis section). The `generate_briefing()` function
+in `briefing_generator.py` uses a three-section prose schema and is used by
+standalone scripts and tests, not by the API.
 
 ### `POST /api/chat` — follow-up Q&A
 

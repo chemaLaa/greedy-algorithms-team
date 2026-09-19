@@ -504,7 +504,7 @@ def test_context_to_prose_has_all_expected_keys():
     assert set(fragments.keys()) == {
         "client_and_portfolio", "client_notes", "client_interests", "performance", "current_risk_return",
         "attribution_caveat", "priorities", "risk_contributors", "change_since_last_interaction",
-        "house_view", "news",
+        "house_view", "news", "watch_for",
     }
 
 

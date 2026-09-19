@@ -316,3 +316,45 @@ def test_prompt_builder_runs_clean_across_all_47_clients():
     # over priorities/house-view items for a pathological client) — the
     # longest real prompt observed during development was ~4.8K chars.
     assert max_length < 15000, f"prompt length grew unexpectedly large: {max_length} chars"
+
+
+def test_watch_for_present_or_none_for_all_47_clients():
+    """
+    watch_for is either a dict (with factor/shock/pattern_history keys)
+    or None — never crashes — for all 47 real clients.
+    """
+    if not REAL_DATA_AVAILABLE:
+        print(f"SKIPPED: {SKIP_REASON}")
+        return
+    import tempfile
+    from pathlib import Path
+
+    from analysis_layer import build_client_priorities
+    from enrichment.house_view import compare_portfolio_to_house_view
+    from state import refresh_client_state
+    from synthesis.context_builder import build_briefing_context
+
+    clients, _, ref = _load_real()
+    state_dir = Path(tempfile.mkdtemp())
+
+    for c in clients:
+        view = build_client_view(c, ref)
+        bundles = build_client_priorities(view, ref)
+        state_result = refresh_client_state(view, bundles, state_dir=state_dir)
+
+        for portfolio, bundle in zip(view["portfolios"], bundles):
+            portfolio_id = str(portfolio["PortfolioId"])
+            house_view = compare_portfolio_to_house_view(portfolio)
+            context = build_briefing_context(
+                view, bundle, state_result["portfolios"][portfolio_id], house_view, []
+            )
+
+            watch_for = context.get("watch_for")
+            # Must be None or a dict — never raises, never an unexpected type
+            assert watch_for is None or isinstance(watch_for, dict), (
+                f"{c.get('ClientRef')}: watch_for is unexpected type {type(watch_for)}"
+            )
+            if watch_for is not None:
+                assert "factor" in watch_for
+                assert "shock" in watch_for
+                assert "pattern_history" in watch_for
