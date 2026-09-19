@@ -9,7 +9,7 @@ so the advisor can ask data-grounded questions after reading the briefing —
 all served through a FastAPI backend and a single-page demo front end.
 
 **Layers, in dependency order:**
-`data_layer` → `analysis_layer` → `state` / `enrichment` → `synthesis` → `server.py`
+`data_layer` → `analysis_layer` → `state` / `enrichment` → `synthesis` → `server.py` (or `app.py`)
 
 ## Demo front end
 
@@ -118,6 +118,20 @@ python3 run_example.py            # data_layer against the synthetic fixture
 python3 run_analysis_example.py   # analysis_layer against the synthetic fixture
 ```
 
+**Alternative demo — `app.py` (Streamlit):** a lighter, single-process
+alternative to `server.py` + `demo/`, calling `synthesis.briefing_generator.generate_briefing()`
+directly (so it gets `client_notes`/`client_interests`/`attribution_caveat`/
+`current_risk_return` and the full per-fact `sources` audit trail that
+`server.py`'s `_generate()` doesn't yet). A client-list dashboard with
+live violation/warning counts per row, click into a client for the
+"Active priorities" view and the "🔔 Generate Briefing" button.
+
+```bash
+pip install streamlit openai
+export OPENAI_API_KEY=sk-...
+streamlit run app.py
+```
+
 ## Testing
 
 ```bash
@@ -126,7 +140,7 @@ python3 run_tests.py          # zero dependencies, works anywhere
 pytest tests/                 # same test files, nicer output
 ```
 
-176 tests, covering `data_layer`, `analysis_layer`, `state`, `enrichment`,
+282 tests, covering `data_layer`, `analysis_layer`, `state`, `enrichment`,
 and `synthesis`:
 - `loader.py` — valid/invalid file shapes
 - `reference_index.py` — id lookups, the plain→SAA category translation,
@@ -152,12 +166,21 @@ and `synthesis`:
   the fund→sector-theme fallback (see below); the actual network fetch is
   NOT covered by this suite (see `enrichment` section)
 - `synthesis/context_builder.py` — assembling every layer's output into
-  one `BriefingContext`, including the state-diff-vs-note-proxy fallback
+  one `BriefingContext`, including the state-diff-vs-note-proxy fallback,
+  `client_notes`/`client_interests` extraction, the `attribution_caveat`
+  and `current_risk_return` facts, and the `sources` audit-trail entries
+  (one per priority/contributor/house-view/news-article/note/tag/expected-return)
 - `synthesis/prompt_builder.py` — every formatting function tested in
   isolation, plus the house-view actionable-vs-aligned filtering logic
 - `synthesis/briefing_generator.py` — response parsing, markdown-fence
   stripping, missing-key/error handling, all against a fake client (no
   network); the real API call is NOT covered by this suite (see below)
+- `tests/test_attribution_regression.py` — a live, `OPENAI_API_KEY`-gated
+  regression test (skipped, not failed, without a key) that calls the
+  real model against a 100%-liquid, declining-value, zero-holdings-data
+  fixture and checks the response for fabricated-cause phrases
+  (negation-aware — `"not attributable to..."` is the correct hedge, not
+  a violation)
 
 `tests/test_real_data_regression.py` re-runs the checks we did by hand
 against the real 47-client dataset (all clients build without error, no
@@ -645,11 +668,16 @@ MARKET NEWS:
 {news}
 ```
 
-Three fragments built by `context_to_prose()` — `client_notes`,
-`client_interests`, and `attribution_caveat` — are used by the
+Four fragments built by `context_to_prose()` — `client_notes`,
+`client_interests`, `attribution_caveat`, and `current_risk_return` (the
+bank's own forward-looking `ExpectedReturn`, added after this section was
+first written — see the `synthesis` section above) — are used by the
 `synthesis/briefing_generator.py` standalone path but are **not** included
-in `server.py`'s `_generate()` user message. The SAA deviations section is
-the reverse: it is unique to `_generate()` (not in `build_prompt()`).
+in `server.py`'s `_generate()` user message, and `server.py`'s own
+hand-built `sources` list likewise has no entry for the bank's expected
+return the way `context_builder.py`'s `sources` does. The SAA deviations
+section is the reverse: it is unique to `_generate()` (not in
+`build_prompt()`).
 
 **`_SYSTEM` prompt rules enforced:**
 - Error-level suitability violations take priority — headline must reference them if any exist
@@ -715,6 +743,13 @@ scratch each time.
 | Client interests | — | YES |
 | **All portfolio positions** (weight, CHF, risk share) | — | **YES** |
 | **All proposals** (status, date, reason) | — | **YES** |
+| Bank's expected return (`current_risk_return`) | — | — |
+
+That last row is a real gap, not a design choice: `current_risk_return`
+(the bank's own forward-looking `ExpectedReturn` — see the `synthesis`
+section above) is computed and available on every `BriefingContext` but
+isn't wired into either endpoint's prompt yet, unlike the
+`synthesis/briefing_generator.py` standalone path where it is.
 
 Positions and proposals are included only in the chat context because they
 increase token count significantly and the briefing prompt is already tight
