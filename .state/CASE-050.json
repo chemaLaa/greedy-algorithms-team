@@ -1,0 +1,85 @@
+{
+  "snapshots": {
+    "-900011": {
+      "portfolio_id": -900011,
+      "captured_at": "2026-09-19T12:55:48.280512+00:00",
+      "portfolio_value": 500000.0,
+      "allocation": {
+        "AssetClass": {
+          "Bonds": 0.15,
+          "Liquidity": 0.0,
+          "Real estate": 0.0,
+          "Shares": 0.7500000000000002,
+          "Specialties andCommodities": 0.0
+        },
+        "CurrencyGroup": {
+          "Andere": 0.045,
+          "Euro": 0.185,
+          "Swiss francs": 0.015,
+          "US-Dollar": 0.6550000000000001
+        },
+        "CountryGroup": {
+          "Asia/Pacific (ex Japan)": 0.02,
+          "Great Britain": 0.0,
+          "Japan": 0.0,
+          "North America": 0.6550000000000001,
+          "Not classified": 0.0,
+          "Others": 0.0,
+          "Rest of Europe": 0.21,
+          "Switzerland": 0.015
+        },
+        "Industry": {
+          "Consumer Discretionary": 0.065,
+          "Consumer Staples": 0.015,
+          "Energy": 0.0,
+          "Financials": 0.0,
+          "Health Care": 0.025,
+          "Industrials": 0.0,
+          "Information Technology": 0.46499999999999997,
+          "Materials": 0.0,
+          "Real Estate": 0.0,
+          "Telecommunication Services": 0.18,
+          "Utilities": 0.0
+        }
+      },
+      "top_positions": [
+        {
+          "SecurityId": 7906,
+          "SecurityName": "Namen-Aktie Oracle Corp",
+          "weight": 0.19
+        },
+        {
+          "SecurityId": 9033,
+          "SecurityName": "Namen-Aktie -A- Alphabet Inc",
+          "weight": 0.18
+        },
+        {
+          "SecurityId": 11208,
+          "SecurityName": "Na. u. Inh. Ti.-Aktie ASML Holding NV",
+          "weight": 0.16
+        },
+        {
+          "SecurityId": 49496,
+          "SecurityName": "0.625 % Vereinigte Staaten von Amerika 2021-02.08.27 Series AT-2024",
+          "weight": 0.15
+        },
+        {
+          "SecurityId": 7830,
+          "SecurityName": "Namen-Aktie Microsoft Corp",
+          "weight": 0.04
+        }
+      ],
+      "violations": [
+        "Cluster risk of a single financial instrument",
+        "Foreign currency cluster risk USD",
+        "Foreign currency exposure exceeds 50%",
+        "Significant overweight in the equity region \"North America\"",
+        "Significant overweight in the equity sector \"Communication Services\"",
+        "Significant overweight in the equity sector \"Information Technology\""
+      ]
+    }
+  },
+  "events": [
+    "2026-09-19T12:55:48.280512+00:00: first briefing generated for this client"
+  ]
+}

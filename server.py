@@ -42,6 +42,16 @@ STATE_DIR = Path(".state")
 
 # ── load data once at startup ─────────────────────────────────────────────
 _clients: list[dict] = load_clients(CLIENTS_PATH)
+
+# Auto-merge any test-clients-*.json files found alongside the main file
+_clients_dir = Path(CLIENTS_PATH).parent
+for _extra in sorted(_clients_dir.glob("test-clients-*.json")):
+    try:
+        _clients.extend(load_clients(_extra))
+        print(f"[startup] loaded extra clients from {_extra.name}")
+    except Exception as _e:
+        print(f"[startup] skipped {_extra.name}: {_e}")
+
 _ref: ReferenceIndex = ReferenceIndex(load_reference(REFERENCE_PATH))
 _client_by_id: dict[str, dict] = {str(c.get("ClientId")): c for c in _clients}
 

@@ -1,0 +1,1637 @@
+[
+  {
+    "ClientId": 101369,
+    "ClientRef": "CASE-048",
+    "FirstName": "James",
+    "LastName": "Bond",
+    "Company": null,
+    "IsClientACompany": false,
+    "IsEmployee": false,
+    "RegulatoryClientTypeId": 13,
+    "RegulatoryClientTypeName": "Private client",
+    "ReportingCurrency": "CHF",
+    "RiskProfileId": 19,
+    "RiskProfileName": "Anlageprofil 7",
+    "EsgProfileId": 2,
+    "EsgProfileName": "No",
+    "Birthday": "1966-09-19",
+    "ProfilingDateUtc": "2024-11-12T23:00:00+01:00",
+    "AssetsUnderManagementInDefaultCurrency": 102908.28281,
+    "LiquidityInDefaultCurrency": 960.71281,
+    "Portfolios": [
+      {
+        "PortfolioId": 147733,
+        "PublicGuid": "4ACC0D58-A5E7-EC11-9F61-0050568CD8FC",
+        "PortfolioNr": "CASE-048-01",
+        "Name": "Anlageberatung",
+        "PortfolioCurrency": "CHF",
+        "StrategicAssetAllocationId": 43,
+        "InvestmentServiceId": 9,
+        "InvestmentServiceName": "Investment Advisory",
+        "StrategyId": 4,
+        "StrategyName": "Investor profile 4",
+        "ReferenceCurrency": "CHF",
+        "AssetsUnderManagementInDefaultCurrency": 102908.28281,
+        "LiquidityInDefaultCurrency": 960.71281,
+        "Volatility": 0.06157,
+        "ExpectedReturn": 0.03756,
+        "ValueAtRisk": 0.13141,
+        "FactoryDateUtc": "2026-09-03T11:15:19.5373945Z",
+        "SecurityPositions": [
+          {
+            "SecurityId": 1105,
+            "Isin": "CH0111762537",
+            "Valor": "11176253",
+            "SecurityName": "Anteile -(CHF) A-dis- UBS ETF (CH) - SMIM (R)",
+            "Quantity": 30.0,
+            "PricePerUnit": 262.05,
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 7861.5,
+            "PortfolioValuePercentage": 0.07639,
+            "MarginalContributionToRisk": 0.14586,
+            "ContributionVolatility": 0.0111422454
+          },
+          {
+            "SecurityId": 1211,
+            "Isin": "IE00B4YLF345",
+            "Valor": "3753364",
+            "SecurityName": "Anteile CHF (Hedged) PIMCO Funds Glob.Inv.Series - Global Investment Grade Credit Fund",
+            "Quantity": 700.0,
+            "PricePerUnit": 15.2,
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 10640.0,
+            "PortfolioValuePercentage": 0.10339,
+            "MarginalContributionToRisk": 0.04447,
+            "ContributionVolatility": 0.0045977533
+          },
+          {
+            "SecurityId": 1672,
+            "Isin": "IE00B8BVCK12",
+            "Valor": "19328350",
+            "SecurityName": "Anteile Hedged CHF ETF iShares VI PLC  - iShares MSCI World CHF Hedged UCITS ETF (Acc)",
+            "Quantity": 265.0,
+            "PricePerUnit": 69.5,
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 18417.5,
+            "PortfolioValuePercentage": 0.17897,
+            "MarginalContributionToRisk": 0.12679,
+            "ContributionVolatility": 0.0226916063
+          },
+          {
+            "SecurityId": 2258,
+            "Isin": "CH0226976816",
+            "Valor": "22697681",
+            "SecurityName": "Anteile -A- iShares ETF (CH) - iShares Core CHF Corporate   Bond ETF (CH)",
+            "Quantity": 110.0,
+            "PricePerUnit": 94.51,
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 10396.1,
+            "PortfolioValuePercentage": 0.10102,
+            "MarginalContributionToRisk": 0.01892,
+            "ContributionVolatility": 0.0019112984
+          },
+          {
+            "SecurityId": 2346,
+            "Isin": "CH0237935637",
+            "Valor": "23793563",
+            "SecurityName": "Anteile -A- iShares ETF (CH) - iShares Swiss Dividend ETF   (CH)",
+            "Quantity": 80.0,
+            "PricePerUnit": 151.58,
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 12126.4,
+            "PortfolioValuePercentage": 0.11784,
+            "MarginalContributionToRisk": 0.10373,
+            "ContributionVolatility": 0.0122235432
+          },
+          {
+            "SecurityId": 2347,
+            "Isin": "IE00B988C465",
+            "Valor": "22134231",
+            "SecurityName": "Anteile Hedged CHF ETF iShares VI PLC - Glob.High Yield Corp Bd CHF UCITS ETF (Dist)",
+            "Quantity": 80.0,
+            "PricePerUnit": 73.494,
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 5879.52,
+            "PortfolioValuePercentage": 0.05713,
+            "MarginalContributionToRisk": 0.04925,
+            "ContributionVolatility": 0.0028136525
+          },
+          {
+            "SecurityId": 14207,
+            "Isin": "IE00BK7XZ629",
+            "Valor": "48369993",
+            "SecurityName": "Anteile Hedged CHF iShares PLC - iShares USD Treasury Bond 1-3yr UCITS ETF",
+            "Quantity": 1700.0,
+            "PricePerUnit": 4.5923,
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 7806.91,
+            "PortfolioValuePercentage": 0.07586,
+            "MarginalContributionToRisk": 0.00706,
+            "ContributionVolatility": 0.0005355716
+          },
+          {
+            "SecurityId": 37733,
+            "Isin": "CH1122756732",
+            "Valor": "112275673",
+            "SecurityName": "Anteile -H-Klasse CHF (hedged)- Raiffeisen ETF - Solid Gold Responsibly Sourced & Traceable",
+            "Quantity": 10.0,
+            "PricePerUnit": 625.9,
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 6259.0,
+            "PortfolioValuePercentage": 0.06082,
+            "MarginalContributionToRisk": 0.06321,
+            "ContributionVolatility": 0.0038444322
+          },
+          {
+            "SecurityId": 38071,
+            "Isin": "IE00BYXYYP94",
+            "Valor": "36324506",
+            "SecurityName": "Anteile Unhedged USD iShares IV PLC - iShares USD Short Duration Corp Bond UCITS ETF",
+            "Quantity": 2000.0,
+            "PricePerUnit": 5.1828,
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 10365.6,
+            "PortfolioValuePercentage": 0.10073,
+            "MarginalContributionToRisk": 0.00628,
+            "ContributionVolatility": 0.0006325844
+          },
+          {
+            "SecurityId": 46408,
+            "Isin": "CH0016426881",
+            "Valor": "1642688",
+            "SecurityName": "Anteile -I dy- Pictet CH - CHF Short Mid Term Bonds",
+            "Quantity": 16.0,
+            "PricePerUnit": 762.19,
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 12195.04,
+            "PortfolioValuePercentage": 0.1185,
+            "MarginalContributionToRisk": 0.00999,
+            "ContributionVolatility": 0.001183815
+          },
+          {
+            "SecurityId": 27627,
+            "SecurityName": "0.375 % Stadler Rail AG 2019-20.11.26",
+            "Isin": "CH0461238864",
+            "Valor": "46123886",
+            "Currency": "CHF",
+            "Quantity": 1000,
+            "PricePerUnit": 0.9996,
+            "TotalAmountInPortfolioCurrency": 999.6,
+            "PortfolioValuePercentage": 0.00971,
+            "ContributionVolatility": 0.0001005,
+            "MarginalContributionToRisk": 0.00514
+          }
+        ],
+        "AccountPositions": [
+          {
+            "AccountName": "Investitionskonto CHF",
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 915.43,
+            "PortfolioValuePercentage": 0.00891,
+            "MarginalContributionToRisk": 0.0,
+            "ContributionVolatility": 0.0
+          },
+          {
+            "AccountName": "Investitionskonto FWG EUR",
+            "Currency": "EUR",
+            "TotalAmountInPortfolioCurrency": 8.89343,
+            "PortfolioValuePercentage": 9e-05,
+            "MarginalContributionToRisk": 0.00517,
+            "ContributionVolatility": 4.653e-07
+          },
+          {
+            "AccountName": "Investitionskonto FWG USD",
+            "Currency": "USD",
+            "TotalAmountInPortfolioCurrency": 36.38938,
+            "PortfolioValuePercentage": 0.00035,
+            "MarginalContributionToRisk": -0.01978,
+            "ContributionVolatility": -6.923e-06
+          }
+        ],
+        "PerformanceHistory": [
+          {
+            "Date": "2021-10-01",
+            "Value": 64090.94
+          },
+          {
+            "Date": "2021-11-01",
+            "Value": 64402.65
+          },
+          {
+            "Date": "2021-12-01",
+            "Value": 67114.62
+          },
+          {
+            "Date": "2022-01-01",
+            "Value": 63464.68
+          },
+          {
+            "Date": "2022-02-01",
+            "Value": 62520.47
+          },
+          {
+            "Date": "2022-03-01",
+            "Value": 64828.82
+          },
+          {
+            "Date": "2022-04-01",
+            "Value": 63098.65
+          },
+          {
+            "Date": "2022-05-01",
+            "Value": 60235.0
+          },
+          {
+            "Date": "2022-06-01",
+            "Value": 55921.73
+          },
+          {
+            "Date": "2022-07-01",
+            "Value": 59587.78
+          },
+          {
+            "Date": "2022-08-01",
+            "Value": 59062.39
+          },
+          {
+            "Date": "2022-09-01",
+            "Value": 56315.98
+          },
+          {
+            "Date": "2022-10-01",
+            "Value": 59086.98
+          },
+          {
+            "Date": "2022-11-01",
+            "Value": 61257.15
+          },
+          {
+            "Date": "2022-12-01",
+            "Value": 57098.76
+          },
+          {
+            "Date": "2023-01-01",
+            "Value": 61744.8
+          },
+          {
+            "Date": "2023-02-01",
+            "Value": 60599.32
+          },
+          {
+            "Date": "2023-03-01",
+            "Value": 61703.39
+          },
+          {
+            "Date": "2023-04-01",
+            "Value": 63290.01
+          },
+          {
+            "Date": "2023-05-01",
+            "Value": 65521.2
+          },
+          {
+            "Date": "2023-06-01",
+            "Value": 67263.44
+          },
+          {
+            "Date": "2023-07-01",
+            "Value": 69130.93
+          },
+          {
+            "Date": "2023-08-01",
+            "Value": 68387.11
+          },
+          {
+            "Date": "2023-09-01",
+            "Value": 67750.72
+          },
+          {
+            "Date": "2023-10-01",
+            "Value": 66238.84
+          },
+          {
+            "Date": "2023-11-01",
+            "Value": 70702.04
+          },
+          {
+            "Date": "2023-12-01",
+            "Value": 71715.92
+          },
+          {
+            "Date": "2024-01-01",
+            "Value": 74704.81
+          },
+          {
+            "Date": "2024-02-01",
+            "Value": 75761.55
+          },
+          {
+            "Date": "2024-03-01",
+            "Value": 77741.6
+          },
+          {
+            "Date": "2024-04-01",
+            "Value": 75940.13
+          },
+          {
+            "Date": "2024-05-01",
+            "Value": 79726.88
+          },
+          {
+            "Date": "2024-06-01",
+            "Value": 80513.13
+          },
+          {
+            "Date": "2024-07-01",
+            "Value": 80938.11
+          },
+          {
+            "Date": "2024-08-01",
+            "Value": 82415.07
+          },
+          {
+            "Date": "2024-09-01",
+            "Value": 81409.64
+          },
+          {
+            "Date": "2024-10-01",
+            "Value": 80930.84
+          },
+          {
+            "Date": "2024-11-01",
+            "Value": 84848.22
+          },
+          {
+            "Date": "2024-12-01",
+            "Value": 86151.51
+          },
+          {
+            "Date": "2025-01-01",
+            "Value": 90497.27
+          },
+          {
+            "Date": "2025-02-01",
+            "Value": 90192.63
+          },
+          {
+            "Date": "2025-03-01",
+            "Value": 83895.59
+          },
+          {
+            "Date": "2025-04-01",
+            "Value": 81744.32
+          },
+          {
+            "Date": "2025-05-01",
+            "Value": 84529.62
+          },
+          {
+            "Date": "2025-06-01",
+            "Value": 85679.93
+          },
+          {
+            "Date": "2025-07-01",
+            "Value": 85287.83
+          },
+          {
+            "Date": "2025-08-01",
+            "Value": 87061.66
+          },
+          {
+            "Date": "2025-09-01",
+            "Value": 88534.48
+          },
+          {
+            "Date": "2025-10-01",
+            "Value": 91564.82
+          },
+          {
+            "Date": "2025-11-01",
+            "Value": 92692.61
+          },
+          {
+            "Date": "2025-12-01",
+            "Value": 93482.94
+          },
+          {
+            "Date": "2026-01-01",
+            "Value": 93300.55
+          },
+          {
+            "Date": "2026-02-01",
+            "Value": 95436.01
+          },
+          {
+            "Date": "2026-03-01",
+            "Value": 89413.98
+          },
+          {
+            "Date": "2026-04-01",
+            "Value": 94597.03
+          },
+          {
+            "Date": "2026-05-01",
+            "Value": 101296.59
+          },
+          {
+            "Date": "2026-06-01",
+            "Value": 106476.71
+          },
+          {
+            "Date": "2026-07-01",
+            "Value": 102908.28
+          }
+        ]
+      }
+    ],
+    "Proposals": [
+      {
+        "ProposalId": 21535,
+        "PublicGuid": "C6DDDB57-1373-EE11-9F6B-0050568CD8FC",
+        "PortfolioId": 147733,
+        "ProposalStatusId": 3,
+        "ProposalStatusName": "Final",
+        "AdvisoryTypeId": 1,
+        "AdvisoryTypeName": "Depot meeting",
+        "Currency": "CHF",
+        "StrategicAssetAllocationId": 43,
+        "FinalizedDateUTC": "2026-03-30T08:50:23.4759757Z",
+        "Reason": "Client called",
+        "Notes": "Comment",
+        "ExpectedReturn": 0.03547,
+        "Volatility": 0.08313,
+        "ValueAtRisk": 0.12364,
+        "SecurityPositions": [
+          {
+            "Isin": "CH0111762537",
+            "SecurityName": "Anteile -(CHF) A-dis- UBS ETF (CH) - SMIM (R)",
+            "Quantity": 30.0,
+            "PricePerUnit": 238.6,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 7158.0,
+            "ProposalValuePercentage": 0.07483
+          },
+          {
+            "Isin": "IE00B4YLF345",
+            "SecurityName": "Anteile CHF (Hedged) PIMCO Funds Glob.Inv.Series - Global Investment Grade Credit Fund",
+            "Quantity": 700.0,
+            "PricePerUnit": 14.34,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 10038.0,
+            "ProposalValuePercentage": 0.10494
+          },
+          {
+            "Isin": "IE00B8BVCK12",
+            "SecurityName": "Anteile Hedged CHF ETF iShares VI PLC  - iShares MSCI World CHF Hedged UCITS ETF (Acc)",
+            "Quantity": 265.0,
+            "PricePerUnit": 58.95,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 15621.75,
+            "ProposalValuePercentage": 0.16331
+          },
+          {
+            "Isin": "CH0226976816",
+            "SecurityName": "Anteile -A- iShares ETF (CH) - iShares Core CHF Corporate   Bond ETF (CH)",
+            "Quantity": 110.0,
+            "PricePerUnit": 92.44,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 10168.4,
+            "ProposalValuePercentage": 0.1063
+          },
+          {
+            "Isin": "CH0237935637",
+            "SecurityName": "Anteile -A- iShares ETF (CH) - iShares Swiss Dividend ETF   (CH)",
+            "Quantity": 80.0,
+            "PricePerUnit": 139.68,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 11174.4,
+            "ProposalValuePercentage": 0.11682
+          },
+          {
+            "Isin": "IE00B988C465",
+            "SecurityName": "Anteile Hedged CHF ETF iShares VI PLC - Glob.High Yield Corp Bd CHF UCITS ETF (Dist)",
+            "Quantity": 80.0,
+            "PricePerUnit": 69.49,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 5559.2,
+            "ProposalValuePercentage": 0.05812
+          },
+          {
+            "Isin": "IE00BK7XZ629",
+            "SecurityName": "Anteile Hedged CHF iShares PLC - iShares USD Treasury Bond 1-3yr UCITS ETF",
+            "Quantity": 1700.0,
+            "PricePerUnit": 4.583,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 7791.1,
+            "ProposalValuePercentage": 0.08145
+          },
+          {
+            "Isin": "CH1122756732",
+            "SecurityName": "Anteile -H-Klasse CHF (hedged)- Raiffeisen ETF - Solid Gold Responsibly Sourced & Traceable",
+            "Quantity": 10.0,
+            "PricePerUnit": 537.4,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 5374.0,
+            "ProposalValuePercentage": 0.05618
+          },
+          {
+            "Isin": "IE00BYXYYP94",
+            "SecurityName": "Anteile Unhedged USD iShares IV PLC - iShares USD Short Duration Corp Bond UCITS ETF",
+            "Quantity": 2000.0,
+            "PricePerUnit": 4.8935,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 9787.0,
+            "ProposalValuePercentage": 0.10231
+          },
+          {
+            "Isin": "CH0016426881",
+            "SecurityName": "Anteile -I dy- Pictet CH - CHF Short Mid Term Bonds",
+            "Quantity": 16.0,
+            "PricePerUnit": 753.4,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 12054.4,
+            "ProposalValuePercentage": 0.12602
+          }
+        ],
+        "AccountPositions": [
+          {
+            "AccountName": "Investitionskonto CHF",
+            "Currency": "CHF",
+            "Amount": 846.81,
+            "TotalAmountInProposalCurrency": 846.81
+          },
+          {
+            "AccountName": "Investitionskonto FWG EUR",
+            "Currency": "EUR",
+            "Amount": 30.18,
+            "TotalAmountInProposalCurrency": 28.56899
+          },
+          {
+            "AccountName": "Investitionskonto FWG USD",
+            "Currency": "USD",
+            "Amount": 62.82,
+            "TotalAmountInProposalCurrency": 56.17204
+          }
+        ]
+      },
+      {
+        "ProposalId": 11953,
+        "PublicGuid": "E21721F0-B209-ED11-9F64-0050568CD8FC",
+        "PortfolioId": 147733,
+        "ProposalStatusId": 4,
+        "ProposalStatusName": "Abgelehnt",
+        "AdvisoryTypeId": 2,
+        "AdvisoryTypeName": "Investment proposal",
+        "Currency": "CHF",
+        "StrategicAssetAllocationId": 43,
+        "ProposedDateUTC": "2024-12-28T08:07:21.8376695Z",
+        "Reason": "Market volatility follow-up",
+        "Notes": "Comment",
+        "ExpectedReturn": 0.03612,
+        "Volatility": 0.08089,
+        "ValueAtRisk": 0.06633,
+        "SecurityPositions": [
+          {
+            "Isin": "CH0111762537",
+            "SecurityName": "Anteile -(CHF) A-dis- UBS ETF (CH) - SMIM (R)",
+            "Quantity": 0.0,
+            "PricePerUnit": 279.3,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 8379.0,
+            "ProposalValuePercentage": 0.08379
+          },
+          {
+            "Isin": "IE00B4YLF345",
+            "SecurityName": "Anteile CHF (Hedged) PIMCO Funds Glob.Inv.Series - Global Investment Grade Credit Fund",
+            "Quantity": 0.0,
+            "PricePerUnit": 15.33,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 10731.0,
+            "ProposalValuePercentage": 0.10731
+          },
+          {
+            "Isin": "IE00B8BVCK12",
+            "SecurityName": "Anteile Hedged CHF ETF iShares VI PLC  - iShares MSCI World CHF Hedged UCITS ETF (Acc)",
+            "Quantity": 0.0,
+            "PricePerUnit": 57.02,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 15110.3,
+            "ProposalValuePercentage": 0.1511
+          },
+          {
+            "Isin": "CH0226976816",
+            "SecurityName": "Anteile -A- iShares ETF (CH) - iShares Core CHF Corporate   Bond ETF (CH)",
+            "Quantity": 0.0,
+            "PricePerUnit": 91.842,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 10102.62,
+            "ProposalValuePercentage": 0.10103
+          },
+          {
+            "Isin": "CH0237935637",
+            "SecurityName": "Anteile -A- iShares ETF (CH) - iShares Swiss Dividend ETF   (CH)",
+            "Quantity": 0.0,
+            "PricePerUnit": 145.54,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 11643.2,
+            "ProposalValuePercentage": 0.11643
+          },
+          {
+            "Isin": "IE00B988C465",
+            "SecurityName": "Anteile Hedged CHF ETF iShares VI PLC - Glob.High Yield Corp Bd CHF UCITS ETF (Dist)",
+            "Quantity": 0.0,
+            "PricePerUnit": 75.616,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 6049.28,
+            "ProposalValuePercentage": 0.06049
+          },
+          {
+            "Isin": "LU0997546303",
+            "SecurityName": "Anteile -Z-CHF hedged- AXA IM Fixed Income Inv Strategies FCP - US Short Duration High Yield",
+            "Quantity": 0.0,
+            "PricePerUnit": 100.09,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 12010.8,
+            "ProposalValuePercentage": 0.12011
+          },
+          {
+            "Isin": "IE00BK7XZ629",
+            "SecurityName": "Anteile Hedged CHF iShares PLC - iShares USD Treasury Bond 1-3yr UCITS ETF",
+            "Quantity": 0.0,
+            "PricePerUnit": 4.7685,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 8106.45,
+            "ProposalValuePercentage": 0.08106
+          },
+          {
+            "Isin": "CH1122756732",
+            "SecurityName": "Anteile -H-Klasse CHF (hedged)- Raiffeisen ETF - Solid Gold Responsibly Sourced & Traceable",
+            "Quantity": 0.0,
+            "PricePerUnit": 503.2,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 5032.0,
+            "ProposalValuePercentage": 0.05032
+          },
+          {
+            "Isin": "IE00BYXYYP94",
+            "SecurityName": "Anteile Unhedged USD iShares IV PLC - iShares USD Short Duration Corp Bond UCITS ETF",
+            "Quantity": 0.0,
+            "PricePerUnit": 5.19428,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 10388.56,
+            "ProposalValuePercentage": 0.10389
+          }
+        ],
+        "AccountPositions": [
+          {
+            "AccountName": "Investitionskonto CHF",
+            "Currency": "CHF",
+            "Amount": 100000.0,
+            "TotalAmountInProposalCurrency": 2000.0
+          },
+          {
+            "AccountName": "Investitionskonto FWG EUR",
+            "Currency": "EUR",
+            "Amount": 0.0,
+            "TotalAmountInProposalCurrency": 0.0
+          },
+          {
+            "AccountName": "Investitionskonto FWG USD",
+            "Currency": "USD",
+            "Amount": 0.0,
+            "TotalAmountInProposalCurrency": 446.79
+          }
+        ]
+      },
+      {
+        "ProposalId": 13790,
+        "PublicGuid": "3020F925-CB55-ED11-9F65-0050568CD8FC",
+        "PortfolioId": 147733,
+        "ProposalStatusId": 4,
+        "ProposalStatusName": "Abgelehnt",
+        "AdvisoryTypeId": 2,
+        "AdvisoryTypeName": "Investment proposal",
+        "Currency": "CHF",
+        "StrategicAssetAllocationId": 43,
+        "ProposedDateUTC": "2025-04-01T07:49:08.3248542Z",
+        "Reason": "New deposit received",
+        "Notes": "Comment",
+        "ExpectedReturn": 0.03645,
+        "Volatility": 0.08635,
+        "ValueAtRisk": 0.11437,
+        "SecurityPositions": [
+          {
+            "Isin": "CH0111762537",
+            "SecurityName": "Anteile -(CHF) A-dis- UBS ETF (CH) - SMIM (R)",
+            "Quantity": 30.0,
+            "PricePerUnit": 248.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 7440.0,
+            "ProposalValuePercentage": 0.0782
+          },
+          {
+            "Isin": "IE00B4YLF345",
+            "SecurityName": "Anteile CHF (Hedged) PIMCO Funds Glob.Inv.Series - Global Investment Grade Credit Fund",
+            "Quantity": 700.0,
+            "PricePerUnit": 14.3,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 10010.0,
+            "ProposalValuePercentage": 0.10522
+          },
+          {
+            "Isin": "IE00B8BVCK12",
+            "SecurityName": "Anteile Hedged CHF ETF iShares VI PLC  - iShares MSCI World CHF Hedged UCITS ETF (Acc)",
+            "Quantity": 265.0,
+            "PricePerUnit": 55.53,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 14715.45,
+            "ProposalValuePercentage": 0.15467
+          },
+          {
+            "Isin": "CH0226976816",
+            "SecurityName": "Anteile -A- iShares ETF (CH) - iShares Core CHF Corporate   Bond ETF (CH)",
+            "Quantity": 110.0,
+            "PricePerUnit": 89.444,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 9838.84,
+            "ProposalValuePercentage": 0.10342
+          },
+          {
+            "Isin": "CH0237935637",
+            "SecurityName": "Anteile -A- iShares ETF (CH) - iShares Swiss Dividend ETF   (CH)",
+            "Quantity": 80.0,
+            "PricePerUnit": 142.8,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 11424.0,
+            "ProposalValuePercentage": 0.12008
+          },
+          {
+            "Isin": "IE00B988C465",
+            "SecurityName": "Anteile Hedged CHF ETF iShares VI PLC - Glob.High Yield Corp Bd CHF UCITS ETF (Dist)",
+            "Quantity": 80.0,
+            "PricePerUnit": 70.634,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 5650.72,
+            "ProposalValuePercentage": 0.05939
+          },
+          {
+            "Isin": "LU0997546303",
+            "SecurityName": "Anteile -Z-CHF hedged- AXA IM Fixed Income Inv Strategies FCP - US Short Duration High Yield",
+            "Quantity": 120.0,
+            "PricePerUnit": 98.21,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 11785.2,
+            "ProposalValuePercentage": 0.12387
+          },
+          {
+            "Isin": "IE00BK7XZ629",
+            "SecurityName": "Anteile Hedged CHF iShares PLC - iShares USD Treasury Bond 1-3yr UCITS ETF",
+            "Quantity": 1700.0,
+            "PricePerUnit": 4.6496,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 7904.32,
+            "ProposalValuePercentage": 0.08308
+          },
+          {
+            "Isin": "CH1122756732",
+            "SecurityName": "Anteile -H-Klasse CHF (hedged)- Raiffeisen ETF - Solid Gold Responsibly Sourced & Traceable",
+            "Quantity": 10.0,
+            "PricePerUnit": 479.1,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 4791.0,
+            "ProposalValuePercentage": 0.05036
+          },
+          {
+            "Isin": "IE00BYXYYP94",
+            "SecurityName": "Anteile Unhedged USD iShares IV PLC - iShares USD Short Duration Corp Bond UCITS ETF",
+            "Quantity": 2000.0,
+            "PricePerUnit": 5.19628,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 10392.56,
+            "ProposalValuePercentage": 0.10924
+          }
+        ],
+        "AccountPositions": [
+          {
+            "AccountName": "Investitionskonto CHF",
+            "Currency": "CHF",
+            "Amount": 1193.34,
+            "TotalAmountInProposalCurrency": 1193.34
+          },
+          {
+            "AccountName": "Investitionskonto FWG EUR",
+            "Currency": "EUR",
+            "Amount": 0.0,
+            "TotalAmountInProposalCurrency": 0.0
+          },
+          {
+            "AccountName": "Investitionskonto FWG USD",
+            "Currency": "USD",
+            "Amount": -7.13,
+            "TotalAmountInProposalCurrency": -7.03225
+          }
+        ]
+      },
+      {
+        "ProposalId": 15554,
+        "PublicGuid": "427018C9-8D9C-ED11-9F67-0050568CD8FC",
+        "PortfolioId": 147733,
+        "ProposalStatusId": 4,
+        "ProposalStatusName": "Abgelehnt",
+        "AdvisoryTypeId": 2,
+        "AdvisoryTypeName": "Investment proposal",
+        "Currency": "CHF",
+        "StrategicAssetAllocationId": 43,
+        "ProposedDateUTC": "2025-06-30T09:12:42.1472472Z",
+        "Reason": "Portfolio rebalancing",
+        "Notes": "Comment",
+        "ExpectedReturn": 0.03571,
+        "Volatility": 0.08315,
+        "ValueAtRisk": 0.13557,
+        "SecurityPositions": [
+          {
+            "Isin": "CH0111762537",
+            "SecurityName": "Anteile -(CHF) A-dis- UBS ETF (CH) - SMIM (R)",
+            "Quantity": 30.0,
+            "PricePerUnit": 271.3,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 8139.0,
+            "ProposalValuePercentage": 0.08249
+          },
+          {
+            "Isin": "IE00B4YLF345",
+            "SecurityName": "Anteile CHF (Hedged) PIMCO Funds Glob.Inv.Series - Global Investment Grade Credit Fund",
+            "Quantity": 700.0,
+            "PricePerUnit": 15.27,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 10689.0,
+            "ProposalValuePercentage": 0.10833
+          },
+          {
+            "Isin": "IE00B8BVCK12",
+            "SecurityName": "Anteile Hedged CHF ETF iShares VI PLC  - iShares MSCI World CHF Hedged UCITS ETF (Acc)",
+            "Quantity": 265.0,
+            "PricePerUnit": 58.1,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 15396.5,
+            "ProposalValuePercentage": 0.15604
+          },
+          {
+            "Isin": "CH0226976816",
+            "SecurityName": "Anteile -A- iShares ETF (CH) - iShares Core CHF Corporate   Bond ETF (CH)",
+            "Quantity": 110.0,
+            "PricePerUnit": 91.44,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 10058.4,
+            "ProposalValuePercentage": 0.10194
+          },
+          {
+            "Isin": "CH0237935637",
+            "SecurityName": "Anteile -A- iShares ETF (CH) - iShares Swiss Dividend ETF   (CH)",
+            "Quantity": 80.0,
+            "PricePerUnit": 149.32,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 11945.6,
+            "ProposalValuePercentage": 0.12107
+          },
+          {
+            "Isin": "IE00B988C465",
+            "SecurityName": "Anteile Hedged CHF ETF iShares VI PLC - Glob.High Yield Corp Bd CHF UCITS ETF (Dist)",
+            "Quantity": 80.0,
+            "PricePerUnit": 74.42,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 5953.6,
+            "ProposalValuePercentage": 0.06034
+          },
+          {
+            "Isin": "LU0997546303",
+            "SecurityName": "Anteile -Z-CHF hedged- AXA IM Fixed Income Inv Strategies FCP - US Short Duration High Yield",
+            "Quantity": 120.0,
+            "PricePerUnit": 100.43,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 0.0,
+            "ProposalValuePercentage": 0.0
+          },
+          {
+            "Isin": "IE00BF1QPK61",
+            "SecurityName": "Anteile -Hedged CHF- SSGA SPDR ETFs Europe I PLC - SPDR Bloomberg Global Aggregate Bond UCITS ETF",
+            "Quantity": 0.0,
+            "PricePerUnit": 27.695,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 11908.85,
+            "ProposalValuePercentage": 0.1207
+          },
+          {
+            "Isin": "IE00BK7XZ629",
+            "SecurityName": "Anteile Hedged CHF iShares PLC - iShares USD Treasury Bond 1-3yr UCITS ETF",
+            "Quantity": 1700.0,
+            "PricePerUnit": 4.6675,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 7934.75,
+            "ProposalValuePercentage": 0.08042
+          },
+          {
+            "Isin": "CH1122756732",
+            "SecurityName": "Anteile -H-Klasse CHF (hedged)- Raiffeisen ETF - Solid Gold Responsibly Sourced & Traceable",
+            "Quantity": 10.0,
+            "PricePerUnit": 547.1,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 5471.0,
+            "ProposalValuePercentage": 0.05545
+          },
+          {
+            "Isin": "IE00BYXYYP94",
+            "SecurityName": "Anteile Unhedged USD iShares IV PLC - iShares USD Short Duration Corp Bond UCITS ETF",
+            "Quantity": 2000.0,
+            "PricePerUnit": 5.0018,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 10003.6,
+            "ProposalValuePercentage": 0.10139
+          }
+        ],
+        "AccountPositions": [
+          {
+            "AccountName": "Investitionskonto CHF",
+            "Currency": "CHF",
+            "Amount": 842.71,
+            "TotalAmountInProposalCurrency": 985.46
+          },
+          {
+            "AccountName": "Investitionskonto FWG EUR",
+            "Currency": "EUR",
+            "Amount": 93.1,
+            "TotalAmountInProposalCurrency": 93.47483
+          },
+          {
+            "AccountName": "Investitionskonto FWG USD",
+            "Currency": "USD",
+            "Amount": 95.86,
+            "TotalAmountInProposalCurrency": 88.5093
+          }
+        ]
+      },
+      {
+        "ProposalId": 17503,
+        "PublicGuid": "8F8BC43C-47E3-ED11-9F69-0050568CD8FC",
+        "PortfolioId": 147733,
+        "ProposalStatusId": 4,
+        "ProposalStatusName": "Abgelehnt",
+        "AdvisoryTypeId": 2,
+        "AdvisoryTypeName": "Investment proposal",
+        "Currency": "CHF",
+        "StrategicAssetAllocationId": 43,
+        "ProposedDateUTC": "2026-01-19T11:37:11.2252748Z",
+        "Reason": "Annual review meeting",
+        "Notes": "Comment",
+        "ExpectedReturn": 0.03611,
+        "Volatility": 0.08295,
+        "ValueAtRisk": 0.12639,
+        "SecurityPositions": [
+          {
+            "Isin": "CH0111762537",
+            "SecurityName": "Anteile -(CHF) A-dis- UBS ETF (CH) - SMIM (R)",
+            "Quantity": 30.0,
+            "PricePerUnit": 273.2,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 8196.0,
+            "ProposalValuePercentage": 0.0833
+          },
+          {
+            "Isin": "IE00B4YLF345",
+            "SecurityName": "Anteile CHF (Hedged) PIMCO Funds Glob.Inv.Series - Global Investment Grade Credit Fund",
+            "Quantity": 700.0,
+            "PricePerUnit": 14.83,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 10381.0,
+            "ProposalValuePercentage": 0.10551
+          },
+          {
+            "Isin": "IE00B8BVCK12",
+            "SecurityName": "Anteile Hedged CHF ETF iShares VI PLC  - iShares MSCI World CHF Hedged UCITS ETF (Acc)",
+            "Quantity": 265.0,
+            "PricePerUnit": 62.02,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 16435.3,
+            "ProposalValuePercentage": 0.16704
+          },
+          {
+            "Isin": "CH0226976816",
+            "SecurityName": "Anteile -A- iShares ETF (CH) - iShares Core CHF Corporate   Bond ETF (CH)",
+            "Quantity": 110.0,
+            "PricePerUnit": 91.618,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 10077.98,
+            "ProposalValuePercentage": 0.10243
+          },
+          {
+            "Isin": "CH0237935637",
+            "SecurityName": "Anteile -A- iShares ETF (CH) - iShares Swiss Dividend ETF   (CH)",
+            "Quantity": 80.0,
+            "PricePerUnit": 145.82,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 11665.6,
+            "ProposalValuePercentage": 0.11857
+          },
+          {
+            "Isin": "IE00B988C465",
+            "SecurityName": "Anteile Hedged CHF ETF iShares VI PLC - Glob.High Yield Corp Bd CHF UCITS ETF (Dist)",
+            "Quantity": 80.0,
+            "PricePerUnit": 72.464,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 5797.12,
+            "ProposalValuePercentage": 0.05892
+          },
+          {
+            "Isin": "LU0997546303",
+            "SecurityName": "Anteile -Z-CHF hedged- AXA IM Fixed Income Inv Strategies FCP - US Short Duration High Yield",
+            "Quantity": 120.0,
+            "PricePerUnit": 100.34,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 0.0,
+            "ProposalValuePercentage": 0.0
+          },
+          {
+            "Isin": "IE00BK7XZ629",
+            "SecurityName": "Anteile Hedged CHF iShares PLC - iShares USD Treasury Bond 1-3yr UCITS ETF",
+            "Quantity": 1700.0,
+            "PricePerUnit": 4.5911,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 7804.87,
+            "ProposalValuePercentage": 0.07933
+          },
+          {
+            "Isin": "CH1122756732",
+            "SecurityName": "Anteile -H-Klasse CHF (hedged)- Raiffeisen ETF - Solid Gold Responsibly Sourced & Traceable",
+            "Quantity": 10.0,
+            "PricePerUnit": 526.7,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 5267.0,
+            "ProposalValuePercentage": 0.05353
+          },
+          {
+            "Isin": "IE00BYXYYP94",
+            "SecurityName": "Anteile Unhedged USD iShares IV PLC - iShares USD Short Duration Corp Bond UCITS ETF",
+            "Quantity": 2000.0,
+            "PricePerUnit": 4.7991,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 9598.2,
+            "ProposalValuePercentage": 0.09755
+          },
+          {
+            "Isin": "CH0016426881",
+            "SecurityName": "Anteile -I dy- Pictet CH - CHF Short Mid Term Bonds",
+            "Quantity": 0.0,
+            "PricePerUnit": 749.83,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 11997.28,
+            "ProposalValuePercentage": 0.12194
+          }
+        ],
+        "AccountPositions": [
+          {
+            "AccountName": "Investitionskonto CHF",
+            "Currency": "CHF",
+            "Amount": 1021.06,
+            "TotalAmountInProposalCurrency": 1064.58
+          },
+          {
+            "AccountName": "Investitionskonto FWG EUR",
+            "Currency": "EUR",
+            "Amount": 40.52,
+            "TotalAmountInProposalCurrency": 38.84612
+          },
+          {
+            "AccountName": "Investitionskonto FWG USD",
+            "Currency": "USD",
+            "Amount": 73.75,
+            "TotalAmountInProposalCurrency": 64.68447
+          }
+        ]
+      },
+      {
+        "ProposalId": 23519,
+        "PublicGuid": "D6E40226-5DBB-EE11-9F6F-0050568CD8FC",
+        "PortfolioId": 147733,
+        "ProposalStatusId": 4,
+        "ProposalStatusName": "Abgelehnt",
+        "AdvisoryTypeId": 2,
+        "AdvisoryTypeName": "Investment proposal",
+        "Currency": "CHF",
+        "StrategicAssetAllocationId": 43,
+        "ProposedDateUTC": "2026-06-30T09:33:43.428907Z",
+        "Reason": "Follow-up from prior meeting",
+        "Notes": "Comment",
+        "ExpectedReturn": 0.03588,
+        "Volatility": 0.0817,
+        "ValueAtRisk": 0.12664,
+        "SecurityPositions": [
+          {
+            "Isin": "CH0111762537",
+            "SecurityName": "Anteile -(CHF) A-dis- UBS ETF (CH) - SMIM (R)",
+            "Quantity": 30.0,
+            "PricePerUnit": 255.35,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 7660.5,
+            "ProposalValuePercentage": 0.07635
+          },
+          {
+            "Isin": "IE00B4YLF345",
+            "SecurityName": "Anteile CHF (Hedged) PIMCO Funds Glob.Inv.Series - Global Investment Grade Credit Fund",
+            "Quantity": 700.0,
+            "PricePerUnit": 15.28,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 10696.0,
+            "ProposalValuePercentage": 0.10661
+          },
+          {
+            "Isin": "IE00B8BVCK12",
+            "SecurityName": "Anteile Hedged CHF ETF iShares VI PLC  - iShares MSCI World CHF Hedged UCITS ETF (Acc)",
+            "Quantity": 265.0,
+            "PricePerUnit": 66.43,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 0.0,
+            "ProposalValuePercentage": 0.0
+          },
+          {
+            "Isin": "CH0226976816",
+            "SecurityName": "Anteile -A- iShares ETF (CH) - iShares Core CHF Corporate   Bond ETF (CH)",
+            "Quantity": 110.0,
+            "PricePerUnit": 93.47,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 10281.7,
+            "ProposalValuePercentage": 0.10248
+          },
+          {
+            "Isin": "CH0237935637",
+            "SecurityName": "Anteile -A- iShares ETF (CH) - iShares Swiss Dividend ETF   (CH)",
+            "Quantity": 80.0,
+            "PricePerUnit": 150.26,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 12020.8,
+            "ProposalValuePercentage": 0.11981
+          },
+          {
+            "Isin": "IE00B988C465",
+            "SecurityName": "Anteile Hedged CHF ETF iShares VI PLC - Glob.High Yield Corp Bd CHF UCITS ETF (Dist)",
+            "Quantity": 80.0,
+            "PricePerUnit": 73.934,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 5914.72,
+            "ProposalValuePercentage": 0.05895
+          },
+          {
+            "Isin": "IE00BYM11L64",
+            "SecurityName": "Anteile -A- Hedged CHF UBS (Irl) Fund  Solutions PLC - MSCI ACWI SF UCITS ETF",
+            "Quantity": 0.0,
+            "PricePerUnit": 169.8,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 16980.0,
+            "ProposalValuePercentage": 0.16924
+          },
+          {
+            "Isin": "IE00BK7XZ629",
+            "SecurityName": "Anteile Hedged CHF iShares PLC - iShares USD Treasury Bond 1-3yr UCITS ETF",
+            "Quantity": 1700.0,
+            "PricePerUnit": 4.6399,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 7887.83,
+            "ProposalValuePercentage": 0.07862
+          },
+          {
+            "Isin": "CH1122756732",
+            "SecurityName": "Anteile -H-Klasse CHF (hedged)- Raiffeisen ETF - Solid Gold Responsibly Sourced & Traceable",
+            "Quantity": 10.0,
+            "PricePerUnit": 544.7,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 5447.0,
+            "ProposalValuePercentage": 0.05429
+          },
+          {
+            "Isin": "IE00BYXYYP94",
+            "SecurityName": "Anteile Unhedged USD iShares IV PLC - iShares USD Short Duration Corp Bond UCITS ETF",
+            "Quantity": 2000.0,
+            "PricePerUnit": 4.8962,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 9792.4,
+            "ProposalValuePercentage": 0.0976
+          },
+          {
+            "Isin": "CH0016426881",
+            "SecurityName": "Anteile -I dy- Pictet CH - CHF Short Mid Term Bonds",
+            "Quantity": 16.0,
+            "PricePerUnit": 756.6,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 12105.6,
+            "ProposalValuePercentage": 0.12066
+          }
+        ],
+        "AccountPositions": [
+          {
+            "AccountName": "Investitionskonto CHF",
+            "Currency": "CHF",
+            "Amount": 859.08,
+            "TotalAmountInProposalCurrency": 1483.03
+          },
+          {
+            "AccountName": "Investitionskonto FWG EUR",
+            "Currency": "EUR",
+            "Amount": 19.43,
+            "TotalAmountInProposalCurrency": 18.28465
+          },
+          {
+            "AccountName": "Investitionskonto FWG USD",
+            "Currency": "USD",
+            "Amount": 50.94,
+            "TotalAmountInProposalCurrency": 43.98774
+          }
+        ]
+      }
+    ],
+    "Transactions": [
+      {
+        "TransactionId": 82667,
+        "PublicGuid": "AE653415-B309-ED11-9F64-0050568CD8FC",
+        "ProposalId": 11953,
+        "SecurityId": 2346,
+        "Isin": "CH0237935637",
+        "SecurityName": "Anteile -A- iShares ETF (CH) - iShares Swiss Dividend ETF   (CH)",
+        "QuantityForTransaction": 80.0,
+        "Currency": "CHF",
+        "TotalAmount": 11643.2,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 82668,
+        "PublicGuid": "F0320020-B309-ED11-9F64-0050568CD8FC",
+        "ProposalId": 11953,
+        "SecurityId": 1105,
+        "Isin": "CH0111762537",
+        "SecurityName": "Anteile -(CHF) A-dis- UBS ETF (CH) - SMIM (R)",
+        "QuantityForTransaction": 30.0,
+        "Currency": "CHF",
+        "TotalAmount": 8379.0,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 82669,
+        "PublicGuid": "13423C32-B309-ED11-9F64-0050568CD8FC",
+        "ProposalId": 11953,
+        "SecurityId": 37733,
+        "Isin": "CH1122756732",
+        "SecurityName": "Anteile -H-Klasse CHF (hedged)- Raiffeisen ETF - Solid Gold Responsibly Sourced & Traceable",
+        "QuantityForTransaction": 10.0,
+        "Currency": "CHF",
+        "TotalAmount": 5032.0,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 82672,
+        "PublicGuid": "441C0589-B309-ED11-9F64-0050568CD8FC",
+        "ProposalId": 11953,
+        "SecurityId": 2258,
+        "Isin": "CH0226976816",
+        "SecurityName": "Anteile -A- iShares ETF (CH) - iShares Core CHF Corporate   Bond ETF (CH)",
+        "QuantityForTransaction": 110.0,
+        "Currency": "CHF",
+        "TotalAmount": 10102.62,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 82675,
+        "PublicGuid": "C9B3E4C0-B509-ED11-9F64-0050568CD8FC",
+        "ProposalId": 11953,
+        "SecurityId": 2434,
+        "Isin": "LU0997546303",
+        "SecurityName": "Anteile -Z-CHF hedged- AXA IM Fixed Income Inv Strategies FCP - US Short Duration High Yield",
+        "QuantityForTransaction": 120.0,
+        "Currency": "CHF",
+        "TotalAmount": 12010.8,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 82690,
+        "PublicGuid": "CC1B262D-C709-ED11-9F64-0050568CD8FC",
+        "ProposalId": 11953,
+        "SecurityId": 1672,
+        "Isin": "IE00B8BVCK12",
+        "SecurityName": "Anteile Hedged CHF ETF iShares VI PLC  - iShares MSCI World CHF Hedged UCITS ETF (Acc)",
+        "QuantityForTransaction": 265.0,
+        "Currency": "CHF",
+        "TotalAmount": 15110.3,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 82692,
+        "PublicGuid": "B2A5C8E9-C709-ED11-9F64-0050568CD8FC",
+        "ProposalId": 11953,
+        "SecurityId": 38071,
+        "Isin": "IE00BYXYYP94",
+        "SecurityName": "Anteile Unhedged USD iShares IV PLC - iShares USD Short Duration Corp Bond UCITS ETF",
+        "QuantityForTransaction": 2000.0,
+        "Currency": "CHF",
+        "TotalAmount": 10388.56,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 82693,
+        "PublicGuid": "BBB2452D-C809-ED11-9F64-0050568CD8FC",
+        "ProposalId": 11953,
+        "SecurityId": 1211,
+        "Isin": "IE00B4YLF345",
+        "SecurityName": "Anteile CHF (Hedged) PIMCO Funds Glob.Inv.Series - Global Investment Grade Credit Fund",
+        "QuantityForTransaction": 700.0,
+        "Currency": "CHF",
+        "TotalAmount": 10731.0,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 82697,
+        "PublicGuid": "1488E934-CC09-ED11-9F64-0050568CD8FC",
+        "ProposalId": 11953,
+        "QuantityForTransaction": 11560.5,
+        "Currency": "USD",
+        "TotalAmount": 11118.00346,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 82699,
+        "PublicGuid": "D172EAFC-CE09-ED11-9F64-0050568CD8FC",
+        "ProposalId": 11953,
+        "SecurityId": 2347,
+        "Isin": "IE00B988C465",
+        "SecurityName": "Anteile Hedged CHF ETF iShares VI PLC - Glob.High Yield Corp Bd CHF UCITS ETF (Dist)",
+        "QuantityForTransaction": 80.0,
+        "Currency": "CHF",
+        "TotalAmount": 6049.28,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 82700,
+        "PublicGuid": "1D572665-CF09-ED11-9F64-0050568CD8FC",
+        "ProposalId": 11953,
+        "SecurityId": 14207,
+        "Isin": "IE00BK7XZ629",
+        "SecurityName": "Anteile Hedged CHF iShares PLC - iShares USD Treasury Bond 1-3yr UCITS ETF",
+        "QuantityForTransaction": 1700.0,
+        "Currency": "CHF",
+        "TotalAmount": 8106.45,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 82709,
+        "PublicGuid": "5A8319AB-F00B-ED11-9F64-0050568CD8FC",
+        "ProposalId": 11953,
+        "QuantityForTransaction": 2564.76346,
+        "Currency": "CHF",
+        "TotalAmount": 2564.76346,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 106460,
+        "PublicGuid": "9F4934CC-8F9C-ED11-9F67-0050568CD8FC",
+        "ProposalId": 15554,
+        "SecurityId": 2434,
+        "Isin": "LU0997546303",
+        "SecurityName": "Anteile -Z-CHF hedged- AXA IM Fixed Income Inv Strategies FCP - US Short Duration High Yield",
+        "QuantityForTransaction": -120.0,
+        "Currency": "CHF",
+        "TotalAmount": -12051.6,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 106461,
+        "PublicGuid": "54F466D7-8F9C-ED11-9F67-0050568CD8FC",
+        "ProposalId": 15554,
+        "SecurityId": 6721,
+        "Isin": "IE00BF1QPK61",
+        "SecurityName": "Anteile -Hedged CHF- SSGA SPDR ETFs Europe I PLC - SPDR Bloomberg Global Aggregate Bond UCITS ETF",
+        "QuantityForTransaction": 430.0,
+        "Currency": "CHF",
+        "TotalAmount": 11908.85,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 119086,
+        "PublicGuid": "3DE090EB-47E3-ED11-9F69-0050568CD8FC",
+        "ProposalId": 17503,
+        "SecurityId": 2434,
+        "Isin": "LU0997546303",
+        "SecurityName": "Anteile -Z-CHF hedged- AXA IM Fixed Income Inv Strategies FCP - US Short Duration High Yield",
+        "QuantityForTransaction": -120.0,
+        "Currency": "CHF",
+        "TotalAmount": -12040.8,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 119087,
+        "PublicGuid": "FC0F11F9-47E3-ED11-9F69-0050568CD8FC",
+        "ProposalId": 17503,
+        "SecurityId": 46408,
+        "Isin": "CH0016426881",
+        "SecurityName": "Anteile -I dy- Pictet CH - CHF Short Mid Term Bonds",
+        "QuantityForTransaction": 16.0,
+        "Currency": "CHF",
+        "TotalAmount": 11997.28,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 155853,
+        "PublicGuid": "812E5D1B-62BB-EE11-9F6F-0050568CD8FC",
+        "ProposalId": 23519,
+        "SecurityId": 1672,
+        "Isin": "IE00B8BVCK12",
+        "SecurityName": "Anteile Hedged CHF ETF iShares VI PLC  - iShares MSCI World CHF Hedged UCITS ETF (Acc)",
+        "QuantityForTransaction": -265.0,
+        "Currency": "CHF",
+        "TotalAmount": -17603.95,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 155854,
+        "PublicGuid": "636BB422-62BB-EE11-9F6F-0050568CD8FC",
+        "ProposalId": 23519,
+        "SecurityId": 4473,
+        "Isin": "IE00BYM11L64",
+        "SecurityName": "Anteile -A- Hedged CHF UBS (Irl) Fund  Solutions PLC - MSCI ACWI SF UCITS ETF",
+        "QuantityForTransaction": 100.0,
+        "Currency": "CHF",
+        "TotalAmount": 16980.0,
+        "IsExpiry": false
+      }
+    ],
+    "SuitabilityViolations": [
+      {
+        "Id": 633825,
+        "RuleCode": "Overweight in the equity sector \"Industrials\"",
+        "RuleDescription": "Übergewicht (+/- 5% zum SAA-Sollwert der Benchmark) im Aktiensektor \"Industrie\"",
+        "ErrorLevel": 1,
+        "Severity": "Warning",
+        "PortfolioId": 147733,
+        "ViolationPath": [
+          {
+            "FieldName": "RegulatoryClientTypeRuleField`1",
+            "LeftValue": 13.0,
+            "RightValue": 13.0,
+            "Operator": 10
+          },
+          {
+            "FieldName": "SimulationFilterTopLevelSAAIndustryRuleField",
+            "LeftValue": 55.0,
+            "RightValue": 55.0,
+            "Operator": 10
+          },
+          {
+            "FieldName": "SimulationPositionCollectionPortfolioValueRuleField",
+            "LeftValue": 0.14972809176364849,
+            "RightValue": 0.197,
+            "Operator": 50
+          },
+          {
+            "FieldName": "SimulationPositionCollectionPortfolioValueRuleField",
+            "LeftValue": 0.14972809176364849,
+            "RightValue": 0.147,
+            "Operator": 60
+          }
+        ]
+      },
+      {
+        "Id": 633826,
+        "RuleCode": "Cluster risk of a single financial instrument",
+        "RuleDescription": "Für Privatkunden mit Finanzdienstleistung Umfassende Anlageberatung oder trx basierte Anlageberatung muss Einzeltitel Anteil < x% sein (x variiert mit Instrument Typ)",
+        "ErrorLevel": 2,
+        "Severity": "Error",
+        "PortfolioId": 147733,
+        "LastViolatedDateUTC": "2026-06-29T06:17:00.623Z",
+        "SecurityIsin": "IE00B8BVCK12",
+        "ViolationPath": [
+          {
+            "FieldName": "RegulatoryClientTypeRuleField`1",
+            "LeftValue": 13.0,
+            "RightValue": 13.0,
+            "Operator": 10
+          },
+          {
+            "FieldName": "PositionPortfolioValueRuleField`1",
+            "LeftValue": 0.178970161073,
+            "RightValue": 0.075,
+            "Operator": 40
+          },
+          {
+            "FieldName": "PositionIsSecurityRuleField`1",
+            "LeftValue": true,
+            "RightValue": true,
+            "Operator": 10
+          },
+          {
+            "FieldName": "PositionPortfolioValueRuleField`1",
+            "LeftValue": 0.178970161073,
+            "RightValue": 0.15,
+            "Operator": 40
+          },
+          {
+            "FieldName": "PositionTopLevelSecurityTypeRuleField`1",
+            "LeftValue": 181.0,
+            "RightValue": 181.0,
+            "Operator": 10
+          }
+        ]
+      },
+      {
+        "Id": 928298,
+        "RuleCode": "Overweight in the equity sector \"Financials\"",
+        "RuleDescription": "Übergewicht (+/- 5% zum SAA-Sollwert der Benchmark) im Aktiensektor \"Finanzwesen\"",
+        "ErrorLevel": 1,
+        "Severity": "Warning",
+        "PortfolioId": 147733,
+        "ViolationPath": [
+          {
+            "FieldName": "RegulatoryClientTypeRuleField`1",
+            "LeftValue": 13.0,
+            "RightValue": 13.0,
+            "Operator": 10
+          },
+          {
+            "FieldName": "SimulationFilterTopLevelSAAIndustryRuleField",
+            "LeftValue": 59.0,
+            "RightValue": 59.0,
+            "Operator": 10
+          },
+          {
+            "FieldName": "SimulationPositionCollectionPortfolioValueRuleField",
+            "LeftValue": 0.21305479428921162,
+            "RightValue": 0.244,
+            "Operator": 50
+          },
+          {
+            "FieldName": "SimulationPositionCollectionPortfolioValueRuleField",
+            "LeftValue": 0.21305479428921162,
+            "RightValue": 0.194,
+            "Operator": 60
+          }
+        ]
+      },
+      {
+        "Id": 929678,
+        "RuleCode": "Volatility range undershot (portfolio risk too low)",
+        "RuleDescription": "",
+        "ErrorLevel": 2,
+        "Severity": "Error",
+        "PortfolioId": 147733,
+        "LastViolatedDateUTC": "2026-08-27T07:39:31.417Z",
+        "ViolationPath": [
+          {
+            "FieldName": "RegulatoryClientTypeRuleField`1",
+            "LeftValue": 13.0,
+            "RightValue": 13.0,
+            "Operator": 10
+          },
+          {
+            "FieldName": "SimulationVolatilityRuleField`1",
+            "LeftValue": 0.06156911614,
+            "RightValue": 0.07,
+            "Operator": 30
+          }
+        ]
+      }
+    ],
+    "IndividualRuleOverrides": null,
+    "ClientNotes": [
+      {
+        "Note": "Wants a focus on high-dividend stocks for ongoing income generation.",
+        "CreatedByDateUTC": "2026-08-29T11:48:20"
+      },
+      {
+        "Note": "Annual review meeting held, no change to strategy desired.",
+        "CreatedByDateUTC": "2026-08-22T11:48:20"
+      },
+      {
+        "Note": "Comfortable with a high-risk, high-reward strategy; unfazed by volatility.",
+        "CreatedByDateUTC": "2025-10-21T09:20:50"
+      },
+      {
+        "Note": "Requested absolute discretion regarding account details.",
+        "CreatedByDateUTC": "2025-10-03T09:20:50"
+      },
+      {
+        "Note": "Maintains multiple residences abroad; reachable only through his assistant.",
+        "CreatedByDateUTC": "2025-07-12T09:20:50"
+      },
+      {
+        "Note": "Travels internationally on short notice; prefers communication via a secure channel only.",
+        "CreatedByDateUTC": "2025-05-24T09:20:50"
+      }
+    ],
+    "Tags": [
+      {
+        "TagName": "Rest of Europe",
+        "TagTypeName": "Region",
+        "Scope": "Client"
+      },
+      {
+        "TagName": "Consumer Discretionary",
+        "TagTypeName": "Industry",
+        "Scope": "Client"
+      }
+    ]
+  }
+]

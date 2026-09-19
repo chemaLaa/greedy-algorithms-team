@@ -1,0 +1,5261 @@
+[
+  {
+    "ClientId": 60253,
+    "ClientRef": "CASE-047",
+    "FirstName": "Dude",
+    "LastName": "",
+    "Company": null,
+    "IsClientACompany": false,
+    "IsEmployee": false,
+    "RegulatoryClientTypeId": 13,
+    "RegulatoryClientTypeName": "Private client",
+    "ReportingCurrency": "CHF",
+    "RiskProfileId": 18,
+    "RiskProfileName": "Anlageprofil 6",
+    "EsgProfileId": null,
+    "EsgProfileName": null,
+    "Birthday": "1986-09-18",
+    "ProfilingDateUtc": "2022-07-31T01:00:00+02:00",
+    "AssetsUnderManagementInDefaultCurrency": 457469.57343,
+    "LiquidityInDefaultCurrency": 32332.06,
+    "Portfolios": [
+      {
+        "PortfolioId": 41848,
+        "PublicGuid": "68DD7E13-CC1D-EA11-80FD-40F2E9C846E4",
+        "PortfolioNr": "CASE-047-01",
+        "Name": "Anlageberatung",
+        "PortfolioCurrency": "CHF",
+        "StrategicAssetAllocationId": 46,
+        "InvestmentServiceId": 9,
+        "InvestmentServiceName": "Investment Advisory",
+        "StrategyId": 7,
+        "StrategyName": "Investor profile 7",
+        "ReferenceCurrency": "CHF",
+        "AssetsUnderManagementInDefaultCurrency": 457469.57343,
+        "LiquidityInDefaultCurrency": 32332.06,
+        "Volatility": 0.11438,
+        "ExpectedReturn": 0.06112,
+        "ValueAtRisk": 0.12885,
+        "FactoryDateUtc": "2026-09-03T11:27:42.1993343Z",
+        "SecurityPositions": [
+          {
+            "SecurityId": 189,
+            "Isin": "CH0010570767",
+            "Valor": "1057076",
+            "SecurityName": "Partizipationsschein Chocoladefabriken Lindt & Spruengli AG",
+            "Quantity": 2.0,
+            "PricePerUnit": 10300.0,
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 20600.0,
+            "PortfolioValuePercentage": 0.04503,
+            "MarginalContributionToRisk": 0.10503,
+            "ContributionVolatility": 0.0047295009
+          },
+          {
+            "SecurityId": 230,
+            "Isin": "CH0011075394",
+            "Valor": "1107539",
+            "SecurityName": "Namen-Aktie Zurich Insurance Group AG",
+            "Quantity": 33.0,
+            "PricePerUnit": 453.7,
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 14972.1,
+            "PortfolioValuePercentage": 0.03273,
+            "MarginalContributionToRisk": 0.08325,
+            "ContributionVolatility": 0.0027247725000000005
+          },
+          {
+            "SecurityId": 261,
+            "Isin": "CH0012032048",
+            "Valor": "1203204",
+            "SecurityName": "Genussschein Roche Holding AG",
+            "Quantity": 71.0,
+            "PricePerUnit": 225.1,
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 15982.1,
+            "PortfolioValuePercentage": 0.03494,
+            "MarginalContributionToRisk": 0.08901,
+            "ContributionVolatility": 0.0031100094
+          },
+          {
+            "SecurityId": 264,
+            "Isin": "CH0012005267",
+            "Valor": "1200526",
+            "SecurityName": "Namen-Aktie Novartis AG",
+            "Quantity": 120.0,
+            "PricePerUnit": 86.5,
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 10380.0,
+            "PortfolioValuePercentage": 0.02269,
+            "MarginalContributionToRisk": 0.07385,
+            "ContributionVolatility": 0.0016756565
+          },
+          {
+            "SecurityId": 267,
+            "Isin": "CH0012221716",
+            "Valor": "1222171",
+            "SecurityName": "Namen-Aktie ABB Ltd",
+            "Quantity": 480.0,
+            "PricePerUnit": 42.2,
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 20256.0,
+            "PortfolioValuePercentage": 0.04428,
+            "MarginalContributionToRisk": 0.17661,
+            "ContributionVolatility": 0.007820290799999999
+          },
+          {
+            "SecurityId": 300,
+            "Isin": "CH0012549785",
+            "Valor": "1254978",
+            "SecurityName": "Namen-Aktie Sonova Holding AG",
+            "Quantity": 34.0,
+            "PricePerUnit": 257.7,
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 8761.8,
+            "PortfolioValuePercentage": 0.01915,
+            "MarginalContributionToRisk": 0.18776,
+            "ContributionVolatility": 0.003595604
+          },
+          {
+            "SecurityId": 307,
+            "Isin": "CH0016440353",
+            "Valor": "1644035",
+            "SecurityName": "Namen-Aktie EMS-CHEMIE HOLDING AG",
+            "Quantity": 8.0,
+            "PricePerUnit": 697.0,
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 5576.0,
+            "PortfolioValuePercentage": 0.01219,
+            "MarginalContributionToRisk": 0.13324,
+            "ContributionVolatility": 0.0016241956
+          },
+          {
+            "SecurityId": 352,
+            "Isin": "CH0012829898",
+            "Valor": "1282989",
+            "SecurityName": "Namen-Aktie Emmi AG",
+            "Quantity": 10.0,
+            "PricePerUnit": 836.0,
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 8360.0,
+            "PortfolioValuePercentage": 0.01827,
+            "MarginalContributionToRisk": 0.09311,
+            "ContributionVolatility": 0.0017011197
+          },
+          {
+            "SecurityId": 375,
+            "Isin": "CH0002432174",
+            "Valor": "243217",
+            "SecurityName": "Namen-Aktie Bucher Industries AG",
+            "Quantity": 23.0,
+            "PricePerUnit": 392.0,
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 9016.0,
+            "PortfolioValuePercentage": 0.01971,
+            "MarginalContributionToRisk": 0.13438,
+            "ContributionVolatility": 0.0026486298
+          },
+          {
+            "SecurityId": 435,
+            "Isin": "CH0022427626",
+            "Valor": "2242762",
+            "SecurityName": "Namen-Aktie Lem Holding SA",
+            "Quantity": 5.0,
+            "PricePerUnit": 1570.0,
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 7850.0,
+            "PortfolioValuePercentage": 0.01716,
+            "MarginalContributionToRisk": 0.25912,
+            "ContributionVolatility": 0.0044464992000000005
+          },
+          {
+            "SecurityId": 475,
+            "Isin": "CH0025751329",
+            "Valor": "2575132",
+            "SecurityName": "Namen-Aktie Logitech International SA",
+            "Quantity": 165.0,
+            "PricePerUnit": 74.64,
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 12315.6,
+            "PortfolioValuePercentage": 0.02692,
+            "MarginalContributionToRisk": 0.19733,
+            "ContributionVolatility": 0.0053121236
+          },
+          {
+            "SecurityId": 524,
+            "Isin": "CH0030170408",
+            "Valor": "3017040",
+            "SecurityName": "Namen-Aktie Geberit AG",
+            "Quantity": 18.0,
+            "PricePerUnit": 507.4,
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 9133.2,
+            "PortfolioValuePercentage": 0.01996,
+            "MarginalContributionToRisk": 0.13886,
+            "ContributionVolatility": 0.0027716456
+          },
+          {
+            "SecurityId": 644,
+            "Isin": "CH0038863350",
+            "Valor": "3886335",
+            "SecurityName": "Namen-Aktie Nestle SA",
+            "Quantity": 136.0,
+            "PricePerUnit": 92.5,
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 12580.0,
+            "PortfolioValuePercentage": 0.0275,
+            "MarginalContributionToRisk": 0.07807,
+            "ContributionVolatility": 0.002146925
+          },
+          {
+            "SecurityId": 1049,
+            "Isin": "CH0111677362",
+            "Valor": "11167736",
+            "SecurityName": "Namen-Aktie Orior AG",
+            "Quantity": 100.0,
+            "PricePerUnit": 61.6,
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 6160.0,
+            "PortfolioValuePercentage": 0.01347,
+            "MarginalContributionToRisk": 0.12425,
+            "ContributionVolatility": 0.0016736474999999998
+          },
+          {
+            "SecurityId": 1197,
+            "Isin": "LU0329631377",
+            "Valor": "3535028",
+            "SecurityName": "Anteile -I1- Variopartner SICAV - MIV Global Medtech Fund",
+            "Quantity": 8.0,
+            "PricePerUnit": 2646.52,
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 21172.16,
+            "PortfolioValuePercentage": 0.04628,
+            "MarginalContributionToRisk": 0.12424,
+            "ContributionVolatility": 0.0057498272
+          },
+          {
+            "SecurityId": 1288,
+            "Isin": "CH0130293662",
+            "Valor": "13029366",
+            "SecurityName": "Namen-Aktie BKW AG",
+            "Quantity": 100.0,
+            "PricePerUnit": 140.4,
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 14040.0,
+            "PortfolioValuePercentage": 0.03069,
+            "MarginalContributionToRisk": 0.05113,
+            "ContributionVolatility": 0.0015691797
+          },
+          {
+            "SecurityId": 2068,
+            "Isin": "CH0225173167",
+            "Valor": "22517316",
+            "SecurityName": "Namen-Aktie Cembra Money Bank AG",
+            "Quantity": 50.0,
+            "PricePerUnit": 74.7,
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 3735.0,
+            "PortfolioValuePercentage": 0.00816,
+            "MarginalContributionToRisk": 0.04885,
+            "ContributionVolatility": 0.000398616
+          },
+          {
+            "SecurityId": 2686,
+            "Isin": "CH0008742519",
+            "Valor": "874251",
+            "SecurityName": "Namen-Aktie Swisscom AG",
+            "Quantity": 35.0,
+            "PricePerUnit": 517.0,
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 18095.0,
+            "PortfolioValuePercentage": 0.03955,
+            "MarginalContributionToRisk": 0.02767,
+            "ContributionVolatility": 0.0010943485000000001
+          },
+          {
+            "SecurityId": 3507,
+            "Isin": "CH0319416936",
+            "Valor": "31941693",
+            "SecurityName": "Namen-Aktie Flughafen Zuerich AG",
+            "Quantity": 55.0,
+            "PricePerUnit": 190.4,
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 10472.0,
+            "PortfolioValuePercentage": 0.02289,
+            "MarginalContributionToRisk": 0.1058,
+            "ContributionVolatility": 0.002421762
+          },
+          {
+            "SecurityId": 5751,
+            "Isin": "CH0002178181",
+            "Valor": "217818",
+            "SecurityName": "Namen-Aktie Stadler Rail AG",
+            "Quantity": 240.0,
+            "PricePerUnit": 27.9,
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 6696.0,
+            "PortfolioValuePercentage": 0.01464,
+            "MarginalContributionToRisk": 0.10947,
+            "ContributionVolatility": 0.0016026408
+          },
+          {
+            "SecurityId": 8150,
+            "Isin": "IE00B1XNHC34",
+            "Valor": "3246465",
+            "SecurityName": "Anteile Exchange Traded Fund USD iShares II PLC - Global Clean Energy UCITS ETF",
+            "Quantity": 1600.0,
+            "PricePerUnit": 7.715,
+            "Currency": "USD",
+            "TotalAmountInPortfolioCurrency": 11277.6928,
+            "PortfolioValuePercentage": 0.02465,
+            "MarginalContributionToRisk": 0.13033,
+            "ContributionVolatility": 0.0032126345
+          },
+          {
+            "SecurityId": 8409,
+            "Isin": "IE00B53SZB19",
+            "Valor": "10737617",
+            "SecurityName": "Anteile Exchange Traded Fund USD iShares VII PLC - iShares NASDAQ 100 UCITS ETF",
+            "Quantity": 35.0,
+            "PricePerUnit": 1029.0,
+            "Currency": "USD",
+            "TotalAmountInPortfolioCurrency": 32903.93309,
+            "PortfolioValuePercentage": 0.07193,
+            "MarginalContributionToRisk": 0.16753,
+            "ContributionVolatility": 0.0120504329
+          },
+          {
+            "SecurityId": 8652,
+            "Isin": "IE00B6YX5D40",
+            "Valor": "13976063",
+            "SecurityName": "Anteile - ETF USD SSgA SPDR ETFs Europe I PLC - SPDR S&P US Dividend Aristocrats UCITS ETF",
+            "Quantity": 200.0,
+            "PricePerUnit": 69.66,
+            "Currency": "USD",
+            "TotalAmountInPortfolioCurrency": 12728.5184,
+            "PortfolioValuePercentage": 0.02782,
+            "MarginalContributionToRisk": 0.09225,
+            "ContributionVolatility": 0.002566395
+          },
+          {
+            "SecurityId": 8735,
+            "Isin": "LU0629460089",
+            "Valor": "13042337",
+            "SecurityName": "Anteile -A- UBS (Lux) Fund Solutions SICAV  - MSCI USA Socially Responsible UCITS ETF",
+            "Quantity": 320.0,
+            "PricePerUnit": 207.2,
+            "Currency": "USD",
+            "TotalAmountInPortfolioCurrency": 60576.49248,
+            "PortfolioValuePercentage": 0.13242,
+            "MarginalContributionToRisk": 0.14787,
+            "ContributionVolatility": 0.0195809454
+          },
+          {
+            "SecurityId": 8882,
+            "Isin": "IE00B8GKDB10",
+            "Valor": "20974572",
+            "SecurityName": "Anteile Vanguard Funds PLC - FTSE All-World High Dividend Yield UCITS ETF",
+            "Quantity": 260.0,
+            "PricePerUnit": 64.3,
+            "Currency": "USD",
+            "TotalAmountInPortfolioCurrency": 15273.85678,
+            "PortfolioValuePercentage": 0.03339,
+            "MarginalContributionToRisk": 0.10493,
+            "ContributionVolatility": 0.0035036127000000004
+          },
+          {
+            "SecurityId": 9173,
+            "Isin": "IE00BCBJG560",
+            "Valor": "22178032",
+            "SecurityName": "Anteile - ETF USD SSgA SPDR ETFs Europe II Plc  - SPDR MSCI World Small Cap UCITS ETF",
+            "Quantity": 100.0,
+            "PricePerUnit": 98.865,
+            "Currency": "USD",
+            "TotalAmountInPortfolioCurrency": 9032.4791,
+            "PortfolioValuePercentage": 0.01974,
+            "MarginalContributionToRisk": 0.13529,
+            "ContributionVolatility": 0.0026706246
+          },
+          {
+            "SecurityId": 11488,
+            "Isin": "FR0000120628",
+            "Valor": "486352",
+            "SecurityName": "Na. u. Inh. Ti.-Aktie AXA SA",
+            "Quantity": 415.0,
+            "PricePerUnit": 33.82,
+            "Currency": "EUR",
+            "TotalAmountInPortfolioCurrency": 13641.73558,
+            "PortfolioValuePercentage": 0.02982,
+            "MarginalContributionToRisk": 0.10581,
+            "ContributionVolatility": 0.0031552541999999998
+          },
+          {
+            "SecurityId": 18438,
+            "Isin": "LU0403296170",
+            "Valor": "4733788",
+            "SecurityName": "Anteile -Q-acc- UBS (Lux) Equity Fund FCP - China Opportunity (USD)",
+            "Quantity": 80.0,
+            "PricePerUnit": 140.89,
+            "Currency": "USD",
+            "TotalAmountInPortfolioCurrency": 10297.5652,
+            "PortfolioValuePercentage": 0.02251,
+            "MarginalContributionToRisk": 0.06566,
+            "ContributionVolatility": 0.0014780065999999998
+          },
+          {
+            "SecurityId": 25876,
+            "Isin": "CH0582581713",
+            "Valor": "58258171",
+            "SecurityName": "Namen-Aktie Dottikon ES Holding AG",
+            "Quantity": 32.0,
+            "PricePerUnit": 233.5,
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 7472.0,
+            "PortfolioValuePercentage": 0.01633,
+            "MarginalContributionToRisk": 0.13097,
+            "ContributionVolatility": 0.0021387401
+          },
+          {
+            "SecurityId": 39446,
+            "Isin": "CH1176493729",
+            "Valor": "117649372",
+            "SecurityName": "Namen-Aktie BACHEM HOLDING AG",
+            "Quantity": 175.0,
+            "PricePerUnit": 81.4,
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 14245.0,
+            "PortfolioValuePercentage": 0.03114,
+            "MarginalContributionToRisk": 0.13097,
+            "ContributionVolatility": 0.0040784058000000005
+          },
+          {
+            "SecurityId": 42972,
+            "Isin": "CH1169360919",
+            "Valor": "116936091",
+            "SecurityName": "Namen-Aktie Accelleron Industries AG",
+            "Quantity": 24.0,
+            "PricePerUnit": 35.82,
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 859.68,
+            "PortfolioValuePercentage": 0.00188,
+            "MarginalContributionToRisk": 0.10816,
+            "ContributionVolatility": 0.00020334080000000002
+          },
+          {
+            "SecurityId": 55356,
+            "Isin": "CH1243598427",
+            "Valor": "124359842",
+            "SecurityName": "Namen-Aktie Sandoz Group AG",
+            "Quantity": 24.0,
+            "PricePerUnit": 28.15,
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 675.6,
+            "PortfolioValuePercentage": 0.00148,
+            "MarginalContributionToRisk": 0.13097,
+            "ContributionVolatility": 0.0001938356
+          },
+          {
+            "SecurityId": 40543,
+            "SecurityName": "0.1525 % Cembra Money Bank AG 2019-14.10.26",
+            "Isin": "CH0419041659",
+            "Valor": "41904165",
+            "Currency": "CHF",
+            "Quantity": 4500,
+            "PricePerUnit": 0.9999,
+            "TotalAmountInPortfolioCurrency": 4499.55,
+            "PortfolioValuePercentage": 0.00984,
+            "ContributionVolatility": 4.45752e-05,
+            "MarginalContributionToRisk": 0.00453
+          }
+        ],
+        "AccountPositions": [
+          {
+            "AccountName": "Investitionskonto CHF",
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 32332.06,
+            "PortfolioValuePercentage": 0.07068,
+            "MarginalContributionToRisk": 0.0,
+            "ContributionVolatility": 0.0
+          }
+        ],
+        "PerformanceHistory": [
+          {
+            "Date": "2021-10-01",
+            "Value": 316482.45
+          },
+          {
+            "Date": "2021-11-01",
+            "Value": 325494.51
+          },
+          {
+            "Date": "2021-12-01",
+            "Value": 330478.5
+          },
+          {
+            "Date": "2022-01-01",
+            "Value": 309134.39
+          },
+          {
+            "Date": "2022-02-01",
+            "Value": 295090.73
+          },
+          {
+            "Date": "2022-03-01",
+            "Value": 304425.8
+          },
+          {
+            "Date": "2022-04-01",
+            "Value": 284422.77
+          },
+          {
+            "Date": "2022-05-01",
+            "Value": 270871.71
+          },
+          {
+            "Date": "2022-06-01",
+            "Value": 250896.01
+          },
+          {
+            "Date": "2022-07-01",
+            "Value": 278768.0
+          },
+          {
+            "Date": "2022-08-01",
+            "Value": 272892.29
+          },
+          {
+            "Date": "2022-09-01",
+            "Value": 252657.66
+          },
+          {
+            "Date": "2022-10-01",
+            "Value": 262720.0
+          },
+          {
+            "Date": "2022-11-01",
+            "Value": 263173.92
+          },
+          {
+            "Date": "2022-12-01",
+            "Value": 247293.05
+          },
+          {
+            "Date": "2023-01-01",
+            "Value": 262660.77
+          },
+          {
+            "Date": "2023-02-01",
+            "Value": 267270.77
+          },
+          {
+            "Date": "2023-03-01",
+            "Value": 281177.77
+          },
+          {
+            "Date": "2023-04-01",
+            "Value": 281736.16
+          },
+          {
+            "Date": "2023-05-01",
+            "Value": 291438.86
+          },
+          {
+            "Date": "2023-06-01",
+            "Value": 297132.41
+          },
+          {
+            "Date": "2023-07-01",
+            "Value": 306718.02
+          },
+          {
+            "Date": "2023-08-01",
+            "Value": 305296.43
+          },
+          {
+            "Date": "2023-09-01",
+            "Value": 297806.67
+          },
+          {
+            "Date": "2023-10-01",
+            "Value": 282710.01
+          },
+          {
+            "Date": "2023-11-01",
+            "Value": 304824.4
+          },
+          {
+            "Date": "2023-12-01",
+            "Value": 312191.38
+          },
+          {
+            "Date": "2024-01-01",
+            "Value": 321341.65
+          },
+          {
+            "Date": "2024-02-01",
+            "Value": 332198.75
+          },
+          {
+            "Date": "2024-03-01",
+            "Value": 343414.97
+          },
+          {
+            "Date": "2024-04-01",
+            "Value": 328089.39
+          },
+          {
+            "Date": "2024-05-01",
+            "Value": 343178.31
+          },
+          {
+            "Date": "2024-06-01",
+            "Value": 355558.95
+          },
+          {
+            "Date": "2024-07-01",
+            "Value": 348503.74
+          },
+          {
+            "Date": "2024-08-01",
+            "Value": 354072.31
+          },
+          {
+            "Date": "2024-09-01",
+            "Value": 359650.91
+          },
+          {
+            "Date": "2024-10-01",
+            "Value": 352766.36
+          },
+          {
+            "Date": "2024-11-01",
+            "Value": 363503.85
+          },
+          {
+            "Date": "2024-12-01",
+            "Value": 363891.35
+          },
+          {
+            "Date": "2025-01-01",
+            "Value": 378292.08
+          },
+          {
+            "Date": "2025-02-01",
+            "Value": 373655.89
+          },
+          {
+            "Date": "2025-03-01",
+            "Value": 341525.91
+          },
+          {
+            "Date": "2025-04-01",
+            "Value": 328096.6
+          },
+          {
+            "Date": "2025-05-01",
+            "Value": 351059.25
+          },
+          {
+            "Date": "2025-06-01",
+            "Value": 350492.45
+          },
+          {
+            "Date": "2025-07-01",
+            "Value": 352444.04
+          },
+          {
+            "Date": "2025-08-01",
+            "Value": 352763.74
+          },
+          {
+            "Date": "2025-09-01",
+            "Value": 366700.92
+          },
+          {
+            "Date": "2025-10-01",
+            "Value": 381466.1
+          },
+          {
+            "Date": "2025-11-01",
+            "Value": 392021.09
+          },
+          {
+            "Date": "2025-12-01",
+            "Value": 399230.74
+          },
+          {
+            "Date": "2026-01-01",
+            "Value": 404965.21
+          },
+          {
+            "Date": "2026-02-01",
+            "Value": 419338.74
+          },
+          {
+            "Date": "2026-03-01",
+            "Value": 404285.92
+          },
+          {
+            "Date": "2026-04-01",
+            "Value": 432357.57
+          },
+          {
+            "Date": "2026-05-01",
+            "Value": 463217.85
+          },
+          {
+            "Date": "2026-06-01",
+            "Value": 470653.59
+          },
+          {
+            "Date": "2026-07-01",
+            "Value": 454530.29
+          }
+        ]
+      }
+    ],
+    "Proposals": [
+      {
+        "ProposalId": 1774,
+        "PublicGuid": "F6B1C4F1-8281-EB11-8132-40F2E9C846E4",
+        "PortfolioId": 41848,
+        "ProposalStatusId": 4,
+        "ProposalStatusName": "Abgelehnt",
+        "AdvisoryTypeId": 2,
+        "AdvisoryTypeName": "Investment proposal",
+        "Currency": "CHF",
+        "StrategicAssetAllocationId": 46,
+        "ProposedDateUTC": "2023-08-14T09:52:44.6095224Z",
+        "Reason": "Risk profile update",
+        "Notes": "Comment",
+        "ExpectedReturn": 0.06493,
+        "Volatility": 0.13302,
+        "ValueAtRisk": 0.03749,
+        "SecurityPositions": [
+          {
+            "Isin": "CH0010570767",
+            "SecurityName": "Partizipationsschein Chocoladefabriken Lindt & Spruengli AG",
+            "Quantity": 2.0,
+            "PricePerUnit": 8205.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 16410.0,
+            "ProposalValuePercentage": 0.03727
+          },
+          {
+            "Isin": "CH0011075394",
+            "SecurityName": "Namen-Aktie Zurich Insurance Group AG",
+            "Quantity": 33.0,
+            "PricePerUnit": 396.9,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 13097.7,
+            "ProposalValuePercentage": 0.02975
+          },
+          {
+            "Isin": "CH0012032048",
+            "SecurityName": "Genussschein Roche Holding AG",
+            "Quantity": 71.0,
+            "PricePerUnit": 306.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 21726.0,
+            "ProposalValuePercentage": 0.04935
+          },
+          {
+            "Isin": "CH0012005267",
+            "SecurityName": "Namen-Aktie Novartis AG",
+            "Quantity": 120.0,
+            "PricePerUnit": 78.2,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 9384.0,
+            "ProposalValuePercentage": 0.02131
+          },
+          {
+            "Isin": "CH0012221716",
+            "SecurityName": "Namen-Aktie ABB Ltd",
+            "Quantity": 480.0,
+            "PricePerUnit": 28.34,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 13603.2,
+            "ProposalValuePercentage": 0.0309
+          },
+          {
+            "Isin": "CH0012530207",
+            "SecurityName": "Namen-Aktie -B- BACHEM HOLDING AG",
+            "Quantity": 35.0,
+            "PricePerUnit": 337.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 11795.0,
+            "ProposalValuePercentage": 0.02679
+          },
+          {
+            "Isin": "CH0012549785",
+            "SecurityName": "Namen-Aktie Sonova Holding AG",
+            "Quantity": 34.0,
+            "PricePerUnit": 227.6,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 7738.4,
+            "ProposalValuePercentage": 0.01758
+          },
+          {
+            "Isin": "CH0016440353",
+            "SecurityName": "Namen-Aktie EMS-CHEMIE HOLDING AG",
+            "Quantity": 8.0,
+            "PricePerUnit": 806.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 6448.0,
+            "ProposalValuePercentage": 0.01465
+          },
+          {
+            "Isin": "CH0019396990",
+            "SecurityName": "Namen-Aktie Ypsomed Holding AG",
+            "Quantity": 53.0,
+            "PricePerUnit": 156.8,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 0.0,
+            "ProposalValuePercentage": 0.0
+          },
+          {
+            "Isin": "CH0012829898",
+            "SecurityName": "Namen-Aktie Emmi AG",
+            "Quantity": 10.0,
+            "PricePerUnit": 932.5,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 9325.0,
+            "ProposalValuePercentage": 0.02118
+          },
+          {
+            "Isin": "CH0022427626",
+            "SecurityName": "Namen-Aktie Lem Holding SA",
+            "Quantity": 5.0,
+            "PricePerUnit": 1898.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 9490.0,
+            "ProposalValuePercentage": 0.02156
+          },
+          {
+            "Isin": "CH0025238863",
+            "SecurityName": "Namen-Aktie Kuehne + Nagel International AG",
+            "Quantity": 74.0,
+            "PricePerUnit": 248.3,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 18374.2,
+            "ProposalValuePercentage": 0.04173
+          },
+          {
+            "Isin": "CH0025751329",
+            "SecurityName": "Namen-Aktie Logitech International SA",
+            "Quantity": 65.0,
+            "PricePerUnit": 89.86,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 5840.9,
+            "ProposalValuePercentage": 0.01327
+          },
+          {
+            "Isin": "CH0030170408",
+            "SecurityName": "Namen-Aktie Geberit AG",
+            "Quantity": 18.0,
+            "PricePerUnit": 575.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 10350.0,
+            "ProposalValuePercentage": 0.02351
+          },
+          {
+            "Isin": "CH0038863350",
+            "SecurityName": "Namen-Aktie Nestle SA",
+            "Quantity": 136.0,
+            "PricePerUnit": 100.38,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 13651.68,
+            "ProposalValuePercentage": 0.03101
+          },
+          {
+            "Isin": "CH0111677362",
+            "SecurityName": "Namen-Aktie Orior AG",
+            "Quantity": 100.0,
+            "PricePerUnit": 78.4,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 7840.0,
+            "ProposalValuePercentage": 0.01781
+          },
+          {
+            "Isin": "LU0329631377",
+            "SecurityName": "Anteile -I1- Variopartner SICAV - MIV Global Medtech Fund",
+            "Quantity": 8.0,
+            "PricePerUnit": 2650.03,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 21200.24,
+            "ProposalValuePercentage": 0.04815
+          },
+          {
+            "Isin": "CH0126881561",
+            "SecurityName": "Namen-Aktie Swiss Re AG",
+            "Quantity": 101.0,
+            "PricePerUnit": 91.38,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 9229.38,
+            "ProposalValuePercentage": 0.02096
+          },
+          {
+            "Isin": "CH0130293662",
+            "SecurityName": "Namen-Aktie BKW AG",
+            "Quantity": 100.0,
+            "PricePerUnit": 104.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 10400.0,
+            "ProposalValuePercentage": 0.02362
+          },
+          {
+            "Isin": "CH0225173167",
+            "SecurityName": "Namen-Aktie Cembra Money Bank AG",
+            "Quantity": 50.0,
+            "PricePerUnit": 99.1,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 4955.0,
+            "ProposalValuePercentage": 0.01125
+          },
+          {
+            "Isin": "CH0008742519",
+            "SecurityName": "Namen-Aktie Swisscom AG",
+            "Quantity": 35.0,
+            "PricePerUnit": 473.2,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 16562.0,
+            "ProposalValuePercentage": 0.03762
+          },
+          {
+            "Isin": "CH0276837694",
+            "SecurityName": "Namen-Aktie mobilezone holding ag",
+            "Quantity": 945.0,
+            "PricePerUnit": 11.22,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 10602.9,
+            "ProposalValuePercentage": 0.02408
+          },
+          {
+            "Isin": "CH0319416936",
+            "SecurityName": "Namen-Aktie Flughafen Zuerich AG",
+            "Quantity": 55.0,
+            "PricePerUnit": 166.1,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 9135.5,
+            "ProposalValuePercentage": 0.02075
+          },
+          {
+            "Isin": "CH0002178181",
+            "SecurityName": "Namen-Aktie Stadler Rail AG",
+            "Quantity": 240.0,
+            "PricePerUnit": 47.04,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 11289.6,
+            "ProposalValuePercentage": 0.02564
+          },
+          {
+            "Isin": "IE00B1XNHC34",
+            "SecurityName": "Anteile Exchange Traded Fund USD iShares II PLC - Global Clean Energy UCITS ETF",
+            "Quantity": 0.0,
+            "PricePerUnit": 13.782,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 20487.77768,
+            "ProposalValuePercentage": 0.04654
+          },
+          {
+            "Isin": "IE00B53SZB19",
+            "SecurityName": "Anteile Exchange Traded Fund USD iShares VII PLC - iShares NASDAQ 100 UCITS ETF",
+            "Quantity": 10.0,
+            "PricePerUnit": 718.0,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 23348.29185,
+            "ProposalValuePercentage": 0.05303
+          },
+          {
+            "Isin": "IE00B6YX5D40",
+            "SecurityName": "Anteile - ETF USD SSgA SPDR ETFs Europe I PLC - SPDR S&P US Dividend Aristocrats UCITS ETF",
+            "Quantity": 200.0,
+            "PricePerUnit": 64.53,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 11990.96914,
+            "ProposalValuePercentage": 0.02724
+          },
+          {
+            "Isin": "LU0629460089",
+            "SecurityName": "Anteile -A- UBS (Lux) Fund Solutions SICAV  - MSCI USA Socially Responsible UCITS ETF",
+            "Quantity": 65.0,
+            "PricePerUnit": 162.24,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 33162.19305,
+            "ProposalValuePercentage": 0.07532
+          },
+          {
+            "Isin": "IE00B8GKDB10",
+            "SecurityName": "Anteile Vanguard Funds PLC - FTSE All-World High Dividend Yield UCITS ETF",
+            "Quantity": 260.0,
+            "PricePerUnit": 60.1225,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 14523.55734,
+            "ProposalValuePercentage": 0.03299
+          },
+          {
+            "Isin": "IE00B5M1WJ87",
+            "SecurityName": "Anteile -ETF EUR- SSGA SPDR ETFs Europe I PLC  - SPDR S&P Euro Dividend Aristocrats UCITS ETF",
+            "Quantity": 1000.0,
+            "PricePerUnit": 21.82,
+            "Currency": "EUR",
+            "TotalAmountInProposalCurrency": 0.0,
+            "ProposalValuePercentage": 0.0
+          },
+          {
+            "Isin": "FR0000120628",
+            "SecurityName": "Na. u. Inh. Ti.-Aktie AXA SA",
+            "Quantity": 415.0,
+            "PricePerUnit": 22.745,
+            "Currency": "EUR",
+            "TotalAmountInProposalCurrency": 10426.5713,
+            "ProposalValuePercentage": 0.02368
+          },
+          {
+            "Isin": "FR0000120578",
+            "SecurityName": "Inhaber-Aktie Sanofi",
+            "Quantity": 118.0,
+            "PricePerUnit": 79.45,
+            "Currency": "EUR",
+            "TotalAmountInProposalCurrency": 10355.79366,
+            "ProposalValuePercentage": 0.02352
+          },
+          {
+            "Isin": "DE0007100000",
+            "SecurityName": "Namen-Aktie Mercedes-Benz Group AG",
+            "Quantity": 155.0,
+            "PricePerUnit": 71.91,
+            "Currency": "EUR",
+            "TotalAmountInProposalCurrency": 12311.99602,
+            "ProposalValuePercentage": 0.02797
+          },
+          {
+            "Isin": "LU0403296170",
+            "SecurityName": "Anteile -Q-acc- UBS (Lux) Equity Fund FCP - China Opportunity (USD)",
+            "Quantity": 0.0,
+            "PricePerUnit": 295.53,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 21966.16217,
+            "ProposalValuePercentage": 0.04989
+          }
+        ],
+        "AccountPositions": [
+          {
+            "AccountName": "Investitionskonto CHF",
+            "Currency": "CHF",
+            "Amount": 63323.06,
+            "TotalAmountInProposalCurrency": 13240.40391
+          }
+        ]
+      },
+      {
+        "ProposalId": 3546,
+        "PublicGuid": "CE04E448-17C9-EB11-813E-40F2E9C846E4",
+        "PortfolioId": 41848,
+        "ProposalStatusId": 4,
+        "ProposalStatusName": "Abgelehnt",
+        "AdvisoryTypeId": 2,
+        "AdvisoryTypeName": "Investment proposal",
+        "Currency": "CHF",
+        "StrategicAssetAllocationId": 46,
+        "ProposedDateUTC": "2023-11-13T11:43:50.5699162Z",
+        "Reason": "Client relocation",
+        "Notes": "Comment",
+        "ExpectedReturn": 0.06561,
+        "Volatility": 0.13418,
+        "ValueAtRisk": 0.0313,
+        "SecurityPositions": [
+          {
+            "Isin": "CH0010570767",
+            "SecurityName": "Partizipationsschein Chocoladefabriken Lindt & Spruengli AG",
+            "Quantity": 2.0,
+            "PricePerUnit": 8715.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 17430.0,
+            "ProposalValuePercentage": 0.03733
+          },
+          {
+            "Isin": "CH0011075394",
+            "SecurityName": "Namen-Aktie Zurich Insurance Group AG",
+            "Quantity": 33.0,
+            "PricePerUnit": 373.2,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 12315.6,
+            "ProposalValuePercentage": 0.02638
+          },
+          {
+            "Isin": "CH0012032048",
+            "SecurityName": "Genussschein Roche Holding AG",
+            "Quantity": 71.0,
+            "PricePerUnit": 330.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 23430.0,
+            "ProposalValuePercentage": 0.05018
+          },
+          {
+            "Isin": "CH0012005267",
+            "SecurityName": "Namen-Aktie Novartis AG",
+            "Quantity": 120.0,
+            "PricePerUnit": 80.38,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 9645.6,
+            "ProposalValuePercentage": 0.02066
+          },
+          {
+            "Isin": "CH0012221716",
+            "SecurityName": "Namen-Aktie ABB Ltd",
+            "Quantity": 480.0,
+            "PricePerUnit": 31.3,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 15024.0,
+            "ProposalValuePercentage": 0.03218
+          },
+          {
+            "Isin": "CH0012530207",
+            "SecurityName": "Namen-Aktie -B- BACHEM HOLDING AG",
+            "Quantity": 35.0,
+            "PricePerUnit": 505.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 17675.0,
+            "ProposalValuePercentage": 0.03785
+          },
+          {
+            "Isin": "CH0012549785",
+            "SecurityName": "Namen-Aktie Sonova Holding AG",
+            "Quantity": 34.0,
+            "PricePerUnit": 320.2,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 10886.8,
+            "ProposalValuePercentage": 0.02332
+          },
+          {
+            "Isin": "CH0016440353",
+            "SecurityName": "Namen-Aktie EMS-CHEMIE HOLDING AG",
+            "Quantity": 8.0,
+            "PricePerUnit": 850.5,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 6804.0,
+            "ProposalValuePercentage": 0.01457
+          },
+          {
+            "Isin": "CH0012829898",
+            "SecurityName": "Namen-Aktie Emmi AG",
+            "Quantity": 10.0,
+            "PricePerUnit": 930.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 9300.0,
+            "ProposalValuePercentage": 0.01992
+          },
+          {
+            "Isin": "CH0022427626",
+            "SecurityName": "Namen-Aktie Lem Holding SA",
+            "Quantity": 5.0,
+            "PricePerUnit": 1840.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 9200.0,
+            "ProposalValuePercentage": 0.0197
+          },
+          {
+            "Isin": "CH0025238863",
+            "SecurityName": "Namen-Aktie Kuehne + Nagel International AG",
+            "Quantity": 74.0,
+            "PricePerUnit": 314.5,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 23273.0,
+            "ProposalValuePercentage": 0.04984
+          },
+          {
+            "Isin": "CH0025751329",
+            "SecurityName": "Namen-Aktie Logitech International SA",
+            "Quantity": 65.0,
+            "PricePerUnit": 121.4,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 7891.0,
+            "ProposalValuePercentage": 0.0169
+          },
+          {
+            "Isin": "CH0030170408",
+            "SecurityName": "Namen-Aktie Geberit AG",
+            "Quantity": 18.0,
+            "PricePerUnit": 666.4,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 11995.2,
+            "ProposalValuePercentage": 0.02569
+          },
+          {
+            "Isin": "CH0038863350",
+            "SecurityName": "Namen-Aktie Nestle SA",
+            "Quantity": 136.0,
+            "PricePerUnit": 113.4,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 15422.4,
+            "ProposalValuePercentage": 0.03303
+          },
+          {
+            "Isin": "CH0111677362",
+            "SecurityName": "Namen-Aktie Orior AG",
+            "Quantity": 100.0,
+            "PricePerUnit": 85.2,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 8520.0,
+            "ProposalValuePercentage": 0.01825
+          },
+          {
+            "Isin": "LU0329631377",
+            "SecurityName": "Anteile -I1- Variopartner SICAV - MIV Global Medtech Fund",
+            "Quantity": 8.0,
+            "PricePerUnit": 2740.75,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 21926.0,
+            "ProposalValuePercentage": 0.04696
+          },
+          {
+            "Isin": "CH0126881561",
+            "SecurityName": "Namen-Aktie Swiss Re AG",
+            "Quantity": 101.0,
+            "PricePerUnit": 84.86,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 8570.86,
+            "ProposalValuePercentage": 0.01836
+          },
+          {
+            "Isin": "CH0130293662",
+            "SecurityName": "Namen-Aktie BKW AG",
+            "Quantity": 100.0,
+            "PricePerUnit": 98.9,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 9890.0,
+            "ProposalValuePercentage": 0.02118
+          },
+          {
+            "Isin": "CH0225173167",
+            "SecurityName": "Namen-Aktie Cembra Money Bank AG",
+            "Quantity": 50.0,
+            "PricePerUnit": 105.2,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 5260.0,
+            "ProposalValuePercentage": 0.01127
+          },
+          {
+            "Isin": "CH0008742519",
+            "SecurityName": "Namen-Aktie Swisscom AG",
+            "Quantity": 35.0,
+            "PricePerUnit": 520.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 18200.0,
+            "ProposalValuePercentage": 0.03898
+          },
+          {
+            "Isin": "CH0276837694",
+            "SecurityName": "Namen-Aktie mobilezone holding ag",
+            "Quantity": 945.0,
+            "PricePerUnit": 11.16,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 10546.2,
+            "ProposalValuePercentage": 0.02259
+          },
+          {
+            "Isin": "CH0319416936",
+            "SecurityName": "Namen-Aktie Flughafen Zuerich AG",
+            "Quantity": 55.0,
+            "PricePerUnit": 159.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 8745.0,
+            "ProposalValuePercentage": 0.01873
+          },
+          {
+            "Isin": "CH0002178181",
+            "SecurityName": "Namen-Aktie Stadler Rail AG",
+            "Quantity": 240.0,
+            "PricePerUnit": 42.02,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 10084.8,
+            "ProposalValuePercentage": 0.0216
+          },
+          {
+            "Isin": "IE00B1XNHC34",
+            "SecurityName": "Anteile Exchange Traded Fund USD iShares II PLC - Global Clean Energy UCITS ETF",
+            "Quantity": 1600.0,
+            "PricePerUnit": 12.728,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 18254.08065,
+            "ProposalValuePercentage": 0.03909
+          },
+          {
+            "Isin": "IE00B53SZB19",
+            "SecurityName": "Anteile Exchange Traded Fund USD iShares VII PLC - iShares NASDAQ 100 UCITS ETF",
+            "Quantity": 35.0,
+            "PricePerUnit": 776.1,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 24348.12617,
+            "ProposalValuePercentage": 0.05215
+          },
+          {
+            "Isin": "IE00B6YX5D40",
+            "SecurityName": "Anteile - ETF USD SSgA SPDR ETFs Europe I PLC - SPDR S&P US Dividend Aristocrats UCITS ETF",
+            "Quantity": 200.0,
+            "PricePerUnit": 69.77,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 12507.73106,
+            "ProposalValuePercentage": 0.02679
+          },
+          {
+            "Isin": "LU0629460089",
+            "SecurityName": "Anteile -A- UBS (Lux) Fund Solutions SICAV  - MSCI USA Socially Responsible UCITS ETF",
+            "Quantity": 220.0,
+            "PricePerUnit": 178.6,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 35219.56204,
+            "ProposalValuePercentage": 0.07543
+          },
+          {
+            "Isin": "IE00B8GKDB10",
+            "SecurityName": "Anteile Vanguard Funds PLC - FTSE All-World High Dividend Yield UCITS ETF",
+            "Quantity": 260.0,
+            "PricePerUnit": 64.725,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 15084.30214,
+            "ProposalValuePercentage": 0.03231
+          },
+          {
+            "Isin": "IE00BCBJG560",
+            "SecurityName": "Anteile - ETF USD SSgA SPDR ETFs Europe II Plc  - SPDR MSCI World Small Cap UCITS ETF",
+            "Quantity": 0.0,
+            "PricePerUnit": 106.305,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 19057.39358,
+            "ProposalValuePercentage": 0.04081
+          },
+          {
+            "Isin": "FR0000120628",
+            "SecurityName": "Na. u. Inh. Ti.-Aktie AXA SA",
+            "Quantity": 415.0,
+            "PricePerUnit": 22.895,
+            "Currency": "EUR",
+            "TotalAmountInProposalCurrency": 10373.30094,
+            "ProposalValuePercentage": 0.02222
+          },
+          {
+            "Isin": "FR0000120578",
+            "SecurityName": "Inhaber-Aktie Sanofi",
+            "Quantity": 118.0,
+            "PricePerUnit": 85.33,
+            "Currency": "EUR",
+            "TotalAmountInProposalCurrency": 10992.89263,
+            "ProposalValuePercentage": 0.02354
+          },
+          {
+            "Isin": "DE0007100000",
+            "SecurityName": "Namen-Aktie Mercedes-Benz Group AG",
+            "Quantity": 155.0,
+            "PricePerUnit": 78.99,
+            "Currency": "EUR",
+            "TotalAmountInProposalCurrency": 0.0,
+            "ProposalValuePercentage": 0.0
+          },
+          {
+            "Isin": "LU0403296170",
+            "SecurityName": "Anteile -Q-acc- UBS (Lux) Equity Fund FCP - China Opportunity (USD)",
+            "Quantity": 80.0,
+            "PricePerUnit": 282.02,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 20223.19228,
+            "ProposalValuePercentage": 0.04331
+          }
+        ],
+        "AccountPositions": [
+          {
+            "AccountName": "Investitionskonto CHF",
+            "Currency": "CHF",
+            "Amount": 14517.11,
+            "TotalAmountInProposalCurrency": 8826.65785
+          }
+        ]
+      },
+      {
+        "ProposalId": 5425,
+        "PublicGuid": "9AFC2D78-7210-EC11-814A-40F2E9C846E4",
+        "PortfolioId": 41848,
+        "ProposalStatusId": 4,
+        "ProposalStatusName": "Abgelehnt",
+        "AdvisoryTypeId": 2,
+        "AdvisoryTypeName": "Investment proposal",
+        "Currency": "CHF",
+        "StrategicAssetAllocationId": 45,
+        "ProposedDateUTC": "2024-02-12T07:12:38.3789094Z",
+        "Reason": "Annual review meeting",
+        "Notes": "Comment",
+        "ExpectedReturn": 0.06522,
+        "Volatility": 0.13583,
+        "ValueAtRisk": 0.02751,
+        "SecurityPositions": [
+          {
+            "Isin": "CH0010570767",
+            "SecurityName": "Partizipationsschein Chocoladefabriken Lindt & Spruengli AG",
+            "Quantity": 2.0,
+            "PricePerUnit": 10710.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 21420.0,
+            "ProposalValuePercentage": 0.04273
+          },
+          {
+            "Isin": "CH0011075394",
+            "SecurityName": "Namen-Aktie Zurich Insurance Group AG",
+            "Quantity": 33.0,
+            "PricePerUnit": 399.1,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 13170.3,
+            "ProposalValuePercentage": 0.02627
+          },
+          {
+            "Isin": "CH0012032048",
+            "SecurityName": "Genussschein Roche Holding AG",
+            "Quantity": 71.0,
+            "PricePerUnit": 362.45,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 25733.95,
+            "ProposalValuePercentage": 0.05133
+          },
+          {
+            "Isin": "CH0012005267",
+            "SecurityName": "Namen-Aktie Novartis AG",
+            "Quantity": 120.0,
+            "PricePerUnit": 82.6,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 9912.0,
+            "ProposalValuePercentage": 0.01977
+          },
+          {
+            "Isin": "CH0012221716",
+            "SecurityName": "Namen-Aktie ABB Ltd",
+            "Quantity": 480.0,
+            "PricePerUnit": 34.03,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 16334.4,
+            "ProposalValuePercentage": 0.03258
+          },
+          {
+            "Isin": "CH0012530207",
+            "SecurityName": "Namen-Aktie -B- BACHEM HOLDING AG",
+            "Quantity": 35.0,
+            "PricePerUnit": 680.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 23800.0,
+            "ProposalValuePercentage": 0.04748
+          },
+          {
+            "Isin": "CH0012549785",
+            "SecurityName": "Namen-Aktie Sonova Holding AG",
+            "Quantity": 34.0,
+            "PricePerUnit": 367.3,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 12488.2,
+            "ProposalValuePercentage": 0.02491
+          },
+          {
+            "Isin": "CH0016440353",
+            "SecurityName": "Namen-Aktie EMS-CHEMIE HOLDING AG",
+            "Quantity": 8.0,
+            "PricePerUnit": 981.5,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 0.0,
+            "ProposalValuePercentage": 0.0
+          },
+          {
+            "Isin": "CH0012829898",
+            "SecurityName": "Namen-Aktie Emmi AG",
+            "Quantity": 10.0,
+            "PricePerUnit": 1066.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 10660.0,
+            "ProposalValuePercentage": 0.02126
+          },
+          {
+            "Isin": "CH0022427626",
+            "SecurityName": "Namen-Aktie Lem Holding SA",
+            "Quantity": 5.0,
+            "PricePerUnit": 2415.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 12075.0,
+            "ProposalValuePercentage": 0.02409
+          },
+          {
+            "Isin": "CH0025238863",
+            "SecurityName": "Namen-Aktie Kuehne + Nagel International AG",
+            "Quantity": 74.0,
+            "PricePerUnit": 347.5,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 25715.0,
+            "ProposalValuePercentage": 0.0513
+          },
+          {
+            "Isin": "CH0025751329",
+            "SecurityName": "Namen-Aktie Logitech International SA",
+            "Quantity": 165.0,
+            "PricePerUnit": 95.5,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 15757.5,
+            "ProposalValuePercentage": 0.03143
+          },
+          {
+            "Isin": "CH0030170408",
+            "SecurityName": "Namen-Aktie Geberit AG",
+            "Quantity": 18.0,
+            "PricePerUnit": 768.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 13824.0,
+            "ProposalValuePercentage": 0.02758
+          },
+          {
+            "Isin": "CH0038863350",
+            "SecurityName": "Namen-Aktie Nestle SA",
+            "Quantity": 136.0,
+            "PricePerUnit": 115.64,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 15727.04,
+            "ProposalValuePercentage": 0.03137
+          },
+          {
+            "Isin": "CH0111677362",
+            "SecurityName": "Namen-Aktie Orior AG",
+            "Quantity": 100.0,
+            "PricePerUnit": 94.1,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 9410.0,
+            "ProposalValuePercentage": 0.01877
+          },
+          {
+            "Isin": "LU0329631377",
+            "SecurityName": "Anteile -I1- Variopartner SICAV - MIV Global Medtech Fund",
+            "Quantity": 8.0,
+            "PricePerUnit": 3267.01,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 26136.08,
+            "ProposalValuePercentage": 0.05214
+          },
+          {
+            "Isin": "CH0130293662",
+            "SecurityName": "Namen-Aktie BKW AG",
+            "Quantity": 100.0,
+            "PricePerUnit": 106.8,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 10680.0,
+            "ProposalValuePercentage": 0.0213
+          },
+          {
+            "Isin": "CH0225173167",
+            "SecurityName": "Namen-Aktie Cembra Money Bank AG",
+            "Quantity": 50.0,
+            "PricePerUnit": 67.3,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 13460.0,
+            "ProposalValuePercentage": 0.02685
+          },
+          {
+            "Isin": "CH0008742519",
+            "SecurityName": "Namen-Aktie Swisscom AG",
+            "Quantity": 35.0,
+            "PricePerUnit": 537.2,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 18802.0,
+            "ProposalValuePercentage": 0.03751
+          },
+          {
+            "Isin": "CH0319416936",
+            "SecurityName": "Namen-Aktie Flughafen Zuerich AG",
+            "Quantity": 55.0,
+            "PricePerUnit": 151.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 8305.0,
+            "ProposalValuePercentage": 0.01657
+          },
+          {
+            "Isin": "CH0002178181",
+            "SecurityName": "Namen-Aktie Stadler Rail AG",
+            "Quantity": 240.0,
+            "PricePerUnit": 40.56,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 9734.4,
+            "ProposalValuePercentage": 0.01942
+          },
+          {
+            "Isin": "IE00B1XNHC34",
+            "SecurityName": "Anteile Exchange Traded Fund USD iShares II PLC - Global Clean Energy UCITS ETF",
+            "Quantity": 1600.0,
+            "PricePerUnit": 13.378,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 19667.74478,
+            "ProposalValuePercentage": 0.03923
+          },
+          {
+            "Isin": "IE00B53SZB19",
+            "SecurityName": "Anteile Exchange Traded Fund USD iShares VII PLC - iShares NASDAQ 100 UCITS ETF",
+            "Quantity": 35.0,
+            "PricePerUnit": 883.8,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 28422.70656,
+            "ProposalValuePercentage": 0.0567
+          },
+          {
+            "Isin": "IE00B6YX5D40",
+            "SecurityName": "Anteile - ETF USD SSgA SPDR ETFs Europe I PLC - SPDR S&P US Dividend Aristocrats UCITS ETF",
+            "Quantity": 200.0,
+            "PricePerUnit": 68.15,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 12523.89003,
+            "ProposalValuePercentage": 0.02498
+          },
+          {
+            "Isin": "LU0629460089",
+            "SecurityName": "Anteile -A- UBS (Lux) Fund Solutions SICAV  - MSCI USA Socially Responsible UCITS ETF",
+            "Quantity": 220.0,
+            "PricePerUnit": 191.18,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 38646.35401,
+            "ProposalValuePercentage": 0.07709
+          },
+          {
+            "Isin": "IE00B8GKDB10",
+            "SecurityName": "Anteile Vanguard Funds PLC - FTSE All-World High Dividend Yield UCITS ETF",
+            "Quantity": 260.0,
+            "PricePerUnit": 63.48,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 15165.39253,
+            "ProposalValuePercentage": 0.03025
+          },
+          {
+            "Isin": "IE00BCBJG560",
+            "SecurityName": "Anteile - ETF USD SSgA SPDR ETFs Europe II Plc  - SPDR MSCI World Small Cap UCITS ETF",
+            "Quantity": 100.0,
+            "PricePerUnit": 107.55,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 19764.40753,
+            "ProposalValuePercentage": 0.03943
+          },
+          {
+            "Isin": "FR0000120628",
+            "SecurityName": "Na. u. Inh. Ti.-Aktie AXA SA",
+            "Quantity": 415.0,
+            "PricePerUnit": 23.645,
+            "Currency": "EUR",
+            "TotalAmountInProposalCurrency": 10673.60824,
+            "ProposalValuePercentage": 0.02129
+          },
+          {
+            "Isin": "LU0403296170",
+            "SecurityName": "Anteile -Q-acc- UBS (Lux) Equity Fund FCP - China Opportunity (USD)",
+            "Quantity": 80.0,
+            "PricePerUnit": 245.09,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 18016.0247,
+            "ProposalValuePercentage": 0.03594
+          },
+          {
+            "Isin": "CH0542483745",
+            "SecurityName": "Namen-Aktie V-ZUG Holding AG",
+            "Quantity": 0.0,
+            "PricePerUnit": 142.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 14200.0,
+            "ProposalValuePercentage": 0.02833
+          }
+        ],
+        "AccountPositions": [
+          {
+            "AccountName": "Investitionskonto CHF",
+            "Currency": "CHF",
+            "Amount": 37409.13,
+            "TotalAmountInProposalCurrency": 11083.92624
+          }
+        ]
+      },
+      {
+        "ProposalId": 7427,
+        "PublicGuid": "99E946B8-0258-EC11-8157-40F2E9C846E4",
+        "PortfolioId": 41848,
+        "ProposalStatusId": 4,
+        "ProposalStatusName": "Abgelehnt",
+        "AdvisoryTypeId": 2,
+        "AdvisoryTypeName": "Investment proposal",
+        "Currency": "CHF",
+        "StrategicAssetAllocationId": 46,
+        "ProposedDateUTC": "2024-05-13T09:44:47.791078Z",
+        "Reason": "Client relocation",
+        "Notes": "Comment",
+        "ExpectedReturn": 0.06587,
+        "Volatility": 0.13729,
+        "ValueAtRisk": 0.01215,
+        "SecurityPositions": [
+          {
+            "Isin": "CH0010570767",
+            "SecurityName": "Partizipationsschein Chocoladefabriken Lindt & Spruengli AG",
+            "Quantity": 2.0,
+            "PricePerUnit": 11590.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 23180.0,
+            "ProposalValuePercentage": 0.04717
+          },
+          {
+            "Isin": "CH0010675863",
+            "SecurityName": "Namen-Aktie Swissquote Group Holding SA",
+            "Quantity": 0.0,
+            "PricePerUnit": 184.6,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 14768.0,
+            "ProposalValuePercentage": 0.03005
+          },
+          {
+            "Isin": "CH0011075394",
+            "SecurityName": "Namen-Aktie Zurich Insurance Group AG",
+            "Quantity": 33.0,
+            "PricePerUnit": 393.8,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 12995.4,
+            "ProposalValuePercentage": 0.02644
+          },
+          {
+            "Isin": "CH0012032048",
+            "SecurityName": "Genussschein Roche Holding AG",
+            "Quantity": 71.0,
+            "PricePerUnit": 368.25,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 26145.75,
+            "ProposalValuePercentage": 0.0532
+          },
+          {
+            "Isin": "CH0012005267",
+            "SecurityName": "Namen-Aktie Novartis AG",
+            "Quantity": 120.0,
+            "PricePerUnit": 74.85,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 8982.0,
+            "ProposalValuePercentage": 0.01828
+          },
+          {
+            "Isin": "CH0012221716",
+            "SecurityName": "Namen-Aktie ABB Ltd",
+            "Quantity": 480.0,
+            "PricePerUnit": 33.56,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 16108.8,
+            "ProposalValuePercentage": 0.03278
+          },
+          {
+            "Isin": "CH0012530207",
+            "SecurityName": "Namen-Aktie -B- BACHEM HOLDING AG",
+            "Quantity": 35.0,
+            "PricePerUnit": 627.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 21945.0,
+            "ProposalValuePercentage": 0.04466
+          },
+          {
+            "Isin": "CH0012549785",
+            "SecurityName": "Namen-Aktie Sonova Holding AG",
+            "Quantity": 34.0,
+            "PricePerUnit": 347.8,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 11825.2,
+            "ProposalValuePercentage": 0.02406
+          },
+          {
+            "Isin": "CH0016440353",
+            "SecurityName": "Namen-Aktie EMS-CHEMIE HOLDING AG",
+            "Quantity": 8.0,
+            "PricePerUnit": 919.5,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 7356.0,
+            "ProposalValuePercentage": 0.01497
+          },
+          {
+            "Isin": "CH0012829898",
+            "SecurityName": "Namen-Aktie Emmi AG",
+            "Quantity": 10.0,
+            "PricePerUnit": 1047.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 10470.0,
+            "ProposalValuePercentage": 0.02131
+          },
+          {
+            "Isin": "CH0002432174",
+            "SecurityName": "Namen-Aktie Bucher Industries AG",
+            "Quantity": 23.0,
+            "PricePerUnit": 440.6,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 0.0,
+            "ProposalValuePercentage": 0.0
+          },
+          {
+            "Isin": "CH0022427626",
+            "SecurityName": "Namen-Aktie Lem Holding SA",
+            "Quantity": 5.0,
+            "PricePerUnit": 2395.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 11975.0,
+            "ProposalValuePercentage": 0.02437
+          },
+          {
+            "Isin": "CH0025238863",
+            "SecurityName": "Namen-Aktie Kuehne + Nagel International AG",
+            "Quantity": 74.0,
+            "PricePerUnit": 273.8,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 20261.2,
+            "ProposalValuePercentage": 0.04123
+          },
+          {
+            "Isin": "CH0025751329",
+            "SecurityName": "Namen-Aktie Logitech International SA",
+            "Quantity": 165.0,
+            "PricePerUnit": 75.16,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 12401.4,
+            "ProposalValuePercentage": 0.02524
+          },
+          {
+            "Isin": "CH0030170408",
+            "SecurityName": "Namen-Aktie Geberit AG",
+            "Quantity": 18.0,
+            "PricePerUnit": 738.2,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 0.0,
+            "ProposalValuePercentage": 0.0
+          },
+          {
+            "Isin": "CH0038863350",
+            "SecurityName": "Namen-Aktie Nestle SA",
+            "Quantity": 136.0,
+            "PricePerUnit": 121.88,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 16575.68,
+            "ProposalValuePercentage": 0.03373
+          },
+          {
+            "Isin": "CH0111677362",
+            "SecurityName": "Namen-Aktie Orior AG",
+            "Quantity": 100.0,
+            "PricePerUnit": 88.9,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 8890.0,
+            "ProposalValuePercentage": 0.01809
+          },
+          {
+            "Isin": "LU0329631377",
+            "SecurityName": "Anteile -I1- Variopartner SICAV - MIV Global Medtech Fund",
+            "Quantity": 8.0,
+            "PricePerUnit": 3011.77,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 24094.16,
+            "ProposalValuePercentage": 0.04903
+          },
+          {
+            "Isin": "CH0130293662",
+            "SecurityName": "Namen-Aktie BKW AG",
+            "Quantity": 100.0,
+            "PricePerUnit": 122.8,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 12280.0,
+            "ProposalValuePercentage": 0.02499
+          },
+          {
+            "Isin": "CH0225173167",
+            "SecurityName": "Namen-Aktie Cembra Money Bank AG",
+            "Quantity": 50.0,
+            "PricePerUnit": 66.4,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 3320.0,
+            "ProposalValuePercentage": 0.00676
+          },
+          {
+            "Isin": "CH0008742519",
+            "SecurityName": "Namen-Aktie Swisscom AG",
+            "Quantity": 35.0,
+            "PricePerUnit": 510.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 17850.0,
+            "ProposalValuePercentage": 0.03632
+          },
+          {
+            "Isin": "CH0319416936",
+            "SecurityName": "Namen-Aktie Flughafen Zuerich AG",
+            "Quantity": 55.0,
+            "PricePerUnit": 157.7,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 8673.5,
+            "ProposalValuePercentage": 0.01765
+          },
+          {
+            "Isin": "CH0418792922",
+            "SecurityName": "Namen-Aktie Sika AG",
+            "Quantity": 0.0,
+            "PricePerUnit": 374.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 20570.0,
+            "ProposalValuePercentage": 0.04186
+          },
+          {
+            "Isin": "CH0002178181",
+            "SecurityName": "Namen-Aktie Stadler Rail AG",
+            "Quantity": 240.0,
+            "PricePerUnit": 40.1,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 9624.0,
+            "ProposalValuePercentage": 0.01958
+          },
+          {
+            "Isin": "IE00B1XNHC34",
+            "SecurityName": "Anteile Exchange Traded Fund USD iShares II PLC - Global Clean Energy UCITS ETF",
+            "Quantity": 1600.0,
+            "PricePerUnit": 13.04,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 19330.51059,
+            "ProposalValuePercentage": 0.03934
+          },
+          {
+            "Isin": "IE00B53SZB19",
+            "SecurityName": "Anteile Exchange Traded Fund USD iShares VII PLC - iShares NASDAQ 100 UCITS ETF",
+            "Quantity": 35.0,
+            "PricePerUnit": 919.3,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 29810.62326,
+            "ProposalValuePercentage": 0.06066
+          },
+          {
+            "Isin": "IE00B6YX5D40",
+            "SecurityName": "Anteile - ETF USD SSgA SPDR ETFs Europe I PLC - SPDR S&P US Dividend Aristocrats UCITS ETF",
+            "Quantity": 200.0,
+            "PricePerUnit": 69.82,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 12937.65577,
+            "ProposalValuePercentage": 0.02633
+          },
+          {
+            "Isin": "LU0629460089",
+            "SecurityName": "Anteile -A- UBS (Lux) Fund Solutions SICAV  - MSCI USA Socially Responsible UCITS ETF",
+            "Quantity": 220.0,
+            "PricePerUnit": 204.45,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 41673.07496,
+            "ProposalValuePercentage": 0.0848
+          },
+          {
+            "Isin": "IE00B8GKDB10",
+            "SecurityName": "Anteile Vanguard Funds PLC - FTSE All-World High Dividend Yield UCITS ETF",
+            "Quantity": 260.0,
+            "PricePerUnit": 63.305,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 15249.55296,
+            "ProposalValuePercentage": 0.03103
+          },
+          {
+            "Isin": "IE00BCBJG560",
+            "SecurityName": "Anteile - ETF USD SSgA SPDR ETFs Europe II Plc  - SPDR MSCI World Small Cap UCITS ETF",
+            "Quantity": 100.0,
+            "PricePerUnit": 104.865,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 9715.74959,
+            "ProposalValuePercentage": 0.01977
+          },
+          {
+            "Isin": "FR0000120628",
+            "SecurityName": "Na. u. Inh. Ti.-Aktie AXA SA",
+            "Quantity": 415.0,
+            "PricePerUnit": 25.62,
+            "Currency": "EUR",
+            "TotalAmountInProposalCurrency": 11074.85105,
+            "ProposalValuePercentage": 0.02254
+          },
+          {
+            "Isin": "LU0403296170",
+            "SecurityName": "Anteile -Q-acc- UBS (Lux) Equity Fund FCP - China Opportunity (USD)",
+            "Quantity": 80.0,
+            "PricePerUnit": 228.55,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 16940.13879,
+            "ProposalValuePercentage": 0.03447
+          },
+          {
+            "Isin": "CH0582581713",
+            "SecurityName": "Namen-Aktie Dottikon ES Holding AG",
+            "Quantity": 32.0,
+            "PricePerUnit": 280.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 8960.0,
+            "ProposalValuePercentage": 0.01823
+          }
+        ],
+        "AccountPositions": [
+          {
+            "AccountName": "Investitionskonto CHF",
+            "Currency": "CHF",
+            "Amount": 17358.69,
+            "TotalAmountInProposalCurrency": 5442.09
+          }
+        ]
+      },
+      {
+        "ProposalId": 9247,
+        "PublicGuid": "2BF25CDD-1A9E-EC11-815F-40F2E9C846E4",
+        "PortfolioId": 41848,
+        "ProposalStatusId": 4,
+        "ProposalStatusName": "Abgelehnt",
+        "AdvisoryTypeId": 2,
+        "AdvisoryTypeName": "Investment proposal",
+        "Currency": "CHF",
+        "StrategicAssetAllocationId": 46,
+        "ProposedDateUTC": "2024-08-10T16:12:35.0149247Z",
+        "Reason": "Market volatility follow-up",
+        "Notes": "Comment",
+        "ExpectedReturn": 0.06544,
+        "Volatility": 0.14023,
+        "ValueAtRisk": 0.03154,
+        "SecurityPositions": [
+          {
+            "Isin": "CH0010570767",
+            "SecurityName": "Partizipationsschein Chocoladefabriken Lindt & Spruengli AG",
+            "Quantity": 2.0,
+            "PricePerUnit": 9570.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 19140.0,
+            "ProposalValuePercentage": 0.04327
+          },
+          {
+            "Isin": "CH0011075394",
+            "SecurityName": "Namen-Aktie Zurich Insurance Group AG",
+            "Quantity": 33.0,
+            "PricePerUnit": 395.8,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 13061.4,
+            "ProposalValuePercentage": 0.02953
+          },
+          {
+            "Isin": "CH0012032048",
+            "SecurityName": "Genussschein Roche Holding AG",
+            "Quantity": 71.0,
+            "PricePerUnit": 334.9,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 23777.9,
+            "ProposalValuePercentage": 0.05375
+          },
+          {
+            "Isin": "CH0012005267",
+            "SecurityName": "Namen-Aktie Novartis AG",
+            "Quantity": 120.0,
+            "PricePerUnit": 77.36,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 9283.2,
+            "ProposalValuePercentage": 0.02099
+          },
+          {
+            "Isin": "CH0012221716",
+            "SecurityName": "Namen-Aktie ABB Ltd",
+            "Quantity": 480.0,
+            "PricePerUnit": 28.88,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 13862.4,
+            "ProposalValuePercentage": 0.03134
+          },
+          {
+            "Isin": "CH0012530207",
+            "SecurityName": "Namen-Aktie -B- BACHEM HOLDING AG",
+            "Quantity": 35.0,
+            "PricePerUnit": 543.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 19005.0,
+            "ProposalValuePercentage": 0.04296
+          },
+          {
+            "Isin": "CH0012549785",
+            "SecurityName": "Namen-Aktie Sonova Holding AG",
+            "Quantity": 34.0,
+            "PricePerUnit": 329.6,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 11206.4,
+            "ProposalValuePercentage": 0.02533
+          },
+          {
+            "Isin": "CH0016440353",
+            "SecurityName": "Namen-Aktie EMS-CHEMIE HOLDING AG",
+            "Quantity": 8.0,
+            "PricePerUnit": 841.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 6728.0,
+            "ProposalValuePercentage": 0.01521
+          },
+          {
+            "Isin": "CH0012829898",
+            "SecurityName": "Namen-Aktie Emmi AG",
+            "Quantity": 10.0,
+            "PricePerUnit": 1057.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 10570.0,
+            "ProposalValuePercentage": 0.02389
+          },
+          {
+            "Isin": "CH0002432174",
+            "SecurityName": "Namen-Aktie Bucher Industries AG",
+            "Quantity": 23.0,
+            "PricePerUnit": 356.8,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 8206.4,
+            "ProposalValuePercentage": 0.01855
+          },
+          {
+            "Isin": "CH0022427626",
+            "SecurityName": "Namen-Aktie Lem Holding SA",
+            "Quantity": 5.0,
+            "PricePerUnit": 2060.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 10300.0,
+            "ProposalValuePercentage": 0.02328
+          },
+          {
+            "Isin": "CH0025238863",
+            "SecurityName": "Namen-Aktie Kuehne + Nagel International AG",
+            "Quantity": 74.0,
+            "PricePerUnit": 264.7,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 19587.8,
+            "ProposalValuePercentage": 0.04428
+          },
+          {
+            "Isin": "CH0025751329",
+            "SecurityName": "Namen-Aktie Logitech International SA",
+            "Quantity": 165.0,
+            "PricePerUnit": 67.62,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 11157.3,
+            "ProposalValuePercentage": 0.02522
+          },
+          {
+            "Isin": "CH0030170408",
+            "SecurityName": "Namen-Aktie Geberit AG",
+            "Quantity": 18.0,
+            "PricePerUnit": 581.4,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 10465.2,
+            "ProposalValuePercentage": 0.02366
+          },
+          {
+            "Isin": "CH0038863350",
+            "SecurityName": "Namen-Aktie Nestle SA",
+            "Quantity": 136.0,
+            "PricePerUnit": 115.9,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 15762.4,
+            "ProposalValuePercentage": 0.03563
+          },
+          {
+            "Isin": "CH0111677362",
+            "SecurityName": "Namen-Aktie Orior AG",
+            "Quantity": 100.0,
+            "PricePerUnit": 84.5,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 8450.0,
+            "ProposalValuePercentage": 0.0191
+          },
+          {
+            "Isin": "LU0329631377",
+            "SecurityName": "Anteile -I1- Variopartner SICAV - MIV Global Medtech Fund",
+            "Quantity": 8.0,
+            "PricePerUnit": 2792.66,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 22341.28,
+            "ProposalValuePercentage": 0.05051
+          },
+          {
+            "Isin": "CH0130293662",
+            "SecurityName": "Namen-Aktie BKW AG",
+            "Quantity": 100.0,
+            "PricePerUnit": 108.8,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 10880.0,
+            "ProposalValuePercentage": 0.0246
+          },
+          {
+            "Isin": "CH0225173167",
+            "SecurityName": "Namen-Aktie Cembra Money Bank AG",
+            "Quantity": 50.0,
+            "PricePerUnit": 56.4,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 2820.0,
+            "ProposalValuePercentage": 0.00637
+          },
+          {
+            "Isin": "CH0008742519",
+            "SecurityName": "Namen-Aktie Swisscom AG",
+            "Quantity": 35.0,
+            "PricePerUnit": 554.4,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 19404.0,
+            "ProposalValuePercentage": 0.04387
+          },
+          {
+            "Isin": "CH0319416936",
+            "SecurityName": "Namen-Aktie Flughafen Zuerich AG",
+            "Quantity": 55.0,
+            "PricePerUnit": 147.7,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 8123.5,
+            "ProposalValuePercentage": 0.01836
+          },
+          {
+            "Isin": "CH0002178181",
+            "SecurityName": "Namen-Aktie Stadler Rail AG",
+            "Quantity": 240.0,
+            "PricePerUnit": 30.72,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 7372.8,
+            "ProposalValuePercentage": 0.01667
+          },
+          {
+            "Isin": "IE00B1XNHC34",
+            "SecurityName": "Anteile Exchange Traded Fund USD iShares II PLC - Global Clean Energy UCITS ETF",
+            "Quantity": 1600.0,
+            "PricePerUnit": 11.014,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 16187.98284,
+            "ProposalValuePercentage": 0.03659
+          },
+          {
+            "Isin": "IE00B53SZB19",
+            "SecurityName": "Anteile Exchange Traded Fund USD iShares VII PLC - iShares NASDAQ 100 UCITS ETF",
+            "Quantity": 35.0,
+            "PricePerUnit": 777.2,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 24987.82852,
+            "ProposalValuePercentage": 0.05649
+          },
+          {
+            "Isin": "IE00B6YX5D40",
+            "SecurityName": "Anteile - ETF USD SSgA SPDR ETFs Europe I PLC - SPDR S&P US Dividend Aristocrats UCITS ETF",
+            "Quantity": 200.0,
+            "PricePerUnit": 69.07,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 12689.57662,
+            "ProposalValuePercentage": 0.02869
+          },
+          {
+            "Isin": "LU0629460089",
+            "SecurityName": "Anteile -A- UBS (Lux) Fund Solutions SICAV  - MSCI USA Socially Responsible UCITS ETF",
+            "Quantity": 220.0,
+            "PricePerUnit": 177.64,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 35899.72534,
+            "ProposalValuePercentage": 0.08116
+          },
+          {
+            "Isin": "IE00B8GKDB10",
+            "SecurityName": "Anteile Vanguard Funds PLC - FTSE All-World High Dividend Yield UCITS ETF",
+            "Quantity": 260.0,
+            "PricePerUnit": 61.6575,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 14726.0727,
+            "ProposalValuePercentage": 0.03329
+          },
+          {
+            "Isin": "IE00BCBJG560",
+            "SecurityName": "Anteile - ETF USD SSgA SPDR ETFs Europe II Plc  - SPDR MSCI World Small Cap UCITS ETF",
+            "Quantity": 100.0,
+            "PricePerUnit": 94.04,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 17277.07811,
+            "ProposalValuePercentage": 0.03906
+          },
+          {
+            "Isin": "FR0000120628",
+            "SecurityName": "Na. u. Inh. Ti.-Aktie AXA SA",
+            "Quantity": 415.0,
+            "PricePerUnit": 22.255,
+            "Currency": "EUR",
+            "TotalAmountInProposalCurrency": 9260.36497,
+            "ProposalValuePercentage": 0.02093
+          },
+          {
+            "Isin": "LU0403296170",
+            "SecurityName": "Anteile -Q-acc- UBS (Lux) Equity Fund FCP - China Opportunity (USD)",
+            "Quantity": 80.0,
+            "PricePerUnit": 199.11,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 14632.23744,
+            "ProposalValuePercentage": 0.03308
+          },
+          {
+            "Isin": "CH0582581713",
+            "SecurityName": "Namen-Aktie Dottikon ES Holding AG",
+            "Quantity": 32.0,
+            "PricePerUnit": 212.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 6784.0,
+            "ProposalValuePercentage": 0.01534
+          }
+        ],
+        "AccountPositions": [
+          {
+            "AccountName": "Investitionskonto CHF",
+            "Currency": "CHF",
+            "Amount": 17044.15,
+            "TotalAmountInProposalCurrency": 8405.61095
+          }
+        ]
+      },
+      {
+        "ProposalId": 11063,
+        "PublicGuid": "5D71C316-6CE6-EC11-9F61-0050568CD8FC",
+        "PortfolioId": 41848,
+        "ProposalStatusId": 4,
+        "ProposalStatusName": "Abgelehnt",
+        "AdvisoryTypeId": 2,
+        "AdvisoryTypeName": "Investment proposal",
+        "Currency": "CHF",
+        "StrategicAssetAllocationId": 46,
+        "ProposedDateUTC": "2024-11-10T14:30:05.4659704Z",
+        "Reason": "Tax year-end rebalancing",
+        "Notes": "Comment",
+        "ExpectedReturn": 0.0635,
+        "Volatility": 0.13962,
+        "ValueAtRisk": 0.03763,
+        "SecurityPositions": [
+          {
+            "Isin": "CH0010570767",
+            "SecurityName": "Partizipationsschein Chocoladefabriken Lindt & Spruengli AG",
+            "Quantity": 2.0,
+            "PricePerUnit": 9590.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 19180.0,
+            "ProposalValuePercentage": 0.04351
+          },
+          {
+            "Isin": "CH0011075394",
+            "SecurityName": "Namen-Aktie Zurich Insurance Group AG",
+            "Quantity": 33.0,
+            "PricePerUnit": 435.7,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 14378.1,
+            "ProposalValuePercentage": 0.03262
+          },
+          {
+            "Isin": "CH0012032048",
+            "SecurityName": "Genussschein Roche Holding AG",
+            "Quantity": 71.0,
+            "PricePerUnit": 320.7,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 22769.7,
+            "ProposalValuePercentage": 0.05165
+          },
+          {
+            "Isin": "CH0012005267",
+            "SecurityName": "Namen-Aktie Novartis AG",
+            "Quantity": 120.0,
+            "PricePerUnit": 85.83,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 10299.6,
+            "ProposalValuePercentage": 0.02337
+          },
+          {
+            "Isin": "CH0012221716",
+            "SecurityName": "Namen-Aktie ABB Ltd",
+            "Quantity": 480.0,
+            "PricePerUnit": 30.32,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 14553.6,
+            "ProposalValuePercentage": 0.03302
+          },
+          {
+            "Isin": "CH0012549785",
+            "SecurityName": "Namen-Aktie Sonova Holding AG",
+            "Quantity": 34.0,
+            "PricePerUnit": 335.5,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 11407.0,
+            "ProposalValuePercentage": 0.02588
+          },
+          {
+            "Isin": "CH0016440353",
+            "SecurityName": "Namen-Aktie EMS-CHEMIE HOLDING AG",
+            "Quantity": 8.0,
+            "PricePerUnit": 811.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 13787.0,
+            "ProposalValuePercentage": 0.03128
+          },
+          {
+            "Isin": "CH0012829898",
+            "SecurityName": "Namen-Aktie Emmi AG",
+            "Quantity": 10.0,
+            "PricePerUnit": 910.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 9100.0,
+            "ProposalValuePercentage": 0.02064
+          },
+          {
+            "Isin": "CH0002432174",
+            "SecurityName": "Namen-Aktie Bucher Industries AG",
+            "Quantity": 23.0,
+            "PricePerUnit": 372.4,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 8565.2,
+            "ProposalValuePercentage": 0.01943
+          },
+          {
+            "Isin": "CH0022427626",
+            "SecurityName": "Namen-Aktie Lem Holding SA",
+            "Quantity": 5.0,
+            "PricePerUnit": 1924.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 9620.0,
+            "ProposalValuePercentage": 0.02182
+          },
+          {
+            "Isin": "CH0025238863",
+            "SecurityName": "Namen-Aktie Kuehne + Nagel International AG",
+            "Quantity": 74.0,
+            "PricePerUnit": 250.7,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 18551.8,
+            "ProposalValuePercentage": 0.04209
+          },
+          {
+            "Isin": "CH0025751329",
+            "SecurityName": "Namen-Aktie Logitech International SA",
+            "Quantity": 165.0,
+            "PricePerUnit": 58.18,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 9599.7,
+            "ProposalValuePercentage": 0.02178
+          },
+          {
+            "Isin": "CH0030170408",
+            "SecurityName": "Namen-Aktie Geberit AG",
+            "Quantity": 18.0,
+            "PricePerUnit": 526.8,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 9482.4,
+            "ProposalValuePercentage": 0.02151
+          },
+          {
+            "Isin": "CH0038863350",
+            "SecurityName": "Namen-Aktie Nestle SA",
+            "Quantity": 136.0,
+            "PricePerUnit": 114.9,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 15626.4,
+            "ProposalValuePercentage": 0.03545
+          },
+          {
+            "Isin": "CH0111677362",
+            "SecurityName": "Namen-Aktie Orior AG",
+            "Quantity": 100.0,
+            "PricePerUnit": 79.4,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 0.0,
+            "ProposalValuePercentage": 0.0
+          },
+          {
+            "Isin": "LU0329631377",
+            "SecurityName": "Anteile -I1- Variopartner SICAV - MIV Global Medtech Fund",
+            "Quantity": 8.0,
+            "PricePerUnit": 2551.15,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 20409.2,
+            "ProposalValuePercentage": 0.0463
+          },
+          {
+            "Isin": "CH0130293662",
+            "SecurityName": "Namen-Aktie BKW AG",
+            "Quantity": 100.0,
+            "PricePerUnit": 112.9,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 11290.0,
+            "ProposalValuePercentage": 0.02561
+          },
+          {
+            "Isin": "CH0225173167",
+            "SecurityName": "Namen-Aktie Cembra Money Bank AG",
+            "Quantity": 50.0,
+            "PricePerUnit": 66.2,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 11916.0,
+            "ProposalValuePercentage": 0.02703
+          },
+          {
+            "Isin": "CH0008742519",
+            "SecurityName": "Namen-Aktie Swisscom AG",
+            "Quantity": 35.0,
+            "PricePerUnit": 570.2,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 19957.0,
+            "ProposalValuePercentage": 0.04527
+          },
+          {
+            "Isin": "CH0319416936",
+            "SecurityName": "Namen-Aktie Flughafen Zuerich AG",
+            "Quantity": 55.0,
+            "PricePerUnit": 161.1,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 0.0,
+            "ProposalValuePercentage": 0.0
+          },
+          {
+            "Isin": "CH0002178181",
+            "SecurityName": "Namen-Aktie Stadler Rail AG",
+            "Quantity": 240.0,
+            "PricePerUnit": 35.62,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 8548.8,
+            "ProposalValuePercentage": 0.01939
+          },
+          {
+            "Isin": "IE00B1XNHC34",
+            "SecurityName": "Anteile Exchange Traded Fund USD iShares II PLC - Global Clean Energy UCITS ETF",
+            "Quantity": 1600.0,
+            "PricePerUnit": 11.536,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 17767.33888,
+            "ProposalValuePercentage": 0.04031
+          },
+          {
+            "Isin": "IE00B53SZB19",
+            "SecurityName": "Anteile Exchange Traded Fund USD iShares VII PLC - iShares NASDAQ 100 UCITS ETF",
+            "Quantity": 35.0,
+            "PricePerUnit": 710.1,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 23924.05063,
+            "ProposalValuePercentage": 0.05427
+          },
+          {
+            "Isin": "IE00B6YX5D40",
+            "SecurityName": "Anteile - ETF USD SSgA SPDR ETFs Europe I PLC - SPDR S&P US Dividend Aristocrats UCITS ETF",
+            "Quantity": 200.0,
+            "PricePerUnit": 69.22,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 13326.27425,
+            "ProposalValuePercentage": 0.03023
+          },
+          {
+            "Isin": "LU0629460089",
+            "SecurityName": "Anteile -A- UBS (Lux) Fund Solutions SICAV  - MSCI USA Socially Responsible UCITS ETF",
+            "Quantity": 220.0,
+            "PricePerUnit": 164.92,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 34925.54267,
+            "ProposalValuePercentage": 0.07923
+          },
+          {
+            "Isin": "IE00B8GKDB10",
+            "SecurityName": "Anteile Vanguard Funds PLC - FTSE All-World High Dividend Yield UCITS ETF",
+            "Quantity": 260.0,
+            "PricePerUnit": 61.945,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 23851.37412,
+            "ProposalValuePercentage": 0.05411
+          },
+          {
+            "Isin": "IE00BCBJG560",
+            "SecurityName": "Anteile - ETF USD SSgA SPDR ETFs Europe II Plc  - SPDR MSCI World Small Cap UCITS ETF",
+            "Quantity": 100.0,
+            "PricePerUnit": 89.77,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 8641.28604,
+            "ProposalValuePercentage": 0.0196
+          },
+          {
+            "Isin": "FR0000120628",
+            "SecurityName": "Na. u. Inh. Ti.-Aktie AXA SA",
+            "Quantity": 415.0,
+            "PricePerUnit": 23.505,
+            "Currency": "EUR",
+            "TotalAmountInProposalCurrency": 10063.94053,
+            "ProposalValuePercentage": 0.02283
+          },
+          {
+            "Isin": "LU0403296170",
+            "SecurityName": "Anteile -Q-acc- UBS (Lux) Equity Fund FCP - China Opportunity (USD)",
+            "Quantity": 80.0,
+            "PricePerUnit": 187.06,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 14405.15955,
+            "ProposalValuePercentage": 0.03268
+          },
+          {
+            "Isin": "CH0582581713",
+            "SecurityName": "Namen-Aktie Dottikon ES Holding AG",
+            "Quantity": 32.0,
+            "PricePerUnit": 256.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 0.0,
+            "ProposalValuePercentage": 0.0
+          },
+          {
+            "Isin": "CH1176493729",
+            "SecurityName": "Namen-Aktie BACHEM HOLDING AG",
+            "Quantity": 175.0,
+            "PricePerUnit": 74.8,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 13090.0,
+            "ProposalValuePercentage": 0.0297
+          }
+        ],
+        "AccountPositions": [
+          {
+            "AccountName": "Investitionskonto CHF",
+            "Currency": "CHF",
+            "Amount": 21028.16,
+            "TotalAmountInProposalCurrency": 21767.67906
+          }
+        ]
+      },
+      {
+        "ProposalId": 12807,
+        "PublicGuid": "4F8C2F45-C32D-ED11-9F65-0050568CD8FC",
+        "PortfolioId": 41848,
+        "ProposalStatusId": 4,
+        "ProposalStatusName": "Abgelehnt",
+        "AdvisoryTypeId": 2,
+        "AdvisoryTypeName": "Investment proposal",
+        "Currency": "CHF",
+        "StrategicAssetAllocationId": 46,
+        "ProposedDateUTC": "2025-02-09T09:56:44.1967426Z",
+        "Reason": "Risk profile update",
+        "Notes": "Comment",
+        "ExpectedReturn": 0.0643,
+        "Volatility": 0.14227,
+        "ValueAtRisk": 0.07613,
+        "SecurityPositions": [
+          {
+            "Isin": "CH0010570767",
+            "SecurityName": "Partizipationsschein Chocoladefabriken Lindt & Spruengli AG",
+            "Quantity": 2.0,
+            "PricePerUnit": 10260.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 20520.0,
+            "ProposalValuePercentage": 0.04949
+          },
+          {
+            "Isin": "CH0011075394",
+            "SecurityName": "Namen-Aktie Zurich Insurance Group AG",
+            "Quantity": 33.0,
+            "PricePerUnit": 430.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 14190.0,
+            "ProposalValuePercentage": 0.03422
+          },
+          {
+            "Isin": "CH0012032048",
+            "SecurityName": "Genussschein Roche Holding AG",
+            "Quantity": 71.0,
+            "PricePerUnit": 319.2,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 22663.2,
+            "ProposalValuePercentage": 0.05466
+          },
+          {
+            "Isin": "CH0012005267",
+            "SecurityName": "Namen-Aktie Novartis AG",
+            "Quantity": 120.0,
+            "PricePerUnit": 79.82,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 19955.0,
+            "ProposalValuePercentage": 0.04813
+          },
+          {
+            "Isin": "CH0012221716",
+            "SecurityName": "Namen-Aktie ABB Ltd",
+            "Quantity": 480.0,
+            "PricePerUnit": 26.73,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 12830.4,
+            "ProposalValuePercentage": 0.03094
+          },
+          {
+            "Isin": "CH0012549785",
+            "SecurityName": "Namen-Aktie Sonova Holding AG",
+            "Quantity": 34.0,
+            "PricePerUnit": 253.3,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 8612.2,
+            "ProposalValuePercentage": 0.02077
+          },
+          {
+            "Isin": "CH0016440353",
+            "SecurityName": "Namen-Aktie EMS-CHEMIE HOLDING AG",
+            "Quantity": 8.0,
+            "PricePerUnit": 664.5,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 5316.0,
+            "ProposalValuePercentage": 0.01282
+          },
+          {
+            "Isin": "CH0012829898",
+            "SecurityName": "Namen-Aktie Emmi AG",
+            "Quantity": 10.0,
+            "PricePerUnit": 831.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 8310.0,
+            "ProposalValuePercentage": 0.02004
+          },
+          {
+            "Isin": "CH0002432174",
+            "SecurityName": "Namen-Aktie Bucher Industries AG",
+            "Quantity": 23.0,
+            "PricePerUnit": 339.2,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 7801.6,
+            "ProposalValuePercentage": 0.01882
+          },
+          {
+            "Isin": "CH0022427626",
+            "SecurityName": "Namen-Aktie Lem Holding SA",
+            "Quantity": 5.0,
+            "PricePerUnit": 1518.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 7590.0,
+            "ProposalValuePercentage": 0.0183
+          },
+          {
+            "Isin": "CH0025238863",
+            "SecurityName": "Namen-Aktie Kuehne + Nagel International AG",
+            "Quantity": 74.0,
+            "PricePerUnit": 216.6,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 0.0,
+            "ProposalValuePercentage": 0.0
+          },
+          {
+            "Isin": "CH0025751329",
+            "SecurityName": "Namen-Aktie Logitech International SA",
+            "Quantity": 165.0,
+            "PricePerUnit": 47.63,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 7858.95,
+            "ProposalValuePercentage": 0.01895
+          },
+          {
+            "Isin": "CH0030170408",
+            "SecurityName": "Namen-Aktie Geberit AG",
+            "Quantity": 18.0,
+            "PricePerUnit": 442.6,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 7966.8,
+            "ProposalValuePercentage": 0.01921
+          },
+          {
+            "Isin": "CH0038863350",
+            "SecurityName": "Namen-Aktie Nestle SA",
+            "Quantity": 136.0,
+            "PricePerUnit": 113.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 15368.0,
+            "ProposalValuePercentage": 0.03706
+          },
+          {
+            "Isin": "CH0111677362",
+            "SecurityName": "Namen-Aktie Orior AG",
+            "Quantity": 100.0,
+            "PricePerUnit": 74.8,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 7480.0,
+            "ProposalValuePercentage": 0.01804
+          },
+          {
+            "Isin": "LU0329631377",
+            "SecurityName": "Anteile -I1- Variopartner SICAV - MIV Global Medtech Fund",
+            "Quantity": 8.0,
+            "PricePerUnit": 2350.66,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 18805.28,
+            "ProposalValuePercentage": 0.04535
+          },
+          {
+            "Isin": "CH0130293662",
+            "SecurityName": "Namen-Aktie BKW AG",
+            "Quantity": 100.0,
+            "PricePerUnit": 116.7,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 11670.0,
+            "ProposalValuePercentage": 0.02814
+          },
+          {
+            "Isin": "CH0225173167",
+            "SecurityName": "Namen-Aktie Cembra Money Bank AG",
+            "Quantity": 50.0,
+            "PricePerUnit": 64.65,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 3232.5,
+            "ProposalValuePercentage": 0.0078
+          },
+          {
+            "Isin": "CH0008742519",
+            "SecurityName": "Namen-Aktie Swisscom AG",
+            "Quantity": 35.0,
+            "PricePerUnit": 503.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 17605.0,
+            "ProposalValuePercentage": 0.04246
+          },
+          {
+            "Isin": "CH0319416936",
+            "SecurityName": "Namen-Aktie Flughafen Zuerich AG",
+            "Quantity": 55.0,
+            "PricePerUnit": 159.4,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 8767.0,
+            "ProposalValuePercentage": 0.02114
+          },
+          {
+            "Isin": "CH0002178181",
+            "SecurityName": "Namen-Aktie Stadler Rail AG",
+            "Quantity": 240.0,
+            "PricePerUnit": 29.98,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 7195.2,
+            "ProposalValuePercentage": 0.01735
+          },
+          {
+            "Isin": "IE00B1XNHC34",
+            "SecurityName": "Anteile Exchange Traded Fund USD iShares II PLC - Global Clean Energy UCITS ETF",
+            "Quantity": 1600.0,
+            "PricePerUnit": 12.314,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 19299.04986,
+            "ProposalValuePercentage": 0.04654
+          },
+          {
+            "Isin": "IE00B53SZB19",
+            "SecurityName": "Anteile Exchange Traded Fund USD iShares VII PLC - iShares NASDAQ 100 UCITS ETF",
+            "Quantity": 35.0,
+            "PricePerUnit": 687.6,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 23573.31766,
+            "ProposalValuePercentage": 0.05685
+          },
+          {
+            "Isin": "IE00B6YX5D40",
+            "SecurityName": "Anteile - ETF USD SSgA SPDR ETFs Europe I PLC - SPDR S&P US Dividend Aristocrats UCITS ETF",
+            "Quantity": 200.0,
+            "PricePerUnit": 68.05,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 13331.37428,
+            "ProposalValuePercentage": 0.03215
+          },
+          {
+            "Isin": "LU0629460089",
+            "SecurityName": "Anteile -A- UBS (Lux) Fund Solutions SICAV  - MSCI USA Socially Responsible UCITS ETF",
+            "Quantity": 220.0,
+            "PricePerUnit": 156.62,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 33751.00402,
+            "ProposalValuePercentage": 0.0814
+          },
+          {
+            "Isin": "IE00B8GKDB10",
+            "SecurityName": "Anteile Vanguard Funds PLC - FTSE All-World High Dividend Yield UCITS ETF",
+            "Quantity": 260.0,
+            "PricePerUnit": 55.78,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 14205.89676,
+            "ProposalValuePercentage": 0.03426
+          },
+          {
+            "Isin": "IE00BCBJG560",
+            "SecurityName": "Anteile - ETF USD SSgA SPDR ETFs Europe II Plc  - SPDR MSCI World Small Cap UCITS ETF",
+            "Quantity": 100.0,
+            "PricePerUnit": 84.82,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 19109.21736,
+            "ProposalValuePercentage": 0.04609
+          },
+          {
+            "Isin": "FR0000120628",
+            "SecurityName": "Na. u. Inh. Ti.-Aktie AXA SA",
+            "Quantity": 415.0,
+            "PricePerUnit": 23.57,
+            "Currency": "EUR",
+            "TotalAmountInProposalCurrency": 9558.92269,
+            "ProposalValuePercentage": 0.02305
+          },
+          {
+            "Isin": "LU0403296170",
+            "SecurityName": "Anteile -Q-acc- UBS (Lux) Equity Fund FCP - China Opportunity (USD)",
+            "Quantity": 80.0,
+            "PricePerUnit": 171.09,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 13406.99383,
+            "ProposalValuePercentage": 0.03233
+          },
+          {
+            "Isin": "CH0582581713",
+            "SecurityName": "Namen-Aktie Dottikon ES Holding AG",
+            "Quantity": 32.0,
+            "PricePerUnit": 235.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 7520.0,
+            "ProposalValuePercentage": 0.01814
+          },
+          {
+            "Isin": "CH1176493729",
+            "SecurityName": "Namen-Aktie BACHEM HOLDING AG",
+            "Quantity": 175.0,
+            "PricePerUnit": 63.25,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 11068.75,
+            "ProposalValuePercentage": 0.02669
+          }
+        ],
+        "AccountPositions": [
+          {
+            "AccountName": "Investitionskonto CHF",
+            "Currency": "CHF",
+            "Amount": 21235.0,
+            "TotalAmountInProposalCurrency": 16085.93802
+          }
+        ]
+      },
+      {
+        "ProposalId": 14627,
+        "PublicGuid": "2BAE36D4-4175-ED11-9F67-0050568CD8FC",
+        "PortfolioId": 41848,
+        "ProposalStatusId": 4,
+        "ProposalStatusName": "Abgelehnt",
+        "AdvisoryTypeId": 2,
+        "AdvisoryTypeName": "Investment proposal",
+        "Currency": "CHF",
+        "StrategicAssetAllocationId": 46,
+        "Reason": "New deposit received",
+        "Notes": "Comment",
+        "ExpectedReturn": 0.06492,
+        "Volatility": 0.15007,
+        "ValueAtRisk": 0.12624,
+        "SecurityPositions": [
+          {
+            "Isin": "CH0010570767",
+            "SecurityName": "Partizipationsschein Chocoladefabriken Lindt & Spruengli AG",
+            "Quantity": 2.0,
+            "PricePerUnit": 9720.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 19440.0,
+            "ProposalValuePercentage": 0.04527
+          },
+          {
+            "Isin": "CH0011075394",
+            "SecurityName": "Namen-Aktie Zurich Insurance Group AG",
+            "Quantity": 33.0,
+            "PricePerUnit": 451.9,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 14912.7,
+            "ProposalValuePercentage": 0.03473
+          },
+          {
+            "Isin": "CH0012032048",
+            "SecurityName": "Genussschein Roche Holding AG",
+            "Quantity": 71.0,
+            "PricePerUnit": 309.55,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 21978.05,
+            "ProposalValuePercentage": 0.05118
+          },
+          {
+            "Isin": "CH0012005267",
+            "SecurityName": "Namen-Aktie Novartis AG",
+            "Quantity": 120.0,
+            "PricePerUnit": 85.8,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 22308.0,
+            "ProposalValuePercentage": 0.05195
+          },
+          {
+            "Isin": "CH0012221716",
+            "SecurityName": "Namen-Aktie ABB Ltd",
+            "Quantity": 480.0,
+            "PricePerUnit": 29.5,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 14160.0,
+            "ProposalValuePercentage": 0.03297
+          },
+          {
+            "Isin": "CH0012549785",
+            "SecurityName": "Namen-Aktie Sonova Holding AG",
+            "Quantity": 34.0,
+            "PricePerUnit": 246.4,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 8377.6,
+            "ProposalValuePercentage": 0.01951
+          },
+          {
+            "Isin": "CH0016440353",
+            "SecurityName": "Namen-Aktie EMS-CHEMIE HOLDING AG",
+            "Quantity": 8.0,
+            "PricePerUnit": 665.5,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 13310.0,
+            "ProposalValuePercentage": 0.03099
+          },
+          {
+            "Isin": "CH0012829898",
+            "SecurityName": "Namen-Aktie Emmi AG",
+            "Quantity": 10.0,
+            "PricePerUnit": 815.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 8150.0,
+            "ProposalValuePercentage": 0.01898
+          },
+          {
+            "Isin": "CH0002432174",
+            "SecurityName": "Namen-Aktie Bucher Industries AG",
+            "Quantity": 23.0,
+            "PricePerUnit": 382.6,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 8799.8,
+            "ProposalValuePercentage": 0.02049
+          },
+          {
+            "Isin": "CH0022427626",
+            "SecurityName": "Namen-Aktie Lem Holding SA",
+            "Quantity": 5.0,
+            "PricePerUnit": 1942.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 0.0,
+            "ProposalValuePercentage": 0.0
+          },
+          {
+            "Isin": "CH0025238863",
+            "SecurityName": "Namen-Aktie Kuehne + Nagel International AG",
+            "Quantity": 74.0,
+            "PricePerUnit": 227.8,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 16857.2,
+            "ProposalValuePercentage": 0.03925
+          },
+          {
+            "Isin": "CH0025751329",
+            "SecurityName": "Namen-Aktie Logitech International SA",
+            "Quantity": 165.0,
+            "PricePerUnit": 58.04,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 9576.6,
+            "ProposalValuePercentage": 0.0223
+          },
+          {
+            "Isin": "CH0030170408",
+            "SecurityName": "Namen-Aktie Geberit AG",
+            "Quantity": 18.0,
+            "PricePerUnit": 457.7,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 8238.6,
+            "ProposalValuePercentage": 0.01918
+          },
+          {
+            "Isin": "CH0038863350",
+            "SecurityName": "Namen-Aktie Nestle SA",
+            "Quantity": 136.0,
+            "PricePerUnit": 111.3,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 15136.8,
+            "ProposalValuePercentage": 0.03525
+          },
+          {
+            "Isin": "CH0111677362",
+            "SecurityName": "Namen-Aktie Orior AG",
+            "Quantity": 100.0,
+            "PricePerUnit": 73.4,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 7340.0,
+            "ProposalValuePercentage": 0.01709
+          },
+          {
+            "Isin": "LU0329631377",
+            "SecurityName": "Anteile -I1- Variopartner SICAV - MIV Global Medtech Fund",
+            "Quantity": 8.0,
+            "PricePerUnit": 2426.99,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 19415.92,
+            "ProposalValuePercentage": 0.04521
+          },
+          {
+            "Isin": "CH0130293662",
+            "SecurityName": "Namen-Aktie BKW AG",
+            "Quantity": 100.0,
+            "PricePerUnit": 122.8,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 12280.0,
+            "ProposalValuePercentage": 0.0286
+          },
+          {
+            "Isin": "CH0225173167",
+            "SecurityName": "Namen-Aktie Cembra Money Bank AG",
+            "Quantity": 50.0,
+            "PricePerUnit": 73.85,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 3692.5,
+            "ProposalValuePercentage": 0.0086
+          },
+          {
+            "Isin": "CH0008742519",
+            "SecurityName": "Namen-Aktie Swisscom AG",
+            "Quantity": 35.0,
+            "PricePerUnit": 507.8,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 17773.0,
+            "ProposalValuePercentage": 0.04139
+          },
+          {
+            "Isin": "CH0319416936",
+            "SecurityName": "Namen-Aktie Flughafen Zuerich AG",
+            "Quantity": 55.0,
+            "PricePerUnit": 159.4,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 8767.0,
+            "ProposalValuePercentage": 0.02041
+          },
+          {
+            "Isin": "CH0002178181",
+            "SecurityName": "Namen-Aktie Stadler Rail AG",
+            "Quantity": 240.0,
+            "PricePerUnit": 33.28,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 7987.2,
+            "ProposalValuePercentage": 0.0186
+          },
+          {
+            "Isin": "IE00B1XNHC34",
+            "SecurityName": "Anteile Exchange Traded Fund USD iShares II PLC - Global Clean Energy UCITS ETF",
+            "Quantity": 1600.0,
+            "PricePerUnit": 12.102,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 18225.04588,
+            "ProposalValuePercentage": 0.04244
+          },
+          {
+            "Isin": "IE00B53SZB19",
+            "SecurityName": "Anteile Exchange Traded Fund USD iShares VII PLC - iShares NASDAQ 100 UCITS ETF",
+            "Quantity": 35.0,
+            "PricePerUnit": 674.1,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 22206.69208,
+            "ProposalValuePercentage": 0.05171
+          },
+          {
+            "Isin": "IE00B6YX5D40",
+            "SecurityName": "Anteile - ETF USD SSgA SPDR ETFs Europe I PLC - SPDR S&P US Dividend Aristocrats UCITS ETF",
+            "Quantity": 200.0,
+            "PricePerUnit": 71.51,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 13461.33936,
+            "ProposalValuePercentage": 0.03135
+          },
+          {
+            "Isin": "LU0629460089",
+            "SecurityName": "Anteile -A- UBS (Lux) Fund Solutions SICAV  - MSCI USA Socially Responsible UCITS ETF",
+            "Quantity": 220.0,
+            "PricePerUnit": 163.14,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 33781.16617,
+            "ProposalValuePercentage": 0.07866
+          },
+          {
+            "Isin": "IE00B8GKDB10",
+            "SecurityName": "Anteile Vanguard Funds PLC - FTSE All-World High Dividend Yield UCITS ETF",
+            "Quantity": 260.0,
+            "PricePerUnit": 59.595,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 14583.93336,
+            "ProposalValuePercentage": 0.03396
+          },
+          {
+            "Isin": "IE00BCBJG560",
+            "SecurityName": "Anteile - ETF USD SSgA SPDR ETFs Europe II Plc  - SPDR MSCI World Small Cap UCITS ETF",
+            "Quantity": 100.0,
+            "PricePerUnit": 88.52,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 8331.6862,
+            "ProposalValuePercentage": 0.0194
+          },
+          {
+            "Isin": "FR0000120628",
+            "SecurityName": "Na. u. Inh. Ti.-Aktie AXA SA",
+            "Quantity": 415.0,
+            "PricePerUnit": 27.31,
+            "Currency": "EUR",
+            "TotalAmountInProposalCurrency": 11209.33844,
+            "ProposalValuePercentage": 0.0261
+          },
+          {
+            "Isin": "LU0403296170",
+            "SecurityName": "Anteile -Q-acc- UBS (Lux) Equity Fund FCP - China Opportunity (USD)",
+            "Quantity": 80.0,
+            "PricePerUnit": 176.33,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 13277.23658,
+            "ProposalValuePercentage": 0.03092
+          },
+          {
+            "Isin": "CH0582581713",
+            "SecurityName": "Namen-Aktie Dottikon ES Holding AG",
+            "Quantity": 32.0,
+            "PricePerUnit": 278.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 8896.0,
+            "ProposalValuePercentage": 0.02072
+          },
+          {
+            "Isin": "CH1176493729",
+            "SecurityName": "Namen-Aktie BACHEM HOLDING AG",
+            "Quantity": 175.0,
+            "PricePerUnit": 90.25,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 15793.75,
+            "ProposalValuePercentage": 0.03678
+          },
+          {
+            "Isin": "CH1169360919",
+            "SecurityName": "Namen-Aktie Accelleron Industries AG",
+            "Quantity": 24.0,
+            "PricePerUnit": 18.585,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 446.04,
+            "ProposalValuePercentage": 0.00104
+          }
+        ],
+        "AccountPositions": [
+          {
+            "AccountName": "Investitionskonto CHF",
+            "Currency": "CHF",
+            "Amount": 21017.37,
+            "TotalAmountInProposalCurrency": 10729.37
+          }
+        ]
+      },
+      {
+        "ProposalId": 16446,
+        "PublicGuid": "8509A86D-56BE-ED11-9F67-0050568CD8FC",
+        "PortfolioId": 41848,
+        "ProposalStatusId": 4,
+        "ProposalStatusName": "Abgelehnt",
+        "AdvisoryTypeId": 2,
+        "AdvisoryTypeName": "Investment proposal",
+        "Currency": "CHF",
+        "StrategicAssetAllocationId": 46,
+        "ProposedDateUTC": "2025-08-12T09:29:50.5927819Z",
+        "Reason": "Annual review meeting",
+        "Notes": "Comment",
+        "ExpectedReturn": 0.0626,
+        "Volatility": 0.14987,
+        "ValueAtRisk": 0.13237,
+        "SecurityPositions": [
+          {
+            "Isin": "CH0010570767",
+            "SecurityName": "Partizipationsschein Chocoladefabriken Lindt & Spruengli AG",
+            "Quantity": 2.0,
+            "PricePerUnit": 10140.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 20280.0,
+            "ProposalValuePercentage": 0.047
+          },
+          {
+            "Isin": "CH0011075394",
+            "SecurityName": "Namen-Aktie Zurich Insurance Group AG",
+            "Quantity": 33.0,
+            "PricePerUnit": 447.2,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 14757.6,
+            "ProposalValuePercentage": 0.0342
+          },
+          {
+            "Isin": "CH0012032048",
+            "SecurityName": "Genussschein Roche Holding AG",
+            "Quantity": 71.0,
+            "PricePerUnit": 265.75,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 18868.25,
+            "ProposalValuePercentage": 0.04373
+          },
+          {
+            "Isin": "CH0012005267",
+            "SecurityName": "Namen-Aktie Novartis AG",
+            "Quantity": 120.0,
+            "PricePerUnit": 78.6,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 9432.0,
+            "ProposalValuePercentage": 0.02186
+          },
+          {
+            "Isin": "CH0012221716",
+            "SecurityName": "Namen-Aktie ABB Ltd",
+            "Quantity": 480.0,
+            "PricePerUnit": 31.88,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 15302.4,
+            "ProposalValuePercentage": 0.03547
+          },
+          {
+            "Isin": "CH0012549785",
+            "SecurityName": "Namen-Aktie Sonova Holding AG",
+            "Quantity": 34.0,
+            "PricePerUnit": 240.3,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 8170.2,
+            "ProposalValuePercentage": 0.01894
+          },
+          {
+            "Isin": "CH0016440353",
+            "SecurityName": "Namen-Aktie EMS-CHEMIE HOLDING AG",
+            "Quantity": 8.0,
+            "PricePerUnit": 704.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 5632.0,
+            "ProposalValuePercentage": 0.01305
+          },
+          {
+            "Isin": "CH0012829898",
+            "SecurityName": "Namen-Aktie Emmi AG",
+            "Quantity": 10.0,
+            "PricePerUnit": 867.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 8670.0,
+            "ProposalValuePercentage": 0.0201
+          },
+          {
+            "Isin": "CH0002432174",
+            "SecurityName": "Namen-Aktie Bucher Industries AG",
+            "Quantity": 23.0,
+            "PricePerUnit": 416.4,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 9577.2,
+            "ProposalValuePercentage": 0.0222
+          },
+          {
+            "Isin": "CH0022427626",
+            "SecurityName": "Namen-Aktie Lem Holding SA",
+            "Quantity": 5.0,
+            "PricePerUnit": 1960.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 9800.0,
+            "ProposalValuePercentage": 0.02271
+          },
+          {
+            "Isin": "CH0025238863",
+            "SecurityName": "Namen-Aktie Kuehne + Nagel International AG",
+            "Quantity": 74.0,
+            "PricePerUnit": 248.3,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 0.0,
+            "ProposalValuePercentage": 0.0
+          },
+          {
+            "Isin": "CH0025751329",
+            "SecurityName": "Namen-Aktie Logitech International SA",
+            "Quantity": 165.0,
+            "PricePerUnit": 49.88,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 8230.2,
+            "ProposalValuePercentage": 0.01908
+          },
+          {
+            "Isin": "CH0030170408",
+            "SecurityName": "Namen-Aktie Geberit AG",
+            "Quantity": 18.0,
+            "PricePerUnit": 501.2,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 9021.6,
+            "ProposalValuePercentage": 0.02091
+          },
+          {
+            "Isin": "CH0038863350",
+            "SecurityName": "Namen-Aktie Nestle SA",
+            "Quantity": 136.0,
+            "PricePerUnit": 105.32,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 14323.52,
+            "ProposalValuePercentage": 0.0332
+          },
+          {
+            "Isin": "CH0111677362",
+            "SecurityName": "Namen-Aktie Orior AG",
+            "Quantity": 100.0,
+            "PricePerUnit": 75.4,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 7540.0,
+            "ProposalValuePercentage": 0.01748
+          },
+          {
+            "Isin": "LU0329631377",
+            "SecurityName": "Anteile -I1- Variopartner SICAV - MIV Global Medtech Fund",
+            "Quantity": 8.0,
+            "PricePerUnit": 2394.23,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 19153.84,
+            "ProposalValuePercentage": 0.04439
+          },
+          {
+            "Isin": "CH0130293662",
+            "SecurityName": "Namen-Aktie BKW AG",
+            "Quantity": 100.0,
+            "PricePerUnit": 128.4,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 12840.0,
+            "ProposalValuePercentage": 0.02976
+          },
+          {
+            "Isin": "CH0225173167",
+            "SecurityName": "Namen-Aktie Cembra Money Bank AG",
+            "Quantity": 50.0,
+            "PricePerUnit": 76.75,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 3837.5,
+            "ProposalValuePercentage": 0.00889
+          },
+          {
+            "Isin": "CH0008742519",
+            "SecurityName": "Namen-Aktie Swisscom AG",
+            "Quantity": 35.0,
+            "PricePerUnit": 585.2,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 20482.0,
+            "ProposalValuePercentage": 0.04747
+          },
+          {
+            "Isin": "CH0319416936",
+            "SecurityName": "Namen-Aktie Flughafen Zuerich AG",
+            "Quantity": 55.0,
+            "PricePerUnit": 171.7,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 9443.5,
+            "ProposalValuePercentage": 0.02189
+          },
+          {
+            "Isin": "CH0002178181",
+            "SecurityName": "Namen-Aktie Stadler Rail AG",
+            "Quantity": 240.0,
+            "PricePerUnit": 36.24,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 8697.6,
+            "ProposalValuePercentage": 0.02016
+          },
+          {
+            "Isin": "IE00B1XNHC34",
+            "SecurityName": "Anteile Exchange Traded Fund USD iShares II PLC - Global Clean Energy UCITS ETF",
+            "Quantity": 1600.0,
+            "PricePerUnit": 11.316,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 16668.75345,
+            "ProposalValuePercentage": 0.03863
+          },
+          {
+            "Isin": "IE00B53SZB19",
+            "SecurityName": "Anteile Exchange Traded Fund USD iShares VII PLC - iShares NASDAQ 100 UCITS ETF",
+            "Quantity": 35.0,
+            "PricePerUnit": 690.9,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 22262.47468,
+            "ProposalValuePercentage": 0.0516
+          },
+          {
+            "Isin": "IE00B6YX5D40",
+            "SecurityName": "Anteile - ETF USD SSgA SPDR ETFs Europe I PLC - SPDR S&P US Dividend Aristocrats UCITS ETF",
+            "Quantity": 200.0,
+            "PricePerUnit": 68.83,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 12673.54078,
+            "ProposalValuePercentage": 0.02937
+          },
+          {
+            "Isin": "LU0629460089",
+            "SecurityName": "Anteile -A- UBS (Lux) Fund Solutions SICAV  - MSCI USA Socially Responsible UCITS ETF",
+            "Quantity": 220.0,
+            "PricePerUnit": 162.92,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 58496.4095,
+            "ProposalValuePercentage": 0.13558
+          },
+          {
+            "Isin": "IE00B8GKDB10",
+            "SecurityName": "Anteile Vanguard Funds PLC - FTSE All-World High Dividend Yield UCITS ETF",
+            "Quantity": 260.0,
+            "PricePerUnit": 59.38,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 14213.58866,
+            "ProposalValuePercentage": 0.03294
+          },
+          {
+            "Isin": "IE00BCBJG560",
+            "SecurityName": "Anteile - ETF USD SSgA SPDR ETFs Europe II Plc  - SPDR MSCI World Small Cap UCITS ETF",
+            "Quantity": 100.0,
+            "PricePerUnit": 91.24,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 8399.92635,
+            "ProposalValuePercentage": 0.01947
+          },
+          {
+            "Isin": "FR0000120628",
+            "SecurityName": "Na. u. Inh. Ti.-Aktie AXA SA",
+            "Quantity": 415.0,
+            "PricePerUnit": 30.17,
+            "Currency": "EUR",
+            "TotalAmountInProposalCurrency": 12550.1684,
+            "ProposalValuePercentage": 0.02909
+          },
+          {
+            "Isin": "LU0403296170",
+            "SecurityName": "Anteile -Q-acc- UBS (Lux) Equity Fund FCP - China Opportunity (USD)",
+            "Quantity": 80.0,
+            "PricePerUnit": 176.24,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 12980.29829,
+            "ProposalValuePercentage": 0.03009
+          },
+          {
+            "Isin": "CH0582581713",
+            "SecurityName": "Namen-Aktie Dottikon ES Holding AG",
+            "Quantity": 32.0,
+            "PricePerUnit": 272.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 8704.0,
+            "ProposalValuePercentage": 0.02017
+          },
+          {
+            "Isin": "CH1176493729",
+            "SecurityName": "Namen-Aktie BACHEM HOLDING AG",
+            "Quantity": 175.0,
+            "PricePerUnit": 92.75,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 16231.25,
+            "ProposalValuePercentage": 0.03762
+          },
+          {
+            "Isin": "CH1169360919",
+            "SecurityName": "Namen-Aktie Accelleron Industries AG",
+            "Quantity": 24.0,
+            "PricePerUnit": 22.93,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 550.32,
+            "ProposalValuePercentage": 0.00128
+          }
+        ],
+        "AccountPositions": [
+          {
+            "AccountName": "Investitionskonto CHF",
+            "Currency": "CHF",
+            "Amount": 20781.54,
+            "TotalAmountInProposalCurrency": 13657.30509
+          }
+        ]
+      },
+      {
+        "ProposalId": 18402,
+        "PublicGuid": "0322226B-0705-EE11-9F69-0050568CD8FC",
+        "PortfolioId": 41848,
+        "ProposalStatusId": 4,
+        "ProposalStatusName": "Abgelehnt",
+        "AdvisoryTypeId": 2,
+        "AdvisoryTypeName": "Investment proposal",
+        "Currency": "CHF",
+        "StrategicAssetAllocationId": 46,
+        "ProposedDateUTC": "2025-11-10T09:29:58.1601355Z",
+        "Reason": "Periodic portfolio review",
+        "Notes": "Comment",
+        "ExpectedReturn": 0.06345,
+        "Volatility": 0.1488,
+        "ValueAtRisk": 0.14474,
+        "SecurityPositions": [
+          {
+            "Isin": "CH0010570767",
+            "SecurityName": "Partizipationsschein Chocoladefabriken Lindt & Spruengli AG",
+            "Quantity": 2.0,
+            "PricePerUnit": 11120.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 22240.0,
+            "ProposalValuePercentage": 0.04968
+          },
+          {
+            "Isin": "CH0011075394",
+            "SecurityName": "Namen-Aktie Zurich Insurance Group AG",
+            "Quantity": 33.0,
+            "PricePerUnit": 434.7,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 14345.1,
+            "ProposalValuePercentage": 0.03204
+          },
+          {
+            "Isin": "CH0012032048",
+            "SecurityName": "Genussschein Roche Holding AG",
+            "Quantity": 71.0,
+            "PricePerUnit": 292.15,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 20742.65,
+            "ProposalValuePercentage": 0.04633
+          },
+          {
+            "Isin": "CH0012005267",
+            "SecurityName": "Namen-Aktie Novartis AG",
+            "Quantity": 120.0,
+            "PricePerUnit": 90.52,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 10862.4,
+            "ProposalValuePercentage": 0.02426
+          },
+          {
+            "Isin": "CH0012221716",
+            "SecurityName": "Namen-Aktie ABB Ltd",
+            "Quantity": 480.0,
+            "PricePerUnit": 34.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 16320.0,
+            "ProposalValuePercentage": 0.03645
+          },
+          {
+            "Isin": "CH0012549785",
+            "SecurityName": "Namen-Aktie Sonova Holding AG",
+            "Quantity": 34.0,
+            "PricePerUnit": 239.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 8126.0,
+            "ProposalValuePercentage": 0.01815
+          },
+          {
+            "Isin": "CH0016440353",
+            "SecurityName": "Namen-Aktie EMS-CHEMIE HOLDING AG",
+            "Quantity": 8.0,
+            "PricePerUnit": 721.5,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 5772.0,
+            "ProposalValuePercentage": 0.01289
+          },
+          {
+            "Isin": "CH0012829898",
+            "SecurityName": "Namen-Aktie Emmi AG",
+            "Quantity": 10.0,
+            "PricePerUnit": 933.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 9330.0,
+            "ProposalValuePercentage": 0.02084
+          },
+          {
+            "Isin": "CH0002432174",
+            "SecurityName": "Namen-Aktie Bucher Industries AG",
+            "Quantity": 23.0,
+            "PricePerUnit": 392.6,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 9029.8,
+            "ProposalValuePercentage": 0.02017
+          },
+          {
+            "Isin": "CH0022427626",
+            "SecurityName": "Namen-Aktie Lem Holding SA",
+            "Quantity": 5.0,
+            "PricePerUnit": 2105.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 0.0,
+            "ProposalValuePercentage": 0.0
+          },
+          {
+            "Isin": "CH0025238863",
+            "SecurityName": "Namen-Aktie Kuehne + Nagel International AG",
+            "Quantity": 74.0,
+            "PricePerUnit": 255.2,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 0.0,
+            "ProposalValuePercentage": 0.0
+          },
+          {
+            "Isin": "CH0025751329",
+            "SecurityName": "Namen-Aktie Logitech International SA",
+            "Quantity": 165.0,
+            "PricePerUnit": 57.34,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 9461.1,
+            "ProposalValuePercentage": 0.02113
+          },
+          {
+            "Isin": "CH0030170408",
+            "SecurityName": "Namen-Aktie Geberit AG",
+            "Quantity": 18.0,
+            "PricePerUnit": 501.4,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 9025.2,
+            "ProposalValuePercentage": 0.02016
+          },
+          {
+            "Isin": "CH0038863350",
+            "SecurityName": "Namen-Aktie Nestle SA",
+            "Quantity": 136.0,
+            "PricePerUnit": 109.16,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 14845.76,
+            "ProposalValuePercentage": 0.03316
+          },
+          {
+            "Isin": "CH0111677362",
+            "SecurityName": "Namen-Aktie Orior AG",
+            "Quantity": 100.0,
+            "PricePerUnit": 77.9,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 7790.0,
+            "ProposalValuePercentage": 0.0174
+          },
+          {
+            "Isin": "LU0329631377",
+            "SecurityName": "Anteile -I1- Variopartner SICAV - MIV Global Medtech Fund",
+            "Quantity": 8.0,
+            "PricePerUnit": 2502.42,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 20019.36,
+            "ProposalValuePercentage": 0.04472
+          },
+          {
+            "Isin": "CH0130293662",
+            "SecurityName": "Namen-Aktie BKW AG",
+            "Quantity": 100.0,
+            "PricePerUnit": 143.4,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 0.0,
+            "ProposalValuePercentage": 0.0
+          },
+          {
+            "Isin": "CH0225173167",
+            "SecurityName": "Namen-Aktie Cembra Money Bank AG",
+            "Quantity": 50.0,
+            "PricePerUnit": 70.25,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 3512.5,
+            "ProposalValuePercentage": 0.00785
+          },
+          {
+            "Isin": "CH0008742519",
+            "SecurityName": "Namen-Aktie Swisscom AG",
+            "Quantity": 35.0,
+            "PricePerUnit": 568.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 19880.0,
+            "ProposalValuePercentage": 0.0444
+          },
+          {
+            "Isin": "CH0319416936",
+            "SecurityName": "Namen-Aktie Flughafen Zuerich AG",
+            "Quantity": 55.0,
+            "PricePerUnit": 172.9,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 9509.5,
+            "ProposalValuePercentage": 0.02124
+          },
+          {
+            "Isin": "CH0002178181",
+            "SecurityName": "Namen-Aktie Stadler Rail AG",
+            "Quantity": 240.0,
+            "PricePerUnit": 34.72,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 8332.8,
+            "ProposalValuePercentage": 0.01861
+          },
+          {
+            "Isin": "IE00B1XNHC34",
+            "SecurityName": "Anteile Exchange Traded Fund USD iShares II PLC - Global Clean Energy UCITS ETF",
+            "Quantity": 1600.0,
+            "PricePerUnit": 10.726,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 15580.91607,
+            "ProposalValuePercentage": 0.0348
+          },
+          {
+            "Isin": "IE00B53SZB19",
+            "SecurityName": "Anteile Exchange Traded Fund USD iShares VII PLC - iShares NASDAQ 100 UCITS ETF",
+            "Quantity": 35.0,
+            "PricePerUnit": 826.5,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 26263.10772,
+            "ProposalValuePercentage": 0.05866
+          },
+          {
+            "Isin": "IE00B6YX5D40",
+            "SecurityName": "Anteile - ETF USD SSgA SPDR ETFs Europe I PLC - SPDR S&P US Dividend Aristocrats UCITS ETF",
+            "Quantity": 200.0,
+            "PricePerUnit": 67.14,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 12191.20251,
+            "ProposalValuePercentage": 0.02723
+          },
+          {
+            "Isin": "LU0629460089",
+            "SecurityName": "Anteile -A- UBS (Lux) Fund Solutions SICAV  - MSCI USA Socially Responsible UCITS ETF",
+            "Quantity": 220.0,
+            "PricePerUnit": 174.92,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 34937.94544,
+            "ProposalValuePercentage": 0.07804
+          },
+          {
+            "Isin": "IE00B8GKDB10",
+            "SecurityName": "Anteile Vanguard Funds PLC - FTSE All-World High Dividend Yield UCITS ETF",
+            "Quantity": 260.0,
+            "PricePerUnit": 59.36,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 14012.07499,
+            "ProposalValuePercentage": 0.0313
+          },
+          {
+            "Isin": "IE00BM67HP23",
+            "SecurityName": "Anteile -1C- USD Xtrackers (IE) PLC  - MSCI World Consumer Discretionary UCITS ETF",
+            "Quantity": 0.0,
+            "PricePerUnit": 47.615,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 22479.27732,
+            "ProposalValuePercentage": 0.05021
+          },
+          {
+            "Isin": "IE00BCBJG560",
+            "SecurityName": "Anteile - ETF USD SSgA SPDR ETFs Europe II Plc  - SPDR MSCI World Small Cap UCITS ETF",
+            "Quantity": 100.0,
+            "PricePerUnit": 90.87,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 8250.03405,
+            "ProposalValuePercentage": 0.01843
+          },
+          {
+            "Isin": "IE00BYTRR970",
+            "SecurityName": "Anteile USD SSgA SPDR ETFs Europe II PLC - SPDR MSCI World Financials UCITS ETF",
+            "Quantity": 0.0,
+            "PricePerUnit": 49.915,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 22658.76799,
+            "ProposalValuePercentage": 0.05061
+          },
+          {
+            "Isin": "FR0000120628",
+            "SecurityName": "Na. u. Inh. Ti.-Aktie AXA SA",
+            "Quantity": 415.0,
+            "PricePerUnit": 27.26,
+            "Currency": "EUR",
+            "TotalAmountInProposalCurrency": 10980.19994,
+            "ProposalValuePercentage": 0.02453
+          },
+          {
+            "Isin": "LU0403296170",
+            "SecurityName": "Anteile -Q-acc- UBS (Lux) Equity Fund FCP - China Opportunity (USD)",
+            "Quantity": 80.0,
+            "PricePerUnit": 163.03,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 22202.09724,
+            "ProposalValuePercentage": 0.04959
+          },
+          {
+            "Isin": "CH0582581713",
+            "SecurityName": "Namen-Aktie Dottikon ES Holding AG",
+            "Quantity": 32.0,
+            "PricePerUnit": 267.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 8544.0,
+            "ProposalValuePercentage": 0.01908
+          },
+          {
+            "Isin": "CH1176493729",
+            "SecurityName": "Namen-Aktie BACHEM HOLDING AG",
+            "Quantity": 175.0,
+            "PricePerUnit": 93.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 16275.0,
+            "ProposalValuePercentage": 0.03635
+          },
+          {
+            "Isin": "CH1169360919",
+            "SecurityName": "Namen-Aktie Accelleron Industries AG",
+            "Quantity": 24.0,
+            "PricePerUnit": 22.06,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 529.44,
+            "ProposalValuePercentage": 0.00118
+          }
+        ],
+        "AccountPositions": [
+          {
+            "AccountName": "Investitionskonto CHF",
+            "Currency": "CHF",
+            "Amount": 25411.06,
+            "TotalAmountInProposalCurrency": 13661.83599
+          }
+        ]
+      },
+      {
+        "ProposalId": 20516,
+        "PublicGuid": "D49CB0AC-394E-EE11-9F6A-0050568CD8FC",
+        "PortfolioId": 41848,
+        "ProposalStatusId": 4,
+        "ProposalStatusName": "Abgelehnt",
+        "AdvisoryTypeId": 2,
+        "AdvisoryTypeName": "Investment proposal",
+        "Currency": "CHF",
+        "StrategicAssetAllocationId": 46,
+        "Reason": "Life event (retirement)",
+        "Notes": "Comment",
+        "ExpectedReturn": 0.06309,
+        "Volatility": 0.1502,
+        "ValueAtRisk": 0.13948,
+        "SecurityPositions": [
+          {
+            "Isin": "CH0010570767",
+            "SecurityName": "Partizipationsschein Chocoladefabriken Lindt & Spruengli AG",
+            "Quantity": 2.0,
+            "PricePerUnit": 10550.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 21100.0,
+            "ProposalValuePercentage": 0.05033
+          },
+          {
+            "Isin": "CH0011075394",
+            "SecurityName": "Namen-Aktie Zurich Insurance Group AG",
+            "Quantity": 33.0,
+            "PricePerUnit": 433.6,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 14308.8,
+            "ProposalValuePercentage": 0.03413
+          },
+          {
+            "Isin": "CH0012032048",
+            "SecurityName": "Genussschein Roche Holding AG",
+            "Quantity": 71.0,
+            "PricePerUnit": 238.15,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 16908.65,
+            "ProposalValuePercentage": 0.04034
+          },
+          {
+            "Isin": "CH0012005267",
+            "SecurityName": "Namen-Aktie Novartis AG",
+            "Quantity": 120.0,
+            "PricePerUnit": 84.88,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 10185.6,
+            "ProposalValuePercentage": 0.0243
+          },
+          {
+            "Isin": "CH0012221716",
+            "SecurityName": "Namen-Aktie ABB Ltd",
+            "Quantity": 480.0,
+            "PricePerUnit": 31.29,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 0.0,
+            "ProposalValuePercentage": 0.0
+          },
+          {
+            "Isin": "CH0012549785",
+            "SecurityName": "Namen-Aktie Sonova Holding AG",
+            "Quantity": 34.0,
+            "PricePerUnit": 223.1,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 7585.4,
+            "ProposalValuePercentage": 0.0181
+          },
+          {
+            "Isin": "CH0016440353",
+            "SecurityName": "Namen-Aktie EMS-CHEMIE HOLDING AG",
+            "Quantity": 8.0,
+            "PricePerUnit": 607.5,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 4860.0,
+            "ProposalValuePercentage": 0.01159
+          },
+          {
+            "Isin": "CH0012829898",
+            "SecurityName": "Namen-Aktie Emmi AG",
+            "Quantity": 10.0,
+            "PricePerUnit": 873.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 8730.0,
+            "ProposalValuePercentage": 0.02083
+          },
+          {
+            "Isin": "CH0002432174",
+            "SecurityName": "Namen-Aktie Bucher Industries AG",
+            "Quantity": 23.0,
+            "PricePerUnit": 335.8,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 7723.4,
+            "ProposalValuePercentage": 0.01842
+          },
+          {
+            "Isin": "CH0022427626",
+            "SecurityName": "Namen-Aktie Lem Holding SA",
+            "Quantity": 5.0,
+            "PricePerUnit": 1824.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 9120.0,
+            "ProposalValuePercentage": 0.02176
+          },
+          {
+            "Isin": "CH0025238863",
+            "SecurityName": "Namen-Aktie Kuehne + Nagel International AG",
+            "Quantity": 74.0,
+            "PricePerUnit": 240.5,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 0.0,
+            "ProposalValuePercentage": 0.0
+          },
+          {
+            "Isin": "CH0025751329",
+            "SecurityName": "Namen-Aktie Logitech International SA",
+            "Quantity": 165.0,
+            "PricePerUnit": 72.36,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 11939.4,
+            "ProposalValuePercentage": 0.02848
+          },
+          {
+            "Isin": "CH0030170408",
+            "SecurityName": "Namen-Aktie Geberit AG",
+            "Quantity": 18.0,
+            "PricePerUnit": 455.6,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 8200.8,
+            "ProposalValuePercentage": 0.01956
+          },
+          {
+            "Isin": "CH0038863350",
+            "SecurityName": "Namen-Aktie Nestle SA",
+            "Quantity": 136.0,
+            "PricePerUnit": 99.07,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 13473.52,
+            "ProposalValuePercentage": 0.03214
+          },
+          {
+            "Isin": "CH0111677362",
+            "SecurityName": "Namen-Aktie Orior AG",
+            "Quantity": 100.0,
+            "PricePerUnit": 71.5,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 7150.0,
+            "ProposalValuePercentage": 0.01706
+          },
+          {
+            "Isin": "LU0329631377",
+            "SecurityName": "Anteile -I1- Variopartner SICAV - MIV Global Medtech Fund",
+            "Quantity": 8.0,
+            "PricePerUnit": 2185.53,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 17484.24,
+            "ProposalValuePercentage": 0.04171
+          },
+          {
+            "Isin": "CH0130293662",
+            "SecurityName": "Namen-Aktie BKW AG",
+            "Quantity": 100.0,
+            "PricePerUnit": 153.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 15300.0,
+            "ProposalValuePercentage": 0.0365
+          },
+          {
+            "Isin": "CH0225173167",
+            "SecurityName": "Namen-Aktie Cembra Money Bank AG",
+            "Quantity": 50.0,
+            "PricePerUnit": 62.55,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 3127.5,
+            "ProposalValuePercentage": 0.00746
+          },
+          {
+            "Isin": "CH0008742519",
+            "SecurityName": "Namen-Aktie Swisscom AG",
+            "Quantity": 35.0,
+            "PricePerUnit": 510.4,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 17864.0,
+            "ProposalValuePercentage": 0.04261
+          },
+          {
+            "Isin": "CH0319416936",
+            "SecurityName": "Namen-Aktie Flughafen Zuerich AG",
+            "Quantity": 55.0,
+            "PricePerUnit": 176.8,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 9724.0,
+            "ProposalValuePercentage": 0.0232
+          },
+          {
+            "Isin": "CH0002178181",
+            "SecurityName": "Namen-Aktie Stadler Rail AG",
+            "Quantity": 240.0,
+            "PricePerUnit": 32.38,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 7771.2,
+            "ProposalValuePercentage": 0.01854
+          },
+          {
+            "Isin": "IE00B1XNHC34",
+            "SecurityName": "Anteile Exchange Traded Fund USD iShares II PLC - Global Clean Energy UCITS ETF",
+            "Quantity": 1600.0,
+            "PricePerUnit": 7.582,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 10896.12431,
+            "ProposalValuePercentage": 0.02599
+          },
+          {
+            "Isin": "IE00B53SZB19",
+            "SecurityName": "Anteile Exchange Traded Fund USD iShares VII PLC - iShares NASDAQ 100 UCITS ETF",
+            "Quantity": 35.0,
+            "PricePerUnit": 869.6,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 27337.31531,
+            "ProposalValuePercentage": 0.06521
+          },
+          {
+            "Isin": "IE00B5BMR087",
+            "SecurityName": "Anteile Exchange Traded Fund USD iShares VII PLC - iShares Core S&P 500 UCITS ETF",
+            "Quantity": 0.0,
+            "PricePerUnit": 457.55,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 28767.68312,
+            "ProposalValuePercentage": 0.06863
+          },
+          {
+            "Isin": "IE00B6YX5D40",
+            "SecurityName": "Anteile - ETF USD SSgA SPDR ETFs Europe I PLC - SPDR S&P US Dividend Aristocrats UCITS ETF",
+            "Quantity": 200.0,
+            "PricePerUnit": 63.01,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 11318.99223,
+            "ProposalValuePercentage": 0.027
+          },
+          {
+            "Isin": "LU0629460089",
+            "SecurityName": "Anteile -A- UBS (Lux) Fund Solutions SICAV  - MSCI USA Socially Responsible UCITS ETF",
+            "Quantity": 220.0,
+            "PricePerUnit": 178.7,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 35311.44743,
+            "ProposalValuePercentage": 0.08424
+          },
+          {
+            "Isin": "IE00B8GKDB10",
+            "SecurityName": "Anteile Vanguard Funds PLC - FTSE All-World High Dividend Yield UCITS ETF",
+            "Quantity": 260.0,
+            "PricePerUnit": 57.5525,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 13440.20299,
+            "ProposalValuePercentage": 0.03206
+          },
+          {
+            "Isin": "IE00BM67HP23",
+            "SecurityName": "Anteile -1C- USD Xtrackers (IE) PLC  - MSCI World Consumer Discretionary UCITS ETF",
+            "Quantity": 0.0,
+            "PricePerUnit": 48.265,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 21675.57372,
+            "ProposalValuePercentage": 0.05171
+          },
+          {
+            "Isin": "IE00BCBJG560",
+            "SecurityName": "Anteile - ETF USD SSgA SPDR ETFs Europe II Plc  - SPDR MSCI World Small Cap UCITS ETF",
+            "Quantity": 100.0,
+            "PricePerUnit": 85.72,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 7699.28594,
+            "ProposalValuePercentage": 0.01837
+          },
+          {
+            "Isin": "FR0000120628",
+            "SecurityName": "Na. u. Inh. Ti.-Aktie AXA SA",
+            "Quantity": 415.0,
+            "PricePerUnit": 27.715,
+            "Currency": "EUR",
+            "TotalAmountInProposalCurrency": 11066.37385,
+            "ProposalValuePercentage": 0.0264
+          },
+          {
+            "Isin": "LU0403296170",
+            "SecurityName": "Anteile -Q-acc- UBS (Lux) Equity Fund FCP - China Opportunity (USD)",
+            "Quantity": 80.0,
+            "PricePerUnit": 160.02,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 11498.27098,
+            "ProposalValuePercentage": 0.02743
+          },
+          {
+            "Isin": "CH0582581713",
+            "SecurityName": "Namen-Aktie Dottikon ES Holding AG",
+            "Quantity": 32.0,
+            "PricePerUnit": 203.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 6496.0,
+            "ProposalValuePercentage": 0.0155
+          },
+          {
+            "Isin": "CH1176493729",
+            "SecurityName": "Namen-Aktie BACHEM HOLDING AG",
+            "Quantity": 175.0,
+            "PricePerUnit": 70.5,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 12337.5,
+            "ProposalValuePercentage": 0.02943
+          },
+          {
+            "Isin": "CH1169360919",
+            "SecurityName": "Namen-Aktie Accelleron Industries AG",
+            "Quantity": 24.0,
+            "PricePerUnit": 22.66,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 543.84,
+            "ProposalValuePercentage": 0.0013
+          },
+          {
+            "Isin": "CH1243598427",
+            "SecurityName": "Namen-Aktie Sandoz Group AG",
+            "Quantity": 24.0,
+            "PricePerUnit": 24.08,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 577.92,
+            "ProposalValuePercentage": 0.00138
+          }
+        ],
+        "AccountPositions": [
+          {
+            "AccountName": "Investitionskonto CHF",
+            "Currency": "CHF",
+            "Amount": 25300.6,
+            "TotalAmountInProposalCurrency": 7673.54316
+          }
+        ]
+      },
+      {
+        "ProposalId": 23832,
+        "PublicGuid": "563796C4-BCC5-EE11-9F6F-0050568CD8FC",
+        "PortfolioId": 41848,
+        "ProposalStatusId": 4,
+        "ProposalStatusName": "Abgelehnt",
+        "AdvisoryTypeId": 2,
+        "AdvisoryTypeName": "Investment proposal",
+        "Currency": "CHF",
+        "StrategicAssetAllocationId": 46,
+        "ProposedDateUTC": "2026-07-13T14:06:59.551076Z",
+        "Reason": "Annual review meeting",
+        "Notes": "Comment",
+        "ExpectedReturn": 0.06222,
+        "Volatility": 0.14181,
+        "ValueAtRisk": 0.14232,
+        "SecurityPositions": [
+          {
+            "Isin": "CH0010570767",
+            "SecurityName": "Partizipationsschein Chocoladefabriken Lindt & Spruengli AG",
+            "Quantity": 2.0,
+            "PricePerUnit": 11260.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 22520.0,
+            "ProposalValuePercentage": 0.0514
+          },
+          {
+            "Isin": "CH0011075394",
+            "SecurityName": "Namen-Aktie Zurich Insurance Group AG",
+            "Quantity": 33.0,
+            "PricePerUnit": 439.8,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 14513.4,
+            "ProposalValuePercentage": 0.03313
+          },
+          {
+            "Isin": "CH0012032048",
+            "SecurityName": "Genussschein Roche Holding AG",
+            "Quantity": 71.0,
+            "PricePerUnit": 230.55,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 16369.05,
+            "ProposalValuePercentage": 0.03736
+          },
+          {
+            "Isin": "CH0012005267",
+            "SecurityName": "Namen-Aktie Novartis AG",
+            "Quantity": 120.0,
+            "PricePerUnit": 90.09,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 10810.8,
+            "ProposalValuePercentage": 0.02468
+          },
+          {
+            "Isin": "CH0012221716",
+            "SecurityName": "Namen-Aktie ABB Ltd",
+            "Quantity": 480.0,
+            "PricePerUnit": 37.56,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 18028.8,
+            "ProposalValuePercentage": 0.04115
+          },
+          {
+            "Isin": "CH0012549785",
+            "SecurityName": "Namen-Aktie Sonova Holding AG",
+            "Quantity": 34.0,
+            "PricePerUnit": 278.8,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 9479.2,
+            "ProposalValuePercentage": 0.02164
+          },
+          {
+            "Isin": "CH0016440353",
+            "SecurityName": "Namen-Aktie EMS-CHEMIE HOLDING AG",
+            "Quantity": 8.0,
+            "PricePerUnit": 647.5,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 5180.0,
+            "ProposalValuePercentage": 0.01182
+          },
+          {
+            "Isin": "CH0012829898",
+            "SecurityName": "Namen-Aktie Emmi AG",
+            "Quantity": 10.0,
+            "PricePerUnit": 901.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 9010.0,
+            "ProposalValuePercentage": 0.02057
+          },
+          {
+            "Isin": "CH0002432174",
+            "SecurityName": "Namen-Aktie Bucher Industries AG",
+            "Quantity": 23.0,
+            "PricePerUnit": 374.8,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 8620.4,
+            "ProposalValuePercentage": 0.01968
+          },
+          {
+            "Isin": "CH0022427626",
+            "SecurityName": "Namen-Aktie Lem Holding SA",
+            "Quantity": 5.0,
+            "PricePerUnit": 1750.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 8750.0,
+            "ProposalValuePercentage": 0.01997
+          },
+          {
+            "Isin": "CH0025238863",
+            "SecurityName": "Namen-Aktie Kuehne + Nagel International AG",
+            "Quantity": 74.0,
+            "PricePerUnit": 290.1,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 0.0,
+            "ProposalValuePercentage": 0.0
+          },
+          {
+            "Isin": "CH0025751329",
+            "SecurityName": "Namen-Aktie Logitech International SA",
+            "Quantity": 165.0,
+            "PricePerUnit": 74.5,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 12292.5,
+            "ProposalValuePercentage": 0.02806
+          },
+          {
+            "Isin": "CH0030170408",
+            "SecurityName": "Namen-Aktie Geberit AG",
+            "Quantity": 18.0,
+            "PricePerUnit": 495.7,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 8922.6,
+            "ProposalValuePercentage": 0.02037
+          },
+          {
+            "Isin": "CH0038863350",
+            "SecurityName": "Namen-Aktie Nestle SA",
+            "Quantity": 136.0,
+            "PricePerUnit": 99.39,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 13517.04,
+            "ProposalValuePercentage": 0.03085
+          },
+          {
+            "Isin": "CH0111677362",
+            "SecurityName": "Namen-Aktie Orior AG",
+            "Quantity": 100.0,
+            "PricePerUnit": 66.6,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 6660.0,
+            "ProposalValuePercentage": 0.0152
+          },
+          {
+            "Isin": "LU0329631377",
+            "SecurityName": "Anteile -I1- Variopartner SICAV - MIV Global Medtech Fund",
+            "Quantity": 8.0,
+            "PricePerUnit": 2519.44,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 20155.52,
+            "ProposalValuePercentage": 0.04601
+          },
+          {
+            "Isin": "CH0130293662",
+            "SecurityName": "Namen-Aktie BKW AG",
+            "Quantity": 100.0,
+            "PricePerUnit": 133.4,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 13340.0,
+            "ProposalValuePercentage": 0.03045
+          },
+          {
+            "Isin": "CH0225173167",
+            "SecurityName": "Namen-Aktie Cembra Money Bank AG",
+            "Quantity": 50.0,
+            "PricePerUnit": 67.5,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 3375.0,
+            "ProposalValuePercentage": 0.0077
+          },
+          {
+            "Isin": "CH0008742519",
+            "SecurityName": "Namen-Aktie Swisscom AG",
+            "Quantity": 35.0,
+            "PricePerUnit": 505.8,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 17703.0,
+            "ProposalValuePercentage": 0.04041
+          },
+          {
+            "Isin": "CH0319416936",
+            "SecurityName": "Namen-Aktie Flughafen Zuerich AG",
+            "Quantity": 55.0,
+            "PricePerUnit": 186.9,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 10279.5,
+            "ProposalValuePercentage": 0.02346
+          },
+          {
+            "Isin": "CH0002178181",
+            "SecurityName": "Namen-Aktie Stadler Rail AG",
+            "Quantity": 240.0,
+            "PricePerUnit": 27.92,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 6700.8,
+            "ProposalValuePercentage": 0.01529
+          },
+          {
+            "Isin": "IE00B1XNHC34",
+            "SecurityName": "Anteile Exchange Traded Fund USD iShares II PLC - Global Clean Energy UCITS ETF",
+            "Quantity": 1600.0,
+            "PricePerUnit": 7.931,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 11044.51891,
+            "ProposalValuePercentage": 0.02521
+          },
+          {
+            "Isin": "IE00B53SZB19",
+            "SecurityName": "Anteile Exchange Traded Fund USD iShares VII PLC - iShares NASDAQ 100 UCITS ETF",
+            "Quantity": 35.0,
+            "PricePerUnit": 999.7,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 30453.4575,
+            "ProposalValuePercentage": 0.06951
+          },
+          {
+            "Isin": "IE00B6YX5D40",
+            "SecurityName": "Anteile - ETF USD SSgA SPDR ETFs Europe I PLC - SPDR S&P US Dividend Aristocrats UCITS ETF",
+            "Quantity": 200.0,
+            "PricePerUnit": 67.87,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 11814.2652,
+            "ProposalValuePercentage": 0.02697
+          },
+          {
+            "Isin": "LU0629460089",
+            "SecurityName": "Anteile -A- UBS (Lux) Fund Solutions SICAV  - MSCI USA Socially Responsible UCITS ETF",
+            "Quantity": 220.0,
+            "PricePerUnit": 203.35,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 61945.68954,
+            "ProposalValuePercentage": 0.14139
+          },
+          {
+            "Isin": "IE00B8GKDB10",
+            "SecurityName": "Anteile Vanguard Funds PLC - FTSE All-World High Dividend Yield UCITS ETF",
+            "Quantity": 260.0,
+            "PricePerUnit": 62.53,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 14150.13708,
+            "ProposalValuePercentage": 0.0323
+          },
+          {
+            "Isin": "IE00BCBJG560",
+            "SecurityName": "Anteile - ETF USD SSgA SPDR ETFs Europe II Plc  - SPDR MSCI World Small Cap UCITS ETF",
+            "Quantity": 100.0,
+            "PricePerUnit": 95.97,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 8352.8439,
+            "ProposalValuePercentage": 0.01907
+          },
+          {
+            "Isin": "FR0000120628",
+            "SecurityName": "Na. u. Inh. Ti.-Aktie AXA SA",
+            "Quantity": 415.0,
+            "PricePerUnit": 30.64,
+            "Currency": "EUR",
+            "TotalAmountInProposalCurrency": 11900.53253,
+            "ProposalValuePercentage": 0.02716
+          },
+          {
+            "Isin": "LU0403296170",
+            "SecurityName": "Anteile -Q-acc- UBS (Lux) Equity Fund FCP - China Opportunity (USD)",
+            "Quantity": 80.0,
+            "PricePerUnit": 140.6,
+            "Currency": "USD",
+            "TotalAmountInProposalCurrency": 18355.89016,
+            "ProposalValuePercentage": 0.0419
+          },
+          {
+            "Isin": "CH0582581713",
+            "SecurityName": "Namen-Aktie Dottikon ES Holding AG",
+            "Quantity": 32.0,
+            "PricePerUnit": 230.0,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 7360.0,
+            "ProposalValuePercentage": 0.0168
+          },
+          {
+            "Isin": "CH1176493729",
+            "SecurityName": "Namen-Aktie BACHEM HOLDING AG",
+            "Quantity": 175.0,
+            "PricePerUnit": 58.75,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 10281.25,
+            "ProposalValuePercentage": 0.02347
+          },
+          {
+            "Isin": "CH1169360919",
+            "SecurityName": "Namen-Aktie Accelleron Industries AG",
+            "Quantity": 24.0,
+            "PricePerUnit": 29.3,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 703.2,
+            "ProposalValuePercentage": 0.00161
+          },
+          {
+            "Isin": "CH1243598427",
+            "SecurityName": "Namen-Aktie Sandoz Group AG",
+            "Quantity": 24.0,
+            "PricePerUnit": 28.46,
+            "Currency": "CHF",
+            "TotalAmountInProposalCurrency": 683.04,
+            "ProposalValuePercentage": 0.00156
+          }
+        ],
+        "AccountPositions": [
+          {
+            "AccountName": "Investitionskonto CHF",
+            "Currency": "CHF",
+            "Amount": 24949.98,
+            "TotalAmountInProposalCurrency": 14842.89895
+          }
+        ]
+      }
+    ],
+    "Transactions": [
+      {
+        "TransactionId": 16290,
+        "PublicGuid": "60DFD103-8381-EB11-8132-40F2E9C846E4",
+        "ProposalId": 1774,
+        "SecurityId": 8409,
+        "Isin": "IE00B53SZB19",
+        "SecurityName": "Anteile Exchange Traded Fund USD iShares VII PLC - iShares NASDAQ 100 UCITS ETF",
+        "QuantityForTransaction": 25.0,
+        "Currency": "USD",
+        "TotalAmount": 16677.35132,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 16292,
+        "PublicGuid": "B03C6247-8381-EB11-8132-40F2E9C846E4",
+        "ProposalId": 1774,
+        "SecurityId": 18438,
+        "Isin": "LU0403296170",
+        "SecurityName": "Anteile -Q-acc- UBS (Lux) Equity Fund FCP - China Opportunity (USD)",
+        "QuantityForTransaction": 80.0,
+        "Currency": "USD",
+        "TotalAmount": 21966.16217,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 16294,
+        "PublicGuid": "4B279260-8381-EB11-8132-40F2E9C846E4",
+        "ProposalId": 1774,
+        "SecurityId": 8735,
+        "Isin": "LU0629460089",
+        "SecurityName": "Anteile -A- UBS (Lux) Fund Solutions SICAV  - MSCI USA Socially Responsible UCITS ETF",
+        "QuantityForTransaction": 155.0,
+        "Currency": "USD",
+        "TotalAmount": 23364.27238,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 16300,
+        "PublicGuid": "9EAF5DDF-8381-EB11-8132-40F2E9C846E4",
+        "ProposalId": 1774,
+        "SecurityId": 11266,
+        "Isin": "IE00B5M1WJ87",
+        "SecurityName": "Anteile -ETF EUR- SSGA SPDR ETFs Europe I PLC  - SPDR S&P Euro Dividend Aristocrats UCITS ETF",
+        "QuantityForTransaction": -1000.0,
+        "Currency": "EUR",
+        "TotalAmount": -24102.50746,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 16301,
+        "PublicGuid": "5156B601-8481-EB11-8132-40F2E9C846E4",
+        "ProposalId": 1774,
+        "SecurityId": 347,
+        "Isin": "CH0019396990",
+        "SecurityName": "Namen-Aktie Ypsomed Holding AG",
+        "QuantityForTransaction": -53.0,
+        "Currency": "CHF",
+        "TotalAmount": -8310.4,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 16302,
+        "PublicGuid": "F224A638-8481-EB11-8132-40F2E9C846E4",
+        "ProposalId": 1774,
+        "SecurityId": 8150,
+        "Isin": "IE00B1XNHC34",
+        "SecurityName": "Anteile Exchange Traded Fund USD iShares II PLC - Global Clean Energy UCITS ETF",
+        "QuantityForTransaction": 1600.0,
+        "Currency": "USD",
+        "TotalAmount": 20487.77768,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 28422,
+        "PublicGuid": "08FB608C-17C9-EB11-813E-40F2E9C846E4",
+        "ProposalId": 3546,
+        "SecurityId": 11675,
+        "Isin": "DE0007100000",
+        "SecurityName": "Namen-Aktie Mercedes-Benz Group AG",
+        "QuantityForTransaction": -155.0,
+        "Currency": "EUR",
+        "TotalAmount": -13366.94143,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 28424,
+        "PublicGuid": "4B2A38CA-17C9-EB11-813E-40F2E9C846E4",
+        "ProposalId": 3546,
+        "SecurityId": 9173,
+        "Isin": "IE00BCBJG560",
+        "SecurityName": "Anteile - ETF USD SSgA SPDR ETFs Europe II Plc  - SPDR MSCI World Small Cap UCITS ETF",
+        "QuantityForTransaction": 200.0,
+        "Currency": "USD",
+        "TotalAmount": 19057.39358,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 42846,
+        "PublicGuid": "D8E57C53-7310-EC11-814A-40F2E9C846E4",
+        "ProposalId": 5425,
+        "SecurityId": 2068,
+        "Isin": "CH0225173167",
+        "SecurityName": "Namen-Aktie Cembra Money Bank AG",
+        "QuantityForTransaction": 150.0,
+        "Currency": "CHF",
+        "TotalAmount": 10095.0,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 42847,
+        "PublicGuid": "B2CFA368-7310-EC11-814A-40F2E9C846E4",
+        "ProposalId": 5425,
+        "SecurityId": 9173,
+        "Isin": "IE00BCBJG560",
+        "SecurityName": "Anteile - ETF USD SSgA SPDR ETFs Europe II Plc  - SPDR MSCI World Small Cap UCITS ETF",
+        "QuantityForTransaction": 100.0,
+        "Currency": "USD",
+        "TotalAmount": 9882.20376,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 42850,
+        "PublicGuid": "8DFF8CDB-7310-EC11-814A-40F2E9C846E4",
+        "ProposalId": 5425,
+        "SecurityId": 307,
+        "Isin": "CH0016440353",
+        "SecurityName": "Namen-Aktie EMS-CHEMIE HOLDING AG",
+        "QuantityForTransaction": -8.0,
+        "Currency": "CHF",
+        "TotalAmount": -7852.0,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 42851,
+        "PublicGuid": "4D6F67E8-7310-EC11-814A-40F2E9C846E4",
+        "ProposalId": 5425,
+        "SecurityId": 20193,
+        "Isin": "CH0542483745",
+        "SecurityName": "Namen-Aktie V-ZUG Holding AG",
+        "QuantityForTransaction": 100.0,
+        "Currency": "CHF",
+        "TotalAmount": 14200.0,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 54748,
+        "PublicGuid": "A9552DB8-0558-EC11-8157-40F2E9C846E4",
+        "ProposalId": 7427,
+        "SecurityId": 4908,
+        "Isin": "CH0418792922",
+        "SecurityName": "Namen-Aktie Sika AG",
+        "QuantityForTransaction": 55.0,
+        "Currency": "CHF",
+        "TotalAmount": 20570.0,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 54750,
+        "PublicGuid": "727F8BD2-0558-EC11-8157-40F2E9C846E4",
+        "ProposalId": 7427,
+        "SecurityId": 375,
+        "Isin": "CH0002432174",
+        "SecurityName": "Namen-Aktie Bucher Industries AG",
+        "QuantityForTransaction": -23.0,
+        "Currency": "CHF",
+        "TotalAmount": -10133.8,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 54751,
+        "PublicGuid": "74DA69DB-0558-EC11-8157-40F2E9C846E4",
+        "ProposalId": 7427,
+        "SecurityId": 195,
+        "Isin": "CH0010675863",
+        "SecurityName": "Namen-Aktie Swissquote Group Holding SA",
+        "QuantityForTransaction": 80.0,
+        "Currency": "CHF",
+        "TotalAmount": 14768.0,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 54752,
+        "PublicGuid": "8C218120-0658-EC11-8157-40F2E9C846E4",
+        "ProposalId": 7427,
+        "SecurityId": 524,
+        "Isin": "CH0030170408",
+        "SecurityName": "Namen-Aktie Geberit AG",
+        "QuantityForTransaction": -18.0,
+        "Currency": "CHF",
+        "TotalAmount": -13287.6,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 66044,
+        "PublicGuid": "1FA239DC-2E9E-EC11-815F-40F2E9C846E4",
+        "ProposalId": 9247,
+        "SecurityId": 9173,
+        "Isin": "IE00BCBJG560",
+        "SecurityName": "Anteile - ETF USD SSgA SPDR ETFs Europe II Plc  - SPDR MSCI World Small Cap UCITS ETF",
+        "QuantityForTransaction": 100.0,
+        "Currency": "USD",
+        "TotalAmount": 8638.53905,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 77717,
+        "PublicGuid": "4E7143D4-6CE6-EC11-9F61-0050568CD8FC",
+        "ProposalId": 11063,
+        "SecurityId": 25876,
+        "Isin": "CH0582581713",
+        "SecurityName": "Namen-Aktie Dottikon ES Holding AG",
+        "QuantityForTransaction": -32.0,
+        "Currency": "CHF",
+        "TotalAmount": -8192.0,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 77720,
+        "PublicGuid": "F6A564F6-6CE6-EC11-9F61-0050568CD8FC",
+        "ProposalId": 11063,
+        "SecurityId": 307,
+        "Isin": "CH0016440353",
+        "SecurityName": "Namen-Aktie EMS-CHEMIE HOLDING AG",
+        "QuantityForTransaction": 9.0,
+        "Currency": "CHF",
+        "TotalAmount": 7299.0,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 77723,
+        "PublicGuid": "0424EB1F-6DE6-EC11-9F61-0050568CD8FC",
+        "ProposalId": 11063,
+        "SecurityId": 1049,
+        "Isin": "CH0111677362",
+        "SecurityName": "Namen-Aktie Orior AG",
+        "QuantityForTransaction": -100.0,
+        "Currency": "CHF",
+        "TotalAmount": -7940.0,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 77724,
+        "PublicGuid": "0624EB1F-6DE6-EC11-9F61-0050568CD8FC",
+        "ProposalId": 11063,
+        "SecurityId": 2068,
+        "Isin": "CH0225173167",
+        "SecurityName": "Namen-Aktie Cembra Money Bank AG",
+        "QuantityForTransaction": 130.0,
+        "Currency": "CHF",
+        "TotalAmount": 8606.0,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 77725,
+        "PublicGuid": "640DA83E-6DE6-EC11-9F61-0050568CD8FC",
+        "ProposalId": 11063,
+        "SecurityId": 3507,
+        "Isin": "CH0319416936",
+        "SecurityName": "Namen-Aktie Flughafen Zuerich AG",
+        "QuantityForTransaction": -55.0,
+        "Currency": "CHF",
+        "TotalAmount": -8860.5,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 77730,
+        "PublicGuid": "9855A727-6EE6-EC11-9F61-0050568CD8FC",
+        "ProposalId": 11063,
+        "SecurityId": 8882,
+        "Isin": "IE00B8GKDB10",
+        "SecurityName": "Anteile Vanguard Funds PLC - FTSE All-World High Dividend Yield UCITS ETF",
+        "QuantityForTransaction": 140.0,
+        "Currency": "USD",
+        "TotalAmount": 8347.98094,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 88466,
+        "PublicGuid": "4B51B230-C42D-ED11-9F65-0050568CD8FC",
+        "ProposalId": 12807,
+        "SecurityId": 9173,
+        "Isin": "IE00BCBJG560",
+        "SecurityName": "Anteile - ETF USD SSgA SPDR ETFs Europe II Plc  - SPDR MSCI World Small Cap UCITS ETF",
+        "QuantityForTransaction": 130.0,
+        "Currency": "USD",
+        "TotalAmount": 10800.86198,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 88480,
+        "PublicGuid": "E2456112-C82D-ED11-9F65-0050568CD8FC",
+        "ProposalId": 12807,
+        "SecurityId": 465,
+        "Isin": "CH0025238863",
+        "SecurityName": "Namen-Aktie Kuehne + Nagel International AG",
+        "QuantityForTransaction": -74.0,
+        "Currency": "CHF",
+        "TotalAmount": -16028.4,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 88481,
+        "PublicGuid": "36BADA1B-C82D-ED11-9F65-0050568CD8FC",
+        "ProposalId": 12807,
+        "SecurityId": 264,
+        "Isin": "CH0012005267",
+        "SecurityName": "Namen-Aktie Novartis AG",
+        "QuantityForTransaction": 130.0,
+        "Currency": "CHF",
+        "TotalAmount": 10376.6,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 100200,
+        "PublicGuid": "5338EA11-4375-ED11-9F67-0050568CD8FC",
+        "ProposalId": 14627,
+        "SecurityId": 435,
+        "Isin": "CH0022427626",
+        "SecurityName": "Namen-Aktie Lem Holding SA",
+        "QuantityForTransaction": -5.0,
+        "Currency": "CHF",
+        "TotalAmount": -9710.0,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 100201,
+        "PublicGuid": "42786D21-4375-ED11-9F67-0050568CD8FC",
+        "ProposalId": 14627,
+        "SecurityId": 264,
+        "Isin": "CH0012005267",
+        "SecurityName": "Namen-Aktie Novartis AG",
+        "QuantityForTransaction": 140.0,
+        "Currency": "CHF",
+        "TotalAmount": 12012.0,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 100202,
+        "PublicGuid": "F1AE902F-4375-ED11-9F67-0050568CD8FC",
+        "ProposalId": 14627,
+        "SecurityId": 307,
+        "Isin": "CH0016440353",
+        "SecurityName": "Namen-Aktie EMS-CHEMIE HOLDING AG",
+        "QuantityForTransaction": 12.0,
+        "Currency": "CHF",
+        "TotalAmount": 7986.0,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 112423,
+        "PublicGuid": "91B5D251-5CBE-ED11-9F67-0050568CD8FC",
+        "ProposalId": 16446,
+        "SecurityId": 465,
+        "Isin": "CH0025238863",
+        "SecurityName": "Namen-Aktie Kuehne + Nagel International AG",
+        "QuantityForTransaction": -74.0,
+        "Currency": "CHF",
+        "TotalAmount": -18374.2,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 112424,
+        "PublicGuid": "F7E9175D-5CBE-ED11-9F67-0050568CD8FC",
+        "ProposalId": 16446,
+        "SecurityId": 8735,
+        "Isin": "LU0629460089",
+        "SecurityName": "Anteile -A- UBS (Lux) Fund Solutions SICAV  - MSCI USA Socially Responsible UCITS ETF",
+        "QuantityForTransaction": 170.0,
+        "Currency": "USD",
+        "TotalAmount": 25498.43491,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 124372,
+        "PublicGuid": "8B40E1BA-0805-EE11-9F69-0050568CD8FC",
+        "ProposalId": 18402,
+        "SecurityId": 465,
+        "Isin": "CH0025238863",
+        "SecurityName": "Namen-Aktie Kuehne + Nagel International AG",
+        "QuantityForTransaction": -74.0,
+        "Currency": "CHF",
+        "TotalAmount": -18884.8,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 124383,
+        "PublicGuid": "D3D8D655-0905-EE11-9F69-0050568CD8FC",
+        "ProposalId": 18402,
+        "SecurityId": 1288,
+        "Isin": "CH0130293662",
+        "SecurityName": "Namen-Aktie BKW AG",
+        "QuantityForTransaction": -100.0,
+        "Currency": "CHF",
+        "TotalAmount": -14340.0,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 124440,
+        "PublicGuid": "6D011EB0-0E05-EE11-9F69-0050568CD8FC",
+        "ProposalId": 18402,
+        "SecurityId": 9313,
+        "Isin": "IE00BYTRR970",
+        "SecurityName": "Anteile USD SSgA SPDR ETFs Europe II PLC - SPDR MSCI World Financials UCITS ETF",
+        "QuantityForTransaction": 500.0,
+        "Currency": "USD",
+        "TotalAmount": 22658.76799,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 124443,
+        "PublicGuid": "516E02CD-0E05-EE11-9F69-0050568CD8FC",
+        "ProposalId": 18402,
+        "SecurityId": 9108,
+        "Isin": "IE00BM67HP23",
+        "SecurityName": "Anteile -1C- USD Xtrackers (IE) PLC  - MSCI World Consumer Discretionary UCITS ETF",
+        "QuantityForTransaction": 520.0,
+        "Currency": "USD",
+        "TotalAmount": 22479.27732,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 124470,
+        "PublicGuid": "1A53EBB1-1405-EE11-9F69-0050568CD8FC",
+        "ProposalId": 18402,
+        "SecurityId": 435,
+        "Isin": "CH0022427626",
+        "SecurityName": "Namen-Aktie Lem Holding SA",
+        "QuantityForTransaction": -5.0,
+        "Currency": "CHF",
+        "TotalAmount": -10525.0,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 124471,
+        "PublicGuid": "256C3CC9-1405-EE11-9F69-0050568CD8FC",
+        "ProposalId": 18402,
+        "SecurityId": 18438,
+        "Isin": "LU0403296170",
+        "SecurityName": "Anteile -Q-acc- UBS (Lux) Equity Fund FCP - China Opportunity (USD)",
+        "QuantityForTransaction": 70.0,
+        "Currency": "USD",
+        "TotalAmount": 10360.97871,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 137393,
+        "PublicGuid": "47EE0B1D-454E-EE11-9F6A-0050568CD8FC",
+        "ProposalId": 20516,
+        "SecurityId": 465,
+        "Isin": "CH0025238863",
+        "SecurityName": "Namen-Aktie Kuehne + Nagel International AG",
+        "QuantityForTransaction": -74.0,
+        "Currency": "CHF",
+        "TotalAmount": -17797.0,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 137394,
+        "PublicGuid": "49EE0B1D-454E-EE11-9F6A-0050568CD8FC",
+        "ProposalId": 20516,
+        "SecurityId": 267,
+        "Isin": "CH0012221716",
+        "SecurityName": "Namen-Aktie ABB Ltd",
+        "QuantityForTransaction": -480.0,
+        "Currency": "CHF",
+        "TotalAmount": -15019.2,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 137396,
+        "PublicGuid": "62753B5C-454E-EE11-9F6A-0050568CD8FC",
+        "ProposalId": 20516,
+        "SecurityId": 9108,
+        "Isin": "IE00BM67HP23",
+        "SecurityName": "Anteile -1C- USD Xtrackers (IE) PLC  - MSCI World Consumer Discretionary UCITS ETF",
+        "QuantityForTransaction": 500.0,
+        "Currency": "USD",
+        "TotalAmount": 21675.57372,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 137401,
+        "PublicGuid": "B954EF7B-454E-EE11-9F6A-0050568CD8FC",
+        "ProposalId": 20516,
+        "SecurityId": 8449,
+        "Isin": "IE00B5BMR087",
+        "SecurityName": "Anteile Exchange Traded Fund USD iShares VII PLC - iShares Core S&P 500 UCITS ETF",
+        "QuantityForTransaction": 70.0,
+        "Currency": "USD",
+        "TotalAmount": 28767.68312,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 157798,
+        "PublicGuid": "44259D6A-BFC5-EE11-9F6F-0050568CD8FC",
+        "ProposalId": 23832,
+        "SecurityId": 465,
+        "Isin": "CH0025238863",
+        "SecurityName": "Namen-Aktie Kuehne + Nagel International AG",
+        "QuantityForTransaction": -74.0,
+        "Currency": "CHF",
+        "TotalAmount": -21467.4,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 157799,
+        "PublicGuid": "B590E2F3-BFC5-EE11-9F6F-0050568CD8FC",
+        "ProposalId": 23832,
+        "SecurityId": 8735,
+        "Isin": "LU0629460089",
+        "SecurityName": "Anteile -A- UBS (Lux) Fund Solutions SICAV  - MSCI USA Socially Responsible UCITS ETF",
+        "QuantityForTransaction": 130.0,
+        "Currency": "USD",
+        "TotalAmount": 23008.39897,
+        "IsExpiry": false
+      },
+      {
+        "TransactionId": 157801,
+        "PublicGuid": "68E2357A-C1C5-EE11-9F6F-0050568CD8FC",
+        "ProposalId": 23832,
+        "SecurityId": 18438,
+        "Isin": "LU0403296170",
+        "SecurityName": "Anteile -Q-acc- UBS (Lux) Equity Fund FCP - China Opportunity (USD)",
+        "QuantityForTransaction": 70.0,
+        "Currency": "USD",
+        "TotalAmount": 8566.08207,
+        "IsExpiry": false
+      }
+    ],
+    "SuitabilityViolations": [
+      {
+        "Id": 605587,
+        "RuleCode": "Underweight in the equity sector \"Consumer Discretionary\"",
+        "RuleDescription": "Untergewicht (+/- 5% zum SAA-Sollwert der Benchmark) im Aktiensektor \"Nicht-Basiskonsumgüter\"",
+        "ErrorLevel": 1,
+        "Severity": "Warning",
+        "PortfolioId": 41848,
+        "ViolationPath": [
+          {
+            "FieldName": "RegulatoryClientTypeRuleField`1",
+            "LeftValue": 13.0,
+            "RightValue": 13.0,
+            "Operator": 10
+          },
+          {
+            "FieldName": "SimulationFilterTopLevelSAAAssetClassRuleField",
+            "LeftValue": 50000.0,
+            "RightValue": 50000.0,
+            "Operator": 10
+          },
+          {
+            "FieldName": "SimulationPositionCollectionPortfolioValueRuleField",
+            "LeftValue": 1.0,
+            "RightValue": 0.0,
+            "Operator": 40
+          },
+          {
+            "FieldName": "SimulationFilterTopLevelSAAIndustryRuleField",
+            "LeftValue": 56.0,
+            "RightValue": 56.0,
+            "Operator": 10
+          },
+          {
+            "FieldName": "SimulationPositionCollectionPortfolioValueRuleField",
+            "LeftValue": 0.036589346126541314,
+            "RightValue": 0.039,
+            "Operator": 50
+          },
+          {
+            "FieldName": "SimulationPositionCollectionPortfolioValueRuleField",
+            "LeftValue": 0.036589346126541314,
+            "RightValue": -0.011,
+            "Operator": 60
+          }
+        ]
+      },
+      {
+        "Id": 860605,
+        "RuleCode": "Volatility range undershot (portfolio risk too low)",
+        "RuleDescription": "",
+        "ErrorLevel": 2,
+        "Severity": "Error",
+        "PortfolioId": 41848,
+        "LastViolatedDateUTC": "2026-09-03T11:27:42.23Z",
+        "ViolationPath": [
+          {
+            "FieldName": "RegulatoryClientTypeRuleField`1",
+            "LeftValue": 13.0,
+            "RightValue": 13.0,
+            "Operator": 10
+          },
+          {
+            "FieldName": "SimulationVolatilityRuleField`1",
+            "LeftValue": 0.114383123858,
+            "RightValue": 0.135,
+            "Operator": 30
+          }
+        ]
+      },
+      {
+        "Id": 860606,
+        "RuleCode": "Overweight in the equity region \"Switzerland\"",
+        "RuleDescription": "Übergewicht (+/- 5% zum SAA-Sollwert der Benchmark) in der Aktienregion \"Schweiz\"",
+        "ErrorLevel": 1,
+        "Severity": "Warning",
+        "PortfolioId": 41848,
+        "ViolationPath": [
+          {
+            "FieldName": "RegulatoryClientTypeRuleField`1",
+            "LeftValue": 13.0,
+            "RightValue": 13.0,
+            "Operator": 10
+          },
+          {
+            "FieldName": "GenericSimulationFilterNumericRuleField",
+            "LeftValue": 1.0,
+            "RightValue": 1.0,
+            "Operator": 10
+          },
+          {
+            "FieldName": "SimulationPositionCollectionPortfolioValueRuleField",
+            "LeftValue": 0.5669266656925024,
+            "RightValue": 0.616,
+            "Operator": 50
+          },
+          {
+            "FieldName": "SimulationPositionCollectionPortfolioValueRuleField",
+            "LeftValue": 0.5669266656925024,
+            "RightValue": 0.566,
+            "Operator": 60
+          }
+        ]
+      },
+      {
+        "Id": 860607,
+        "RuleCode": "Overweight in the equity sector \"Industrials\"",
+        "RuleDescription": "Übergewicht (+/- 5% zum SAA-Sollwert der Benchmark) im Aktiensektor \"Industrie\"",
+        "ErrorLevel": 1,
+        "Severity": "Warning",
+        "PortfolioId": 41848,
+        "ViolationPath": [
+          {
+            "FieldName": "RegulatoryClientTypeRuleField`1",
+            "LeftValue": 13.0,
+            "RightValue": 13.0,
+            "Operator": 10
+          },
+          {
+            "FieldName": "SimulationFilterTopLevelSAAIndustryRuleField",
+            "LeftValue": 55.0,
+            "RightValue": 55.0,
+            "Operator": 10
+          },
+          {
+            "FieldName": "SimulationPositionCollectionPortfolioValueRuleField",
+            "LeftValue": 0.17225515488420148,
+            "RightValue": 0.197,
+            "Operator": 50
+          },
+          {
+            "FieldName": "SimulationPositionCollectionPortfolioValueRuleField",
+            "LeftValue": 0.17225515488420148,
+            "RightValue": 0.147,
+            "Operator": 60
+          }
+        ]
+      }
+    ],
+    "IndividualRuleOverrides": null,
+    "ClientNotes": [
+      {
+        "Note": "Wants to buy and invest in electric vehicles",
+        "CreatedByDateUTC": "2026-09-19T09:20:50"
+      },
+      {
+        "Note": "Mentioned he'd rather not be bothered with day-to-day updates -- 'the portfolio abides.'",
+        "CreatedByDateUTC": "2026-08-07T09:20:50"
+      },
+      {
+        "Note": "Was informed of the risks of structured products and explicitly accepts them.",
+        "CreatedByDateUTC": "2026-05-31T11:48:20"
+      },
+      {
+        "Note": "Asked that all correspondence stay brief and infrequent.",
+        "CreatedByDateUTC": "2025-12-17T09:20:50"
+      },
+      {
+        "Note": "Extremely low-maintenance; prefers minimal contact and a hands-off approach.",
+        "CreatedByDateUTC": "2025-02-27T09:20:50"
+      },
+      {
+        "Note": "Very relaxed about short-term volatility, unconcerned with market timing.",
+        "CreatedByDateUTC": "2025-01-14T09:20:50"
+      }
+    ],
+    "Tags": [
+      {
+        "TagName": "Rest of Europe",
+        "TagTypeName": "Region",
+        "Scope": "Client"
+      },
+      {
+        "TagName": "Latin America",
+        "TagTypeName": "Region",
+        "Scope": "Client"
+      },
+      {
+        "TagName": "Consumer Staples",
+        "TagTypeName": "Industry",
+        "Scope": "Client"
+      },
+      {
+        "TagName": "Industrials",
+        "TagTypeName": "Industry",
+        "Scope": "Client"
+      }
+    ]
+  }
+]

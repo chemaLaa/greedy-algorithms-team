@@ -1,0 +1,472 @@
+[
+  {
+    "ClientId": -900010,
+    "ClientRef": "CASE-050",
+    "FirstName": "Jordan",
+    "LastName": "Belfort",
+    "Company": null,
+    "IsClientACompany": false,
+    "IsEmployee": false,
+    "RegulatoryClientTypeId": 13,
+    "RegulatoryClientTypeName": "Private client",
+    "ReportingCurrency": "CHF",
+    "RiskProfileId": 19,
+    "RiskProfileName": "Anlageprofil 7",
+    "EsgProfileId": 2,
+    "EsgProfileName": "No",
+    "Birthday": "1970-03-15",
+    "ProfilingDateUtc": "2024-03-15T09:00:00+01:00",
+    "AssetsUnderManagementInDefaultCurrency": 500000.0,
+    "LiquidityInDefaultCurrency": 50000.0,
+    "Portfolios": [
+      {
+        "PortfolioId": -900011,
+        "PublicGuid": "AB2B3C23-6561-4905-A1D9-4A5AA9477D46",
+        "PortfolioNr": "CASE-050-01",
+        "Name": "Anlageberatung",
+        "PortfolioCurrency": "CHF",
+        "StrategicAssetAllocationId": 46,
+        "InvestmentServiceId": 9,
+        "InvestmentServiceName": "Investment Advisory",
+        "StrategyId": 7,
+        "StrategyName": "Investor profile 7",
+        "ReferenceCurrency": "CHF",
+        "AssetsUnderManagementInDefaultCurrency": 500000.0,
+        "LiquidityInDefaultCurrency": 50000.0,
+        "Volatility": 0.17169,
+        "ExpectedReturn": 0.082,
+        "ValueAtRisk": 0.19,
+        "FactoryDateUtc": "2026-09-03T11:27:42.1993343Z",
+        "SecurityPositions": [
+          {
+            "SecurityId": 9033,
+            "Isin": "US02079K3059",
+            "Valor": "29798540",
+            "SecurityName": "Namen-Aktie -A- Alphabet Inc",
+            "Quantity": 305,
+            "PricePerUnit": 335.02,
+            "Currency": "USD",
+            "TotalAmountInPortfolioCurrency": 90000.0,
+            "PortfolioValuePercentage": 0.18,
+            "MarginalContributionToRisk": 0.22,
+            "ContributionVolatility": 0.0396
+          },
+          {
+            "SecurityId": 11208,
+            "Isin": "NL0010273215",
+            "Valor": "19531091",
+            "SecurityName": "Na. u. Inh. Ti.-Aktie ASML Holding NV",
+            "Quantity": 59,
+            "PricePerUnit": 1435.4,
+            "Currency": "EUR",
+            "TotalAmountInPortfolioCurrency": 80000.0,
+            "PortfolioValuePercentage": 0.16,
+            "MarginalContributionToRisk": 0.28,
+            "ContributionVolatility": 0.0448
+          },
+          {
+            "SecurityId": 7906,
+            "Isin": "US68389X1054",
+            "Valor": "959184",
+            "SecurityName": "Namen-Aktie Oracle Corp",
+            "Quantity": 764,
+            "PricePerUnit": 141.32,
+            "Currency": "USD",
+            "TotalAmountInPortfolioCurrency": 95000.0,
+            "PortfolioValuePercentage": 0.19,
+            "MarginalContributionToRisk": 0.18,
+            "ContributionVolatility": 0.0342
+          },
+          {
+            "SecurityId": 49496,
+            "Isin": "US91282CDB46",
+            "Valor": "114092094",
+            "SecurityName": "0.625 % Vereinigte Staaten von Amerika 2021-02.08.27 Series AT-2024",
+            "Quantity": 85000.0,
+            "PricePerUnit": 0.9773,
+            "Currency": "USD",
+            "TotalAmountInPortfolioCurrency": 75000.0,
+            "PortfolioValuePercentage": 0.15,
+            "MarginalContributionToRisk": 0.0436,
+            "ContributionVolatility": 0.00654
+          },
+          {
+            "SecurityId": 7830,
+            "Isin": "US5949181045",
+            "Valor": "951692",
+            "SecurityName": "Namen-Aktie Microsoft Corp",
+            "Quantity": 45.0,
+            "PricePerUnit": 501.02,
+            "Currency": "USD",
+            "TotalAmountInPortfolioCurrency": 20000.0,
+            "PortfolioValuePercentage": 0.04,
+            "MarginalContributionToRisk": 0.2,
+            "ContributionVolatility": 0.008
+          },
+          {
+            "SecurityId": 8442,
+            "Isin": "US88160R1014",
+            "Valor": "11448018",
+            "SecurityName": "Namen-Aktie Tesla Motors Inc",
+            "Quantity": 56.0,
+            "PricePerUnit": 356.09,
+            "Currency": "USD",
+            "TotalAmountInPortfolioCurrency": 17500.0,
+            "PortfolioValuePercentage": 0.035,
+            "MarginalContributionToRisk": 0.35,
+            "ContributionVolatility": 0.01225
+          },
+          {
+            "SecurityId": 7839,
+            "Isin": "US0378331005",
+            "Valor": "908440",
+            "SecurityName": "Namen-Aktie Apple Inc",
+            "Quantity": 52.0,
+            "PricePerUnit": 325.13,
+            "Currency": "USD",
+            "TotalAmountInPortfolioCurrency": 15000.0,
+            "PortfolioValuePercentage": 0.03,
+            "MarginalContributionToRisk": 0.19,
+            "ContributionVolatility": 0.0057
+          },
+          {
+            "SecurityId": 8817,
+            "Isin": "US0231351067",
+            "Valor": "645156",
+            "SecurityName": "Namen-Aktie Amazon.Com Inc",
+            "Quantity": 67.0,
+            "PricePerUnit": 254.92,
+            "Currency": "USD",
+            "TotalAmountInPortfolioCurrency": 15000.0,
+            "PortfolioValuePercentage": 0.03,
+            "MarginalContributionToRisk": 0.24,
+            "ContributionVolatility": 0.0072
+          },
+          {
+            "SecurityId": 7805,
+            "Isin": "DK0060534915",
+            "Valor": "23159222",
+            "SecurityName": "Namen-Aktie Novo Nordisk A/S",
+            "Quantity": 72.0,
+            "PricePerUnit": 1373.33185,
+            "Currency": "DKK",
+            "TotalAmountInPortfolioCurrency": 12500.0,
+            "PortfolioValuePercentage": 0.025,
+            "MarginalContributionToRisk": 0.15,
+            "ContributionVolatility": 0.00375
+          },
+          {
+            "SecurityId": 10635,
+            "Isin": "DE0007164600",
+            "Valor": "345952",
+            "SecurityName": "Inhaber-Aktie SAP SE",
+            "Quantity": 71.0,
+            "PricePerUnit": 184.26,
+            "Currency": "EUR",
+            "TotalAmountInPortfolioCurrency": 12500.0,
+            "PortfolioValuePercentage": 0.025,
+            "MarginalContributionToRisk": 0.17,
+            "ContributionVolatility": 0.00425
+          },
+          {
+            "SecurityId": 7776,
+            "Isin": "US7960508882",
+            "Valor": "381611",
+            "SecurityName": "Namen-Aktie Samsung Electronics Co Ltd Sponsored Global Deposit Receipt Repr 1/2 Sh",
+            "Quantity": 2.0,
+            "PricePerUnit": 4608.0,
+            "Currency": "USD",
+            "TotalAmountInPortfolioCurrency": 10000.0,
+            "PortfolioValuePercentage": 0.02,
+            "MarginalContributionToRisk": 0.21,
+            "ContributionVolatility": 0.0042
+          },
+          {
+            "SecurityId": 644,
+            "Isin": "CH0038863350",
+            "Valor": "3886335",
+            "SecurityName": "Namen-Aktie Nestle SA",
+            "Quantity": 96.0,
+            "PricePerUnit": 78.51,
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 7500.0,
+            "PortfolioValuePercentage": 0.015,
+            "MarginalContributionToRisk": 0.08,
+            "ContributionVolatility": 0.0012
+          }
+        ],
+        "AccountPositions": [
+          {
+            "AccountName": "Investitionskonto CHF",
+            "Currency": "CHF",
+            "TotalAmountInPortfolioCurrency": 50000.0,
+            "PortfolioValuePercentage": 0.1,
+            "MarginalContributionToRisk": 0.0,
+            "ContributionVolatility": 0.0
+          }
+        ],
+        "PerformanceHistory": []
+      }
+    ],
+    "Proposals": [],
+    "Transactions": [],
+    "SuitabilityViolations": [
+      {
+        "Id": -900101,
+        "RuleCode": "Cluster risk of a single financial instrument",
+        "RuleDescription": "Fuer Privatkunden mit Finanzdienstleistung Umfassende Anlageberatung oder trx basierte Anlageberatung muss Einzeltitel Anteil < x% sein (x variiert mit Instrument Typ)",
+        "ErrorLevel": 2,
+        "Severity": "Error",
+        "PortfolioId": -900011,
+        "SecurityIsin": "US02079K3059",
+        "LastViolatedDateUTC": "2026-09-19T08:00:00Z",
+        "ViolationPath": [
+          {
+            "FieldName": "RegulatoryClientTypeRuleField`1",
+            "LeftValue": 13.0,
+            "RightValue": 13.0,
+            "Operator": 10
+          },
+          {
+            "FieldName": "PositionIsSecurityRuleField`1",
+            "LeftValue": true,
+            "RightValue": true,
+            "Operator": 10
+          },
+          {
+            "FieldName": "PositionPortfolioValueRuleField`1",
+            "LeftValue": 0.18,
+            "RightValue": 0.15,
+            "Operator": 40
+          }
+        ]
+      },
+      {
+        "Id": -900102,
+        "RuleCode": "Cluster risk of a single financial instrument",
+        "RuleDescription": "Fuer Privatkunden mit Finanzdienstleistung Umfassende Anlageberatung oder trx basierte Anlageberatung muss Einzeltitel Anteil < x% sein (x variiert mit Instrument Typ)",
+        "ErrorLevel": 2,
+        "Severity": "Error",
+        "PortfolioId": -900011,
+        "SecurityIsin": "NL0010273215",
+        "LastViolatedDateUTC": "2026-09-19T08:00:00Z",
+        "ViolationPath": [
+          {
+            "FieldName": "RegulatoryClientTypeRuleField`1",
+            "LeftValue": 13.0,
+            "RightValue": 13.0,
+            "Operator": 10
+          },
+          {
+            "FieldName": "PositionIsSecurityRuleField`1",
+            "LeftValue": true,
+            "RightValue": true,
+            "Operator": 10
+          },
+          {
+            "FieldName": "PositionPortfolioValueRuleField`1",
+            "LeftValue": 0.16,
+            "RightValue": 0.15,
+            "Operator": 40
+          }
+        ]
+      },
+      {
+        "Id": -900103,
+        "RuleCode": "Cluster risk of a single financial instrument",
+        "RuleDescription": "Fuer Privatkunden mit Finanzdienstleistung Umfassende Anlageberatung oder trx basierte Anlageberatung muss Einzeltitel Anteil < x% sein (x variiert mit Instrument Typ)",
+        "ErrorLevel": 2,
+        "Severity": "Error",
+        "PortfolioId": -900011,
+        "SecurityIsin": "US68389X1054",
+        "LastViolatedDateUTC": "2026-09-19T08:00:00Z",
+        "ViolationPath": [
+          {
+            "FieldName": "RegulatoryClientTypeRuleField`1",
+            "LeftValue": 13.0,
+            "RightValue": 13.0,
+            "Operator": 10
+          },
+          {
+            "FieldName": "PositionIsSecurityRuleField`1",
+            "LeftValue": true,
+            "RightValue": true,
+            "Operator": 10
+          },
+          {
+            "FieldName": "PositionPortfolioValueRuleField`1",
+            "LeftValue": 0.19,
+            "RightValue": 0.15,
+            "Operator": 40
+          }
+        ]
+      },
+      {
+        "Id": -900104,
+        "RuleCode": "Significant overweight in the equity sector \"Information Technology\"",
+        "RuleDescription": "Starkes Uebergewicht (+/- 10% zum SAA-Sollwert der Benchmark) im Aktiensektor \"Informationstechnologie\"",
+        "ErrorLevel": 2,
+        "Severity": "Error",
+        "PortfolioId": -900011,
+        "LastViolatedDateUTC": "2026-09-19T08:00:00Z",
+        "ViolationPath": [
+          {
+            "FieldName": "RegulatoryClientTypeRuleField`1",
+            "LeftValue": 13.0,
+            "RightValue": 13.0,
+            "Operator": 10
+          },
+          {
+            "FieldName": "SimulationPositionCollectionPortfolioValueRuleField",
+            "LeftValue": 0.44,
+            "RightValue": 0.10949,
+            "Operator": 40
+          },
+          {
+            "FieldName": "SimulationPositionCollectionPortfolioValueRuleField",
+            "LeftValue": 0.44,
+            "RightValue": 0.20949,
+            "Operator": 60
+          }
+        ]
+      },
+      {
+        "Id": -900105,
+        "RuleCode": "Significant overweight in the equity sector \"Communication Services\"",
+        "RuleDescription": "Starkes Uebergewicht (+/- 10% zum SAA-Sollwert der Benchmark) im Aktiensektor \"Kommunikationsdienstleister\"",
+        "ErrorLevel": 2,
+        "Severity": "Error",
+        "PortfolioId": -900011,
+        "SecurityIsin": "US02079K3059",
+        "LastViolatedDateUTC": "2026-09-19T08:00:00Z",
+        "ViolationPath": [
+          {
+            "FieldName": "RegulatoryClientTypeRuleField`1",
+            "LeftValue": 13.0,
+            "RightValue": 13.0,
+            "Operator": 10
+          },
+          {
+            "FieldName": "SimulationPositionCollectionPortfolioValueRuleField",
+            "LeftValue": 0.18,
+            "RightValue": 0.04281,
+            "Operator": 40
+          },
+          {
+            "FieldName": "SimulationPositionCollectionPortfolioValueRuleField",
+            "LeftValue": 0.18,
+            "RightValue": 0.14281,
+            "Operator": 60
+          }
+        ]
+      },
+      {
+        "Id": -900106,
+        "RuleCode": "Significant overweight in the equity region \"North America\"",
+        "RuleDescription": "Starkes Uebergewicht (+/- 10% zum SAA-Sollwert der Benchmark) in der Aktienregion \"Nordamerika\"",
+        "ErrorLevel": 2,
+        "Severity": "Error",
+        "PortfolioId": -900011,
+        "LastViolatedDateUTC": "2026-09-19T08:00:00Z",
+        "ViolationPath": [
+          {
+            "FieldName": "RegulatoryClientTypeRuleField`1",
+            "LeftValue": 13.0,
+            "RightValue": 13.0,
+            "Operator": 10
+          },
+          {
+            "FieldName": "SimulationPositionCollectionPortfolioValueRuleField",
+            "LeftValue": 0.655,
+            "RightValue": 0.31477,
+            "Operator": 40
+          },
+          {
+            "FieldName": "SimulationPositionCollectionPortfolioValueRuleField",
+            "LeftValue": 0.655,
+            "RightValue": 0.41477,
+            "Operator": 60
+          }
+        ]
+      },
+      {
+        "Id": -900107,
+        "RuleCode": "Foreign currency cluster risk USD",
+        "RuleDescription": "Fuer Privatkunden soll USD Anteil < 35.5% sein.",
+        "ErrorLevel": 2,
+        "Severity": "Error",
+        "PortfolioId": -900011,
+        "LastViolatedDateUTC": "2026-09-19T08:00:00Z",
+        "ViolationPath": [
+          {
+            "FieldName": "RegulatoryClientTypeRuleField`1",
+            "LeftValue": 13.0,
+            "RightValue": 13.0,
+            "Operator": 10
+          },
+          {
+            "FieldName": "SimulationPositionCollectionPortfolioValueRuleField",
+            "LeftValue": 0.675,
+            "RightValue": 0.355,
+            "Operator": 40
+          }
+        ]
+      },
+      {
+        "Id": -900108,
+        "RuleCode": "Foreign currency exposure exceeds 50%",
+        "RuleDescription": "Der gesamte Fremdwaehrungsanteil im Portfolio ist groesser als 50%",
+        "ErrorLevel": 2,
+        "Severity": "Error",
+        "PortfolioId": -900011,
+        "LastViolatedDateUTC": "2026-09-19T08:00:00Z",
+        "ViolationPath": [
+          {
+            "FieldName": "RegulatoryClientTypeRuleField`1",
+            "LeftValue": 13.0,
+            "RightValue": 13.0,
+            "Operator": 10
+          },
+          {
+            "FieldName": "SimulationPositionCollectionPortfolioValueRuleField",
+            "LeftValue": 0.885,
+            "RightValue": 0.5,
+            "Operator": 40
+          }
+        ]
+      }
+    ],
+    "IndividualRuleOverrides": null,
+    "ClientNotes": [
+      {
+        "Note": "Extremely aggressive risk appetite; comfortable with high leverage and volatility.",
+        "CreatedByDateUTC": "2026-09-10T10:15:00"
+      },
+      {
+        "Note": "Frequently calls with new stock tips, prefers rapid execution over long deliberation.",
+        "CreatedByDateUTC": "2026-08-22T14:30:00"
+      },
+      {
+        "Note": "Not interested in ESG-screened products; performance is the only priority.",
+        "CreatedByDateUTC": "2026-06-05T09:45:00"
+      }
+    ],
+    "Tags": [
+      {
+        "TagName": "Information Technology",
+        "TagTypeName": "Industry",
+        "Scope": "Client"
+      },
+      {
+        "TagName": "Financials",
+        "TagTypeName": "Industry",
+        "Scope": "Client"
+      },
+      {
+        "TagName": "North America",
+        "TagTypeName": "Region",
+        "Scope": "Client"
+      }
+    ]
+  }
+]
