@@ -1,0 +1,80 @@
+{
+  "snapshots": {
+    "130531": {
+      "portfolio_id": 130531,
+      "captured_at": "2026-09-19T12:27:41.329433+00:00",
+      "portfolio_value": 740557.2775,
+      "allocation": {
+        "AssetClass": {
+          "Bonds": 0.17558,
+          "Liquidity": 0.0,
+          "Real estate": 0.0,
+          "Shares": 0.7482304577899995,
+          "Specialties andCommodities": 0.03927
+        },
+        "CurrencyGroup": {
+          "Andere": 0.04940645120099994,
+          "Euro": 0.022697679835999993,
+          "Swiss francs": 0.6868317829369998,
+          "US-Dollar": 0.20414454381599995
+        },
+        "CountryGroup": {
+          "Asia/Pacific (ex Japan)": 0.012311559729,
+          "Great Britain": 0.036925921230000006,
+          "Japan": 0.02855354739199998,
+          "North America": 0.2525360174299999,
+          "Not classified": 0.0,
+          "Others": 0.075509199531,
+          "Rest of Europe": 0.03790907866800001,
+          "Switzerland": 0.5193351338099998
+        },
+        "Industry": {
+          "Consumer Discretionary": 0.04421881467899998,
+          "Consumer Staples": 0.08053810713899999,
+          "Energy": 0.02987073228299999,
+          "Financials": 0.14093782042400002,
+          "Health Care": 0.16247666939799998,
+          "Industrials": 0.14133412724799999,
+          "Information Technology": 0.09676925641800002,
+          "Materials": 0.05914870286699997,
+          "Real Estate": 0.029279002417000002,
+          "Telecommunication Services": 0.03258818699299998,
+          "Utilities": 0.010539037924000003
+        }
+      },
+      "top_positions": [
+        {
+          "SecurityId": 2346,
+          "SecurityName": "Anteile -A- iShares ETF (CH) - iShares Swiss Dividend ETF   (CH)",
+          "weight": 0.13509
+        },
+        {
+          "SecurityId": 1672,
+          "SecurityName": "Anteile Hedged CHF ETF iShares VI PLC  - iShares MSCI World CHF Hedged UCITS ETF (Acc)",
+          "weight": 0.09385
+        },
+        {
+          "SecurityId": 2353,
+          "SecurityName": "Anteile -A- iShares ETF (CH) - iShares Core SPI(R) ETF (CH)",
+          "weight": 0.09307
+        },
+        {
+          "SecurityId": 9093,
+          "SecurityName": "Anteile - USD ETF - iShares IV PLC - iShares Edge MSCI World Value Factor UCITS ETF",
+          "weight": 0.07799
+        },
+        {
+          "SecurityId": 8409,
+          "SecurityName": "Anteile Exchange Traded Fund USD iShares VII PLC - iShares NASDAQ 100 UCITS ETF",
+          "weight": 0.06347
+        }
+      ],
+      "violations": [
+        "Underweight in the equity sector \"Consumer Staples\""
+      ]
+    }
+  },
+  "events": [
+    "2026-09-19T12:27:41.329433+00:00: first briefing generated for this client"
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "snapshots": {
+    "156001": {
+      "portfolio_id": 156001,
+      "captured_at": "2026-09-19T11:59:42.496003+00:00",
+      "portfolio_value": 800320.09024,
+      "allocation": {
+        "AssetClass": {
+          "Bonds": 0.20551999999999998,
+          "Liquidity": 0.0,
+          "Real estate": 0.0,
+          "Shares": 0.7536414102769927,
+          "Specialties andCommodities": 0.02535
+        },
+        "CurrencyGroup": {
+          "Andere": 0.07442993668999985,
+          "Euro": 0.025924230587999992,
+          "Swiss francs": 0.538698806426,
+          "US-Dollar": 0.34545843657299974
+        },
+        "CountryGroup": {
+          "Asia/Pacific (ex Japan)": 0.020869468065000025,
+          "Great Britain": 0.03952089990800001,
+          "Japan": 0.02659857139,
+          "North America": 0.30873759941099976,
+          "Not classified": 0.0,
+          "Others": 0.08474998171799994,
+          "Rest of Europe": 0.03375696864800002,
+          "Switzerland": 0.47027792113700034
+        },
+        "Industry": {
+          "Consumer Discretionary": 0.031491290761000004,
+          "Consumer Staples": 0.10956502245799986,
+          "Energy": 0.011735663259000004,
+          "Financials": 0.12948135551099987,
+          "Health Care": 0.2060608853989999,
+          "Industrials": 0.11244025486900004,
+          "Information Technology": 0.10825599468400002,
+          "Materials": 0.010664972885000004,
+          "Real Estate": 0.02519439522099999,
+          "Telecommunication Services": 0.04609897127800005,
+          "Utilities": 0.017132603952000024
+        }
+      },
+      "top_positions": [
+        {
+          "SecurityId": 8449,
+          "SecurityName": "Anteile Exchange Traded Fund USD iShares VII PLC - iShares Core S&P 500 UCITS ETF",
+          "weight": 0.08024
+        },
+        {
+          "SecurityId": 8409,
+          "SecurityName": "Anteile Exchange Traded Fund USD iShares VII PLC - iShares NASDAQ 100 UCITS ETF",
+          "weight": 0.05873
+        },
+        {
+          "SecurityId": 8882,
+          "SecurityName": "Anteile Vanguard Funds PLC - FTSE All-World High Dividend Yield UCITS ETF",
+          "weight": 0.05872
+        },
+        {
+          "SecurityId": 9093,
+          "SecurityName": "Anteile - USD ETF - iShares IV PLC - iShares Edge MSCI World Value Factor UCITS ETF",
+          "weight": 0.05773
+        },
+        {
+          "SecurityId": 8074,
+          "SecurityName": "Anteile Exchange Traded Fund USD iShares PLC - USD Treasury Bond 1-3 UCITS ETF",
+          "weight": 0.05089
+        }
+      ],
+      "violations": [
+        "Knowledge of structured products",
+        "Overweight in the equity sector \"Industrials\"",
+        "Significant overweight in the equity sector \"Utilities\"",
+        "Underweight in the equity sector \"Consumer Discretionary\"",
+        "Volatility range undershot (portfolio risk too low)"
+      ]
+    }
+  },
+  "events": [
+    "2026-09-19T11:59:42.496003+00:00: first briefing generated for this client"
+  ]
+}

@@ -199,12 +199,6 @@ def _check_output(out: dict) -> list[str]:
     """
     issues: list[str] = []
 
-    # Every attention item must have a digit in title or detail
-    for i, item in enumerate(out.get("attention") or []):
-        text = (item.get("title") or "") + " " + (item.get("detail") or "")
-        if not _DIGIT_RE.search(text):
-            issues.append(f"attention[{i}] has no number in title/detail: {item.get('title')!r}")
-
     # since_last: empty list is fine; each entry must carry a real anchor
     # (date, month, CHF amount, or non-zero %/pp change).
     # A 0.0% value-change entry is useless and must be suppressed by the model.
@@ -229,10 +223,26 @@ def _check_output(out: dict) -> list[str]:
             *((out.get("since_last") or [])),
             *((out.get("talking_points") or [])),
         ])))
-        existing_num_set = {n.replace(",", "") for n in existing_nums}
+        # Numeric-value comparison with tolerance — handles normal model rounding
+        # (e.g. "87.3" in attention → "87" in read.text).
+        # Exact string match was too strict; substring containment was too loose.
+        # Tolerance: 1 unit absolute OR 2% relative, whichever is larger.
+        # Single-digit numbers (0-9) are skipped — too common to be meaningful anchors.
+        existing_vals: list[float] = []
+        for n in existing_nums:
+            try:
+                existing_vals.append(float(n.replace(",", "")))
+            except ValueError:
+                pass
         for num in re.findall(r"[\d,]+\.?\d*", read_text):
             clean = num.replace(",", "")
-            if clean and not any(clean in e or e in clean for e in existing_num_set):
+            if not clean or (clean.replace(".", "").isdigit() and len(clean.replace(".", "")) <= 1):
+                continue  # skip single-digit numbers
+            try:
+                val = float(clean)
+            except ValueError:
+                continue
+            if not any(abs(val - e) <= max(1.0, abs(e) * 0.02) for e in existing_vals):
                 issues.append(
                     f"read.text contains number {num!r} not found in other sections"
                 )
@@ -322,7 +332,7 @@ def _generate(context: dict, max_attempts: int = 3) -> dict:
             response = anthropic_client.chat.completions.create(
                 model=BRIEFING_MODEL,
                 max_tokens=1200,
-                temperature=0.2,
+                temperature=0,
                 messages=[
                     {"role": "system", "content": _SYSTEM},
                     {"role": "user", "content": user_msg},

@@ -1,0 +1,78 @@
+{
+  "snapshots": {
+    "186722": {
+      "portfolio_id": 186722,
+      "captured_at": "2026-09-19T12:28:11.142160+00:00",
+      "portfolio_value": 891222.7523,
+      "allocation": {
+        "AssetClass": {
+          "Bonds": 0.22426000000000001,
+          "Liquidity": 0.0,
+          "Real estate": 0.0,
+          "Shares": 0.7700403834409942,
+          "Specialties andCommodities": 0.0
+        },
+        "CurrencyGroup": {
+          "Andere": 0.056735279117999936,
+          "Euro": 0.05585347499700001,
+          "Swiss francs": 0.6287594785589999,
+          "US-Dollar": 0.25295215076700006
+        },
+        "CountryGroup": {
+          "Asia/Pacific (ex Japan)": 0.04108994808399996,
+          "Great Britain": 0.010053292487999979,
+          "Japan": 0.00958397415799998,
+          "North America": 0.31953154459100014,
+          "Not classified": 0.0,
+          "Others": 0.059862479511999994,
+          "Rest of Europe": 0.071017626194,
+          "Switzerland": 0.4831615184140002
+        },
+        "Industry": {
+          "Consumer Discretionary": 0.06897510963599995,
+          "Consumer Staples": 0.08360502453999998,
+          "Energy": 0.012897456474999982,
+          "Financials": 0.08666958091900002,
+          "Health Care": 0.18089277468400017,
+          "Industrials": 0.13861855662100012,
+          "Information Technology": 0.09644375631700013,
+          "Materials": 0.04917380063699997,
+          "Real Estate": 0.009495109896999985,
+          "Telecommunication Services": 0.063959627724,
+          "Utilities": 0.008499585990999993
+        }
+      },
+      "top_positions": [
+        {
+          "SecurityId": 1672,
+          "SecurityName": "Anteile Hedged CHF ETF iShares VI PLC  - iShares MSCI World CHF Hedged UCITS ETF (Acc)",
+          "weight": 0.09358
+        },
+        {
+          "SecurityId": 8449,
+          "SecurityName": "Anteile Exchange Traded Fund USD iShares VII PLC - iShares Core S&P 500 UCITS ETF",
+          "weight": 0.08314
+        },
+        {
+          "SecurityId": 2353,
+          "SecurityName": "Anteile -A- iShares ETF (CH) - iShares Core SPI(R) ETF (CH)",
+          "weight": 0.06187
+        },
+        {
+          "SecurityId": 1105,
+          "SecurityName": "Anteile -(CHF) A-dis- UBS ETF (CH) - SMIM (R)",
+          "weight": 0.05881
+        },
+        {
+          "SecurityId": 2258,
+          "SecurityName": "Anteile -A- iShares ETF (CH) - iShares Core CHF Corporate   Bond ETF (CH)",
+          "weight": 0.05779
+        }
+      ],
+      "violations": []
+    }
+  },
+  "events": [
+    "2026-09-19T12:28:11.142160+00:00: first briefing generated for this client"
+  ]
+}

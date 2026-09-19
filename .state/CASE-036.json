@@ -1,0 +1,128 @@
+{
+  "snapshots": {
+    "133906": {
+      "portfolio_id": 133906,
+      "captured_at": "2026-09-19T11:50:10.935763+00:00",
+      "portfolio_value": 22297.65625,
+      "allocation": {
+        "AssetClass": {
+          "Bonds": 0.0,
+          "Liquidity": 0.0,
+          "Real estate": 0.0,
+          "Shares": 0.9701118322139981,
+          "Specialties andCommodities": 0.0
+        },
+        "CurrencyGroup": {
+          "Andere": 0.13112305765000024,
+          "Euro": 0.03893819234100003,
+          "Swiss francs": 0.47861563371799976,
+          "US-Dollar": 0.32143494850499993
+        },
+        "CountryGroup": {
+          "Asia/Pacific (ex Japan)": 0.061494293026,
+          "Great Britain": 0.015814069398000005,
+          "Japan": 0.028634484739999987,
+          "North America": 0.33407203280400033,
+          "Others": 0.008941924245,
+          "Rest of Europe": 0.05173628411200005,
+          "Switzerland": 0.46941874388899996
+        },
+        "Industry": {
+          "Consumer Discretionary": 0.08516433860400006,
+          "Consumer Staples": 0.08546731153300006,
+          "Energy": 0.019893508263999993,
+          "Financials": 0.18371832511499994,
+          "Health Care": 0.18401876087100005,
+          "Industrials": 0.12925213807000002,
+          "Information Technology": 0.14068329780399988,
+          "Materials": 0.05635054334500004,
+          "Real Estate": 0.019754815568000007,
+          "Telecommunication Services": 0.05442426954800004,
+          "Utilities": 0.011384523492000007
+        }
+      },
+      "top_positions": [
+        {
+          "SecurityId": 2534,
+          "SecurityName": "Anteile -QBH- Credit Suisse Index Fd (CH) I Umbr. - CSIF (CH) I Equity World ex CH Blue",
+          "weight": 0.24203
+        },
+        {
+          "SecurityId": 4421,
+          "SecurityName": "Anteile -W- UBS (CH) Investment Fund - Equities Switzerland Passive Leader",
+          "weight": 0.24157
+        },
+        {
+          "SecurityId": 5115,
+          "SecurityName": "Anteile -QB- Credit Suisse Index Fd (CH) Umbrella  - CSIF (CH) Equity World ex CH ESG Blue",
+          "weight": 0.19773
+        },
+        {
+          "SecurityId": 5447,
+          "SecurityName": "Anteile -GT CHF- Swisscanto (CH) Index Fund V  - Index Equity Fund Small & Mid Caps Switzerland",
+          "weight": 0.11557
+        },
+        {
+          "SecurityId": 2346,
+          "SecurityName": "Anteile -A- iShares ETF (CH) - iShares Swiss Dividend ETF   (CH)",
+          "weight": 0.11357
+        }
+      ],
+      "violations": []
+    },
+    "144692": {
+      "portfolio_id": 144692,
+      "captured_at": "2026-09-19T11:50:10.935785+00:00",
+      "portfolio_value": 99433.44,
+      "allocation": {
+        "AssetClass": {
+          "Bonds": 0.0,
+          "Liquidity": 0.0,
+          "Real estate": 0.0,
+          "Shares": 0.0,
+          "Specialties andCommodities": 0.0
+        },
+        "CurrencyGroup": {
+          "Andere": 0.0,
+          "Euro": 0.0,
+          "Swiss francs": 0.0,
+          "US-Dollar": 0.0
+        },
+        "CountryGroup": {
+          "Asia/Pacific (ex Japan)": 0.0,
+          "Great Britain": 0.0,
+          "Japan": 0.0,
+          "North America": 0.0,
+          "Not classified": 0.0,
+          "Others": 0.0,
+          "Rest of Europe": 0.0,
+          "Switzerland": 0.0
+        },
+        "Industry": {
+          "Consumer Discretionary": 0.0,
+          "Consumer Staples": 0.0,
+          "Energy": 0.0,
+          "Financials": 0.0,
+          "Health Care": 0.0,
+          "Industrials": 0.0,
+          "Information Technology": 0.0,
+          "Materials": 0.0,
+          "Real Estate": 0.0,
+          "Telecommunication Services": 0.0,
+          "Utilities": 0.0
+        }
+      },
+      "top_positions": [],
+      "violations": [
+        "Maximum limit liquidity",
+        "Minimum limit fixed income",
+        "Minimum limit shares",
+        "Volatility range undershot (portfolio risk too low)"
+      ]
+    }
+  },
+  "events": [
+    "2026-09-19T11:50:10.935763+00:00: first briefing generated for this client",
+    "2026-09-19T11:50:10.935785+00:00: first briefing generated for this client"
+  ]
+}

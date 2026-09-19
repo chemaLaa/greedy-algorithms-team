@@ -1,0 +1,153 @@
+{
+  "snapshots": {
+    "139069": {
+      "portfolio_id": 139069,
+      "captured_at": "2026-09-19T11:54:29.120859+00:00",
+      "portfolio_value": 210581.46325,
+      "allocation": {
+        "AssetClass": {
+          "Bonds": 0.45934,
+          "Liquidity": 0.0,
+          "Real estate": 0.05248,
+          "Shares": 0.4697608724429995,
+          "Specialties andCommodities": 0.0
+        },
+        "CurrencyGroup": {
+          "Andere": 0.06203711696899986,
+          "Euro": 0.018507252756000014,
+          "Swiss francs": 0.7483973572050003,
+          "US-Dollar": 0.152639145513
+        },
+        "CountryGroup": {
+          "Asia/Pacific (ex Japan)": 0.029056393713999994,
+          "Great Britain": 0.007517314625000004,
+          "Japan": 0.013592563821999998,
+          "North America": 0.1586888236639996,
+          "Others": 0.278858126415,
+          "Rest of Europe": 0.024627015092999985,
+          "Switzerland": 0.4692406351100002
+        },
+        "Industry": {
+          "Consumer Discretionary": 0.040756386877000006,
+          "Consumer Staples": 0.04180460761599995,
+          "Energy": 0.009464553781000012,
+          "Financials": 0.08966061996799998,
+          "Health Care": 0.0896356034170001,
+          "Industrials": 0.06331076662300006,
+          "Information Technology": 0.06704219575599997,
+          "Materials": 0.02692801815500001,
+          "Real Estate": 0.009715642807999995,
+          "Telecommunication Services": 0.02597326256699999,
+          "Utilities": 0.005469214874999999
+        }
+      },
+      "top_positions": [
+        {
+          "SecurityId": 2534,
+          "SecurityName": "Anteile -QBH- Credit Suisse Index Fd (CH) I Umbr. - CSIF (CH) I Equity World ex CH Blue",
+          "weight": 0.11659
+        },
+        {
+          "SecurityId": 4421,
+          "SecurityName": "Anteile -W- UBS (CH) Investment Fund - Equities Switzerland Passive Leader",
+          "weight": 0.11457
+        },
+        {
+          "SecurityId": 5115,
+          "SecurityName": "Anteile -QB- Credit Suisse Index Fd (CH) Umbrella  - CSIF (CH) Equity World ex CH ESG Blue",
+          "weight": 0.09226
+        },
+        {
+          "SecurityId": 56925,
+          "SecurityName": "Accum Shs - S6- CHF - HSBC Global Funds ICAV - Global Aggregate Bond Index Fund",
+          "weight": 0.09182
+        },
+        {
+          "SecurityId": 20439,
+          "SecurityName": "Anteile -QBH- Credit Suisse Index Fd (CH) Umbrella - CSIF (CH) Bond Aggregate Global ex CHF ESG Blue",
+          "weight": 0.09159
+        }
+      ],
+      "violations": []
+    },
+    "139067": {
+      "portfolio_id": 139067,
+      "captured_at": "2026-09-19T11:54:29.120902+00:00",
+      "portfolio_value": 1000358.11075,
+      "allocation": {
+        "AssetClass": {
+          "Bonds": 0.3865,
+          "Liquidity": 0.0,
+          "Real estate": 0.04405,
+          "Shares": 0.5505904871600009,
+          "Specialties andCommodities": 0.01259
+        },
+        "CurrencyGroup": {
+          "Andere": 0.05368809971400003,
+          "Euro": 0.07416996309600005,
+          "Swiss francs": 0.601054404734,
+          "US-Dollar": 0.2648180196160001
+        },
+        "CountryGroup": {
+          "Asia/Pacific (ex Japan)": 0.003770712385,
+          "Great Britain": 0.014352507129,
+          "Japan": 0.029684473008999995,
+          "North America": 0.23987872488800005,
+          "Not classified": 0.0,
+          "Others": 0.130416787812,
+          "Rest of Europe": 0.06516463334700003,
+          "Switzerland": 0.5104626485900001
+        },
+        "Industry": {
+          "Consumer Discretionary": 0.03290380087800002,
+          "Consumer Staples": 0.09193767049200009,
+          "Energy": 0.008360647065000002,
+          "Financials": 0.155166301425,
+          "Health Care": 0.1498019462680001,
+          "Industrials": 0.11369212214600004,
+          "Information Technology": 0.079741931438,
+          "Materials": 0.026660044560000033,
+          "Real Estate": 0.02616816304200001,
+          "Telecommunication Services": 0.01822814213799999,
+          "Utilities": 0.005359717708000001
+        }
+      },
+      "top_positions": [
+        {
+          "SecurityId": 9093,
+          "SecurityName": "Anteile - USD ETF - iShares IV PLC - iShares Edge MSCI World Value Factor UCITS ETF",
+          "weight": 0.10508
+        },
+        {
+          "SecurityId": 2346,
+          "SecurityName": "Anteile -A- iShares ETF (CH) - iShares Swiss Dividend ETF   (CH)",
+          "weight": 0.06819
+        },
+        {
+          "SecurityId": 6721,
+          "SecurityName": "Anteile -Hedged CHF- SSGA SPDR ETFs Europe I PLC - SPDR Bloomberg Global Aggregate Bond UCITS ETF",
+          "weight": 0.05831
+        },
+        {
+          "SecurityId": 2353,
+          "SecurityName": "Anteile -A- iShares ETF (CH) - iShares Core SPI(R) ETF (CH)",
+          "weight": 0.04823
+        },
+        {
+          "SecurityId": 1105,
+          "SecurityName": "Anteile -(CHF) A-dis- UBS ETF (CH) - SMIM (R)",
+          "weight": 0.04191
+        }
+      ],
+      "violations": [
+        "Overweight in the equity region \"Rest of Europe\"",
+        "Underweight in the equity region \"Asia/Pacific (ex Japan)\"",
+        "Underweight in the equity region \"North America\""
+      ]
+    }
+  },
+  "events": [
+    "2026-09-19T11:54:29.120859+00:00: first briefing generated for this client",
+    "2026-09-19T11:54:29.120902+00:00: first briefing generated for this client"
+  ]
+}

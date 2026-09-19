@@ -1,0 +1,77 @@
+{
+  "snapshots": {
+    "93418": {
+      "portfolio_id": 93418,
+      "captured_at": "2026-09-19T12:09:08.930155+00:00",
+      "portfolio_value": 102187.89713,
+      "allocation": {
+        "AssetClass": {
+          "Bonds": 0.56475,
+          "Liquidity": 0.0,
+          "Real estate": 0.05142,
+          "Shares": 0.3661706816980007,
+          "Specialties andCommodities": 0.0
+        },
+        "CurrencyGroup": {
+          "Andere": 0.04851099644700011,
+          "Euro": 0.014487311191999995,
+          "Swiss francs": 0.800350321963,
+          "US-Dollar": 0.11899205209600001
+        },
+        "CountryGroup": {
+          "Asia/Pacific (ex Japan)": 0.02296657868100001,
+          "Great Britain": 0.005879710058999996,
+          "Japan": 0.010576215561999993,
+          "North America": 0.12372048518700007,
+          "Others": 0.33917697009000014,
+          "Rest of Europe": 0.019246753785000004,
+          "Switzerland": 0.46077396833400125
+        },
+        "Industry": {
+          "Consumer Discretionary": 0.031357481899000034,
+          "Consumer Staples": 0.03280170636699998,
+          "Energy": 0.007485127341000001,
+          "Financials": 0.07050127940100002,
+          "Health Care": 0.0694067863260001,
+          "Industrials": 0.04976232754100006,
+          "Information Technology": 0.052246599326000086,
+          "Materials": 0.02020828791100002,
+          "Real Estate": 0.007782452844000007,
+          "Telecommunication Services": 0.020271655087999996,
+          "Utilities": 0.004346977654000006
+        }
+      },
+      "top_positions": [
+        {
+          "SecurityId": 56925,
+          "SecurityName": "Accum Shs - S6- CHF - HSBC Global Funds ICAV - Global Aggregate Bond Index Fund",
+          "weight": 0.11248
+        },
+        {
+          "SecurityId": 20439,
+          "SecurityName": "Anteile -QBH- Credit Suisse Index Fd (CH) Umbrella - CSIF (CH) Bond Aggregate Global ex CHF ESG Blue",
+          "weight": 0.11184
+        },
+        {
+          "SecurityId": 2587,
+          "SecurityName": "Anteile Instit.Plus Class Hedged CHF Vanguard Inv. Series PLC - Vanguard Global Bond Index Fund",
+          "weight": 0.11153
+        },
+        {
+          "SecurityId": 2534,
+          "SecurityName": "Anteile -QBH- Credit Suisse Index Fd (CH) I Umbr. - CSIF (CH) I Equity World ex CH Blue",
+          "weight": 0.09664
+        },
+        {
+          "SecurityId": 4421,
+          "SecurityName": "Anteile -W- UBS (CH) Investment Fund - Equities Switzerland Passive Leader",
+          "weight": 0.08217
+        }
+      ],
+      "violations": []
+    }
+  },
+  "events": [
+    "2026-09-19T11:03:43.069315+00:00: first briefing generated for this client"
+  ]
+}

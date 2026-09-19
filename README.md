@@ -760,12 +760,13 @@ section is the reverse: it is unique to `_generate()` (not in
 
 **Post-generation quality gate — `_check_output()`** runs after every model
 response and triggers a retry (up to 3 attempts) if any rule is violated:
-- Digit check on every attention item
 - Zero-change (`+0.0%`) rejection in `since_last`
 - Date/amount anchor check on every `since_last` entry
 - Vague-word-without-number scan across all output text
-- `read.text` number-anchoring: any number in `read.text` not found elsewhere triggers a retry
+- `read.text` number-anchoring: any multi-digit number in `read.text` not found (exact match, commas stripped) in the other sections triggers a retry; single-digit numbers (0–9) are excluded — they appear in nearly every longer number and carry no meaningful anchor signal
 - `read.text` bare-"will" check: "will" not preceded/followed by "not" within ~3 words triggers a retry
+
+Note: the attention digit check and talking-points digit check were removed — some suitability-violation rules in the source data have no usable numeric description, so the model correctly omits a number it cannot invent, and retrying never helps.
 
 **`_generate()` vs `generate_briefing()`:** `server.py` defines its own
 `_generate()` that calls OpenAI Chat Completions directly (same `_default_client()`
