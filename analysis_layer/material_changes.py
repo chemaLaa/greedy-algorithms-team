@@ -1,67 +1,136 @@
-"""
-"What changed since the last client interaction" — one of the required
-briefing inputs (DATA.md / case brief: "material changes since the
-previous client interaction"). The schema has no explicit
-"last interaction date" field and no position-level history, only
-portfolio-level monthly NAV (PerformanceHistory) and free-text
-ClientNotes with dates — so this module uses the most recent note's date
-as a proxy for "last interaction" and measures portfolio value change
-since then. This is an explicit, documented approximation, not something
-the schema states directly — flagged here rather than silently assumed.
+"""Fallback material-change analysis using dated ClientNotes.
+
+The URO UI has a real last-consultation concept, but the supplied JSON export
+we received does not expose that field.  Therefore the latest ClientNote date
+is only a *proxy*.  Persistent state diffs should be preferred when available.
 """
 from __future__ import annotations
 
 from datetime import date, datetime
-from typing import Optional
+import math
+from typing import Any, Optional
+
+from .validation import INTERACTION_DATE_FIELDS
+
+
+def _finite(value: Any) -> bool:
+    return isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value)
 
 
 def _parse_date(value: str) -> date:
-    # Handles both "yyyy-MM-dd" and full ISO datetime strings.
     return datetime.fromisoformat(value.replace("Z", "+00:00")).date()
 
 
 def last_interaction_date(notes: list[dict]) -> Optional[date]:
-    """
-    Latest ClientNotes[].CreatedByDateUTC, or None if there are no notes.
-    Remember: per DATA.md, dates across the export are shifted by a
-    constant offset, so this is only meaningful as a relative anchor
-    (e.g. "since this note"), never as a real calendar date.
-    """
-    dates = [_parse_date(n["CreatedByDateUTC"]) for n in notes if n.get("CreatedByDateUTC")]
+    """Latest valid ClientNotes[].CreatedByDateUTC, or None."""
+    dates: list[date] = []
+    for note in notes or []:
+        if not isinstance(note, dict) or not note.get("CreatedByDateUTC"):
+            continue
+        try:
+            dates.append(_parse_date(note["CreatedByDateUTC"]))
+        except (TypeError, ValueError):
+            continue
     return max(dates) if dates else None
 
 
-def change_since_last_interaction(portfolio: dict, since: Optional[date]) -> dict:
+def resolve_interaction_date(client: dict) -> dict:
+    """Prefer a genuine consultation/interaction field; fall back to ClientNotes."""
+    for field in INTERACTION_DATE_FIELDS:
+        value = client.get(field)
+        if not value:
+            continue
+        try:
+            return {
+                "date": _parse_date(value),
+                "source": field,
+                "approximation": False,
+            }
+        except (TypeError, ValueError):
+            continue
+
+    notes = client.get("notes")
+    if notes is None:
+        notes = client.get("ClientNotes") or []
+    d = last_interaction_date(notes)
+    return {
+        "date": d,
+        "source": "client_note_proxy" if d is not None else None,
+        "approximation": True if d is not None else None,
+    }
+
+
+def _usable_history(portfolio: dict) -> list[dict]:
+    rows = []
+    for h in portfolio.get("PerformanceHistory") or []:
+        if not isinstance(h, dict) or not h.get("Date") or not _finite(h.get("Value")):
+            continue
+        try:
+            d = _parse_date(h["Date"])
+        except (TypeError, ValueError):
+            continue
+        rows.append({"date": d, "value": float(h["Value"])})
+    rows.sort(key=lambda x: x["date"])
+    return rows
+
+
+def change_since_last_interaction(
+    portfolio: dict,
+    since: Optional[date],
+    *,
+    source: str = "client_note_proxy",
+    approximation: bool = True,
+) -> dict:
+    """Portfolio-value change since the latest history point on/before ``since``.
+
+    This is explicitly approximate. If the interaction proxy is *newer* than
+    the latest available history point, the result is unavailable rather than
+    the misleading 0.0 returned by the previous implementation.
     """
-    Portfolio value change from the latest PerformanceHistory point
-    on-or-before `since` to the most recent point overall. All fields are
-    None if `since` is unknown, there's no history, or no history point
-    falls on/before `since` (e.g. the last interaction predates all
-    recorded history).
-    """
-    history = portfolio.get("PerformanceHistory") or []
+    history = _usable_history(portfolio)
+    latest = history[-1] if history else None
     empty = {
-        "since_date": since,
+        "status": "unavailable",
+        "reason": None,
+        "source": source,
+        "approximation": approximation,
+        "semantics": "portfolio_value_change_not_confirmed_return",
+        "since_date": since.isoformat() if since else None,
         "value_then": None,
-        "value_now": history[-1]["Value"] if history else None,
+        "value_now": latest["value"] if latest else None,
         "change": None,
         "change_pct": None,
     }
-    if since is None or not history:
-        return empty
 
-    points_before = [h for h in history if _parse_date(h["Date"]) <= since]
+    if since is None:
+        return {**empty, "reason": "interaction_date_unavailable"}
+    if not history:
+        return {**empty, "reason": "performance_history_unavailable"}
+    if since > latest["date"]:
+        return {
+            **empty,
+            "reason": "interaction_after_latest_history_point",
+            "latest_history_date": latest["date"].isoformat(),
+        }
+
+    points_before = [h for h in history if h["date"] <= since]
     if not points_before:
-        return empty
+        return {**empty, "reason": "interaction_predates_available_history"}
 
-    then, now = points_before[-1], history[-1]
-    change = now["Value"] - then["Value"]
-    change_pct = (change / then["Value"]) if then["Value"] else None
-
+    then = points_before[-1]
+    change = latest["value"] - then["value"]
+    change_pct = change / then["value"] if then["value"] else None
     return {
-        "since_date": since,
-        "value_then": then["Value"],
-        "value_now": now["Value"],
+        "status": "partial",
+        "reason": "client_note_used_as_interaction_proxy" if approximation else None,
+        "source": source,
+        "approximation": approximation,
+        "semantics": "portfolio_value_change_not_confirmed_return",
+        "since_date": since.isoformat(),
+        "history_anchor_date": then["date"].isoformat(),
+        "latest_history_date": latest["date"].isoformat(),
+        "value_then": then["value"],
+        "value_now": latest["value"],
         "change": change,
         "change_pct": change_pct,
     }

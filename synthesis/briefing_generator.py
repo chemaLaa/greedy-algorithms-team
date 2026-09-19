@@ -29,6 +29,7 @@ from __future__ import annotations
 
 import json
 import os
+import time
 from typing import Optional
 
 from .prompt_builder import build_prompt
@@ -108,10 +109,17 @@ def generate_briefing(
         client = _default_client()
 
     last_error: Optional[BriefingGenerationError] = None
-    for _attempt in range(max_attempts):
+    for attempt in range(max_attempts):
+        started = time.monotonic()
+        print(f"[briefing_generator] attempt {attempt + 1}/{max_attempts}: calling model...", flush=True)
         try:
-            return _generate_once(context, model, client, max_tokens)
+            result = _generate_once(context, model, client, max_tokens)
+            elapsed = time.monotonic() - started
+            print(f"[briefing_generator] attempt {attempt + 1} succeeded in {elapsed:.1f}s", flush=True)
+            return result
         except BriefingGenerationError as e:
+            elapsed = time.monotonic() - started
+            print(f"[briefing_generator] attempt {attempt + 1} failed after {elapsed:.1f}s: {e}", flush=True)
             last_error = e
 
     raise last_error
@@ -159,7 +167,7 @@ def _generate_once(context: dict, model: str, client, max_tokens: int) -> dict:
     return result
 
 
-def _default_client():
+def _default_client(timeout_seconds: float = 90.0):
     try:
         import anthropic
     except ImportError as e:
@@ -167,11 +175,28 @@ def _default_client():
             "The 'anthropic' package isn't installed — run `pip install anthropic`."
         ) from e
 
+    # Some Python installations (notably python.org builds and certain
+    # macOS setups) don't wire SSL certificate verification up to the
+    # system trust store the way `curl` does — TLS handshakes then fail
+    # or hang entirely, surfacing as a slow APIConnectionError rather
+    # than a clear SSL error. Confirmed as the real root cause of a real
+    # ~60-75s hang-then-fail in testing. Relying on the user's shell
+    # having SSL_CERT_FILE exported is fragile (it doesn't persist across
+    # terminal sessions, as happened in practice) — set it here, in code,
+    # every time this runs, so it never depends on shell state again.
+    try:
+        import certifi
+
+        os.environ.setdefault("SSL_CERT_FILE", certifi.where())
+        os.environ.setdefault("REQUESTS_CA_BUNDLE", certifi.where())
+    except ImportError:
+        pass  # certifi not installed — best-effort, fall through to whatever's configured
+
     api_key = os.environ.get("ANTHROPIC_API_KEY")
     if not api_key:
         raise BriefingGenerationError("ANTHROPIC_API_KEY environment variable is not set.")
 
-    return anthropic.Anthropic(api_key=api_key)
+    return anthropic.Anthropic(api_key=api_key, timeout=timeout_seconds)
 
 
 def _extract_text(response) -> str:

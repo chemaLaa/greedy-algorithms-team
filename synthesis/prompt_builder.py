@@ -166,7 +166,7 @@ def _format_priorities(priorities: list[dict]) -> str:
     for item in priorities:
         if item["type"] == "violation":
             lines.append(f"- [{item.get('severity')}] {item.get('description')}")
-        elif item["type"] == "saa_deviation":
+        elif item["type"] == "saa_breach":
             actual = item.get("actual")
             target = item.get("target")
             breach = item.get("breach")
@@ -175,11 +175,15 @@ def _format_priorities(priorities: list[dict]) -> str:
                 f"- {item.get('category')} ({item.get('dimension')}) is "
                 f"{actual:.1%} of the portfolio vs. a {target:.1%} target — {direction} the allowed range."
             )
-        elif item["type"] == "concentration":
+        elif item["type"] == "single_position_concentration":
             lines.append(
                 f"- {clean_security_name(item.get('security_name', ''))} makes up "
                 f"{item.get('weight'):.1%} of the portfolio — a concentrated single position."
             )
+        elif item["type"] == "high_liquidity":
+            ratio = item.get("liquidity_ratio")
+            ratio_str = f"{ratio:.1%}" if ratio is not None else "above 10%"
+            lines.append(f"- Portfolio liquidity is {ratio_str} of AUM — may warrant discussion.")
     return "\n".join(lines)
 
 

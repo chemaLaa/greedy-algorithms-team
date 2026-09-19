@@ -103,7 +103,7 @@ def test_priorities_formats_saa_deviation_below():
     text = _format_priorities(
         [
             {
-                "type": "saa_deviation",
+                "type": "saa_breach",
                 "category": "Bonds",
                 "dimension": "AssetClass",
                 "actual": 0.10,
@@ -119,13 +119,13 @@ def test_priorities_formats_saa_deviation_below():
 
 
 def test_priorities_formats_concentration():
-    text = _format_priorities([{"type": "concentration", "security_name": "Nestle SA", "weight": 0.35}])
+    text = _format_priorities([{"type": "single_position_concentration", "security_name": "Nestle SA", "weight": 0.35}])
     assert "Nestle SA" in text
 
 
 def test_priorities_formats_concentration_cleans_raw_security_name():
     text = _format_priorities(
-        [{"type": "concentration", "security_name": "Namen-Aktie Nestle SA", "weight": 0.35}]
+        [{"type": "single_position_concentration", "security_name": "Namen-Aktie Nestle SA", "weight": 0.35}]
     )
     assert "Namen-Aktie" not in text
     assert "Nestle SA" in text

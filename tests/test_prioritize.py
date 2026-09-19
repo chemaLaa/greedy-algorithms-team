@@ -1,59 +1,74 @@
-from helpers import first_client
-from data_layer import build_client_view
-from analysis_layer.prioritize import build_client_priorities, build_portfolio_priorities
+from analysis_layer.prioritize import build_portfolio_priorities
 
 
-def test_build_client_priorities_returns_one_bundle_per_portfolio():
-    client, ref = first_client()
-    view = build_client_view(client, ref)
-    priorities = build_client_priorities(view, ref)
-    assert len(priorities) == len(view["portfolios"])
+def portfolio():
+    return {
+        "PortfolioId": 1,
+        "Name": "P",
+        "AssetsUnderManagementInDefaultCurrency": 1000.0,
+        "LiquidityInDefaultCurrency": 150.0,
+        "Volatility": 0.10,
+        "ExpectedReturn": 0.04,
+        "ValueAtRisk": 0.08,
+        "PerformanceHistory": [
+            {"Date": "2026-06-01", "Value": 100.0},
+            {"Date": "2026-07-01", "Value": 105.0},
+        ],
+        "SecurityPositions": [
+            {
+                "SecurityId": 10,
+                "SecurityName": "Big Position",
+                "PortfolioValuePercentage": 0.30,
+                "ContributionVolatility": 0.07,
+            },
+            {
+                "SecurityId": 11,
+                "SecurityName": "Other",
+                "PortfolioValuePercentage": 0.55,
+                "ContributionVolatility": 0.03,
+            },
+        ],
+        "AccountPositions": [{"AccountName": "Cash", "PortfolioValuePercentage": 0.15, "ContributionVolatility": 0.0}],
+        "saa_deviations": {
+            "AssetClass": [
+                {
+                    "category": "Shares",
+                    "actual": 0.70,
+                    "target": 0.55,
+                    "min": 0.40,
+                    "max": 0.65,
+                    "breaches_min": False,
+                    "breaches_max": True,
+                }
+            ],
+            "Industry": [{"category": "Technology", "actual": 0.25, "target": 0.15}],
+        },
+    }
 
 
-def test_priorities_include_active_violation():
-    client, ref = first_client()
-    view = build_client_view(client, ref)
-    priorities = build_client_priorities(view, ref)[0]
-
-    types = [p["type"] for p in priorities["priorities"]]
-    # Fixture: MAX_SINGLE_POSITION survives override filtering (see
-    # test_violations.py), should show up here as a violation item.
-    assert "violation" in types
-
-
-def test_priorities_include_saa_breach():
-    client, ref = first_client()
-    view = build_client_view(client, ref)
-    priorities = build_client_priorities(view, ref)[0]
-
-    deviation_items = [p for p in priorities["priorities"] if p["type"] == "saa_deviation"]
-    # Fixture: Bonds breaches its min (0.10 actual vs 0.30 min).
-    assert any(item["category"] == "Bonds" and item["breach"] == "min" for item in deviation_items)
+def test_priorities_are_structured_and_self_contained():
+    p = portfolio()
+    client = {
+        "active_violations": [
+            {"PortfolioId": 1, "Severity": "Error", "RuleCode": "RULE_X", "RuleDescription": "Important violation"}
+        ],
+        "notes": [{"CreatedByDateUTC": "2026-06-15T00:00:00Z"}],
+    }
+    result = build_portfolio_priorities(client, p, ref=None)
+    assert result["priorities"][0]["type"] == "violation"
+    saa = next(x for x in result["priorities"] if x["type"] == "saa_breach")
+    assert saa["actual"] == 0.70
+    assert saa["target"] == 0.55
+    assert saa["max"] == 0.65
+    assert round(saa["breach_amount_pp"], 6) == 5.0
+    assert any(x["type"] == "high_liquidity" for x in result["priorities"])
+    assert result["saa_target_deviations"][0]["category"] in {"Shares", "Technology"}
 
 
-def test_priorities_sorted_errors_before_warnings():
-    client, ref = first_client()
-    view = build_client_view(client, ref)
-    priorities = build_client_priorities(view, ref)[0]
-
-    ranks = [p["rank"] for p in priorities["priorities"]]
-    assert ranks == sorted(ranks, reverse=True)
-
-
-def test_concentration_flag_above_threshold():
-    client, ref = first_client()
-    view = build_client_view(client, ref)
-    priorities = build_client_priorities(view, ref)[0]
-
-    # Fixture: Nestle is 35% of the portfolio, above the 20% threshold.
-    concentration_items = [p for p in priorities["priorities"] if p["type"] == "concentration"]
-    assert any(item["security_name"] == "Nestle SA" for item in concentration_items)
-
-
-def test_build_portfolio_priorities_single_portfolio():
-    client, ref = first_client()
-    view = build_client_view(client, ref)
-    bundle = build_portfolio_priorities(view, view["portfolios"][0])
-    assert bundle["portfolio_name"] == "Vorsorge Indiv"
-    assert "top_risk_contributors" in bundle
-    assert "performance" in bundle
+def test_target_only_saa_is_not_called_a_breach():
+    p = portfolio()
+    p["saa_deviations"] = {"Industry": [{"category": "Technology", "actual": 0.40, "target": 0.10}]}
+    client = {"active_violations": [], "notes": []}
+    result = build_portfolio_priorities(client, p, ref=None)
+    assert not any(x["type"] == "saa_breach" for x in result["priorities"])
+    assert result["saa_target_deviations"][0]["deviation_from_target_pp"] == 30.000000000000004

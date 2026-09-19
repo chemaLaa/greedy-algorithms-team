@@ -171,9 +171,9 @@ def test_relevant_search_terms_includes_concentration_and_saa_items():
     priorities_bundle = {
         "top_risk_contributors": [],
         "priorities": [
-            {"type": "concentration", "security_name": "Namen-Aktie Sika AG", "weight": 0.35},
+            {"type": "single_position_concentration", "security_name": "Namen-Aktie Sika AG", "weight": 0.35},
             {
-                "type": "saa_deviation",
+                "type": "saa_breach",
                 "dimension": "AssetClass",
                 "category": "Bonds",
                 "breach": "min",
@@ -192,7 +192,7 @@ def test_relevant_search_terms_deduplicates_by_query():
             {"SecurityName": "Namen-Aktie Nestle SA", "share_of_portfolio_volatility": 0.2}
         ],
         "priorities": [
-            {"type": "concentration", "security_name": "Namen-Aktie Nestle SA", "weight": 0.3}
+            {"type": "single_position_concentration", "security_name": "Namen-Aktie Nestle SA", "weight": 0.3}
         ],
     }
     terms = relevant_search_terms({}, priorities_bundle)

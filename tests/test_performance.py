@@ -1,57 +1,86 @@
-from helpers import first_client
-from analysis_layer.performance import performance_trend, top_risk_contributors
+from analysis_layer.performance import (
+    current_risk_return_snapshot,
+    performance_trend,
+    risk_contributor_analysis,
+    top_risk_contributors,
+)
 
 
-def _portfolio():
-    client, ref = first_client()
-    return client["Portfolios"][0]
-
-
-def test_performance_trend_computes_change_between_last_two_points():
-    portfolio = _portfolio()
-    trend = performance_trend(portfolio)
-    # Fixture: last two PerformanceHistory points are 510000 (2026-08-01)
-    # then 500000 (2026-09-01).
-    assert trend["latest_value"] == 500000
-    assert trend["previous_value"] == 510000
-    assert trend["change_since_previous_point"] == -10000
-    assert abs(trend["change_since_previous_point_pct"] - (-10000 / 510000)) < 1e-9
-
-
-def test_performance_trend_handles_missing_history():
-    assert performance_trend({"PerformanceHistory": []}) == {
-        "latest_value": None,
-        "latest_date": None,
-        "previous_value": None,
-        "previous_date": None,
-        "change_since_previous_point": None,
-        "change_since_previous_point_pct": None,
-        "performance_ytd": None,
-        "months_of_history": 0,
+def portfolio():
+    return {
+        "Volatility": 0.10,
+        "ExpectedReturn": 0.04,
+        "ValueAtRisk": 0.07,
+        "PerformanceHistory": [
+            {"Date": "2026-01-01", "Value": 100.0},
+            {"Date": "2026-04-01", "Value": 110.0},
+            {"Date": "2026-07-01", "Value": 105.0},
+        ],
+        "SecurityPositions": [
+            {
+                "SecurityId": 1,
+                "SecurityName": "A",
+                "PortfolioValuePercentage": 0.60,
+                "ContributionVolatility": 0.07,
+            }
+        ],
+        "AccountPositions": [
+            {
+                "AccountName": "Cash CHF",
+                "PortfolioValuePercentage": 0.40,
+                "ContributionVolatility": 0.03,
+            }
+        ],
     }
 
 
-def test_performance_trend_handles_single_point():
-    result = performance_trend({"PerformanceHistory": [{"Date": "2026-01-01", "Value": 100}]})
-    assert result["latest_value"] == 100
-    assert result["change_since_previous_point"] is None
-    assert result["months_of_history"] == 1
+def test_performance_sorts_unsorted_history_and_calls_it_value_change():
+    p = portfolio()
+    p["PerformanceHistory"] = [p["PerformanceHistory"][2], p["PerformanceHistory"][0], p["PerformanceHistory"][1]]
+    result = performance_trend(p)
+    assert result["latest_date"] == "2026-07-01"
+    assert result["semantics"] == "portfolio_value_change_not_confirmed_return"
+    assert result["change_since_previous_point"] == -5.0
 
 
-def test_top_risk_contributors_ranks_by_contribution_volatility():
-    portfolio = _portfolio()
-    ranked = top_risk_contributors(portfolio, n=5)
-    # Fixture: Nestle has ContributionVolatility 0.007, the fund 0.004.
-    assert ranked[0]["SecurityName"] == "Nestle SA"
-    assert ranked[1]["SecurityName"] == "Global Balanced Fund"
+def test_performance_ytd_is_only_used_when_explicitly_provided():
+    p = portfolio()
+    assert performance_trend(p)["performance_ytd"] is None
+    p["PerformanceYTD"] = 0.08
+    result = performance_trend(p)
+    assert result["performance_ytd"] == 0.08
+    assert result["performance_ytd_source"] == "provided"
 
 
-def test_top_risk_contributors_respects_n():
-    portfolio = _portfolio()
-    assert len(top_risk_contributors(portfolio, n=1)) == 1
+def test_current_risk_return_keeps_expected_return_forward_looking():
+    result = current_risk_return_snapshot(portfolio())
+    assert result["expected_return"] == 0.04
+    assert result["expected_return_semantics"] == "forward_looking_expected_return"
 
 
-def test_top_risk_contributors_share_is_none_without_total_volatility():
-    portfolio = {"SecurityPositions": [{"SecurityName": "X", "ContributionVolatility": 0.01}]}
-    ranked = top_risk_contributors(portfolio, n=5)
-    assert ranked[0]["share_of_portfolio_volatility"] is None
+def test_risk_attribution_includes_account_position():
+    result = risk_contributor_analysis(portfolio(), n=5)
+    assert result["status"] == "ok"
+    assert len(result["contributors"]) == 2
+    assert any(x["position_type"] == "account" for x in result["contributors"])
+
+
+def test_invalid_risk_attribution_emits_no_ranking():
+    p = portfolio()
+    p["SecurityPositions"][0]["ContributionVolatility"] = 9999.0
+    result = risk_contributor_analysis(p)
+    assert result["status"] == "invalid"
+    assert result["contributors"] == []
+    assert top_risk_contributors(p) == []
+
+
+def test_negative_contribution_is_a_risk_reducer_not_top_contributor():
+    p = portfolio()
+    p["SecurityPositions"] = [
+        {"SecurityName": "A", "PortfolioValuePercentage": 0.7, "ContributionVolatility": 0.12},
+        {"SecurityName": "Hedge", "PortfolioValuePercentage": 0.1, "ContributionVolatility": -0.04},
+    ]
+    p["AccountPositions"] = [{"AccountName": "Cash", "PortfolioValuePercentage": 0.2, "ContributionVolatility": 0.02}]
+    result = risk_contributor_analysis(p)
+    assert result["status"] == "ok"
+    assert result["risk_reducers"][0]["SecurityName"] == "Hedge"

@@ -231,7 +231,7 @@ def relevant_search_terms(
         )
 
     for item in priorities_bundle.get("priorities", []):
-        if item["type"] == "concentration":
+        if item["type"] == "single_position_concentration":
             terms.append(
                 {
                     "type": "security",
@@ -239,7 +239,7 @@ def relevant_search_terms(
                     "reason": f"concentrated position ({item['weight']:.0%} of portfolio)",
                 }
             )
-        elif item["type"] == "saa_deviation":
+        elif item["type"] == "saa_breach":
             direction = "below" if item["breach"] == "min" else "above"
             terms.append(
                 {
