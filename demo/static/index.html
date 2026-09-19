@@ -417,8 +417,8 @@
 <script>
 // ── CONFIG ─────────────────────────────────────────────────────────────────────
 const API_URL = '/api/briefing';
-// Default client shown until the picker loads. Change to any ClientId from
-// clients.json if you want a different starting selection.
+// Pre-select this client on load. If the ID does not exist in the loaded
+// database the picker falls back to the first available client automatically.
 const DEFAULT_CLIENT_ID = '49388';
 // ───────────────────────────────────────────────────────────────────────────────
 
@@ -430,68 +430,55 @@ const USE_MOCK = new URLSearchParams(location.search).has('mock');
 let _clients = [];   // full list from /api/clients
 let CLIENT = { id: DEFAULT_CLIENT_ID, name: '', portfolio: null };
 
+// MOCK is only used with ?mock=1 — for UI review without an API key.
+// Values are illustrative; real numbers come from the live backend.
 const MOCK = {
   client: {
-    name: 'Pikachu',
-    id: '49388',
+    name: 'Demo Client',
+    id: '—',
     type: 'Individual',
-    profile: 'Anlageprofil 7',
-    assets_chf: 'CHF 698,978',
+    profile: 'Balanced',
+    assets_chf: 'CHF —',
     age: null
   },
-  headline: 'Seven suitability violations and a 24 pp CHF overweight require immediate discussion.',
+  headline: 'Multiple SAA deviations and active suitability violations require immediate discussion.',
   attention: [
     {
       level: 'critical',
-      title: 'CHF currency overweight',
-      detail: 'Swiss franc exposure at 75.2 % vs SAA target of 51.5 % — a +23.7 pp breach flagged as Error-severity by seven suitability rules.',
-      source: 'saa_target_deviations'
-    },
-    {
-      level: 'critical',
-      title: 'Switzerland concentration',
-      detail: 'Swiss country-group weight at 71.8 % vs 51.6 % target (+20.3 pp); overlaps directly with the CHF overweight and amplifies compliance exposure.',
-      source: 'active_violations'
-    },
-    {
-      level: 'warning',
-      title: 'IT sector overweight',
-      detail: 'Information Technology at 26.0 % vs 10.9 % SAA target (+15.1 pp); Comet Holding AG alone drives 48.6 % of total portfolio volatility at 21.9 % weight.',
+      title: 'Currency overweight',
+      detail: 'Home-currency exposure significantly above SAA target — breach flagged as Error-severity.',
       source: 'saa_target_deviations'
     },
     {
       level: 'warning',
-      title: 'North America & USD underweight',
-      detail: 'North America -14.3 pp below target (17.2 % vs 31.5 %); USD -13.9 pp (16.6 % vs 30.5 %). Both simultaneously below band.',
+      title: 'Sector concentration',
+      detail: 'Single sector materially above SAA target; top position drives a disproportionate share of portfolio volatility.',
+      source: 'saa_target_deviations'
+    },
+    {
+      level: 'warning',
+      title: 'Region underweight',
+      detail: 'Key region below allocation band; compounded by matching currency underweight.',
       source: 'saa_target_deviations'
     },
     {
       level: 'info',
       title: 'Liquidity near floor',
-      detail: 'Portfolio liquidity at 0.6 % (CHF 3,977). Client notes a preference for a cash reserve for medical expenses — confirm this level is sufficient.',
+      detail: 'Portfolio liquidity near floor. Confirm cash-reserve needs before any rebalancing.',
       source: 'liquidity'
     }
   ],
   since_last: [
-    'First briefing for this client — baseline snapshot set today; no prior diff available.',
-    'Seven Error-level and seven Warning-level suitability violations currently active.',
-    'Comet Holding AG is 21.9 % of the portfolio and accounts for 48.6 % of total volatility.'
+    'Baseline snapshot set on first briefing — no prior interaction to diff against.',
+    'Multiple Error-level and Warning-level suitability violations currently active.',
+    'Top position accounts for a significant share of total portfolio volatility.'
   ],
   talking_points: [
-    'CHF at 75 % is nearly double the SAA band — confirm whether overweight is intentional or drift, agree rebalancing path.',
-    'North America and USD both ~14 pp below target simultaneously — explore US-listed positions to close both gaps in one move.',
-    'Comet Holding dominates risk; confirm client understands single-stock volatility contribution before next review.',
-    'Seven Error-level violations are compliance-reportable — confirm compliance team has been notified.',
-    'Liquidity at 0.6 % may not cover stated cash-reserve preference; address before any further rebalancing.'
-  ],
-  sources: [
-    { section: 'Suitability violations',  field: 'active_violations',       detail: '13 active — 7 Error, 6 Warning' },
-    { section: 'SAA target deviations',   field: 'saa_target_deviations',   detail: '5 dimensions out of band; largest: Swiss francs +23.7 pp' },
-    { section: 'Risk contributors',       field: 'risk_attribution',        detail: 'Top 3 positions by contribution volatility; largest: Namen-Aktie Comet Holding AG (48.6% of portfolio vol)' },
-    { section: 'Performance history',     field: 'PerformanceHistory',      detail: '2 data points (2026-06-01 to 2026-07-01)' },
-    { section: 'House view',              field: 'house_view',              detail: '11 asset-class stances, as of 2026-09-01 (mock)' },
-    { section: 'Client notes',            field: 'ClientNotes',             detail: '3 notes, latest 2026-09-04' },
-    { section: 'Client interest tags',    field: 'Tags',                    detail: 'Consumer Staples, Japan, North America' }
+    'Review currency overweight: confirm intentional tilt or agree rebalancing path.',
+    'Discuss region underweight — closing it also addresses the matched currency gap.',
+    'Top position dominates risk; confirm client understands single-stock concentration.',
+    'Active Error-level violations are compliance-reportable — confirm team is notified.',
+    'Check liquidity covers any stated cash-reserve preference before rebalancing.'
   ]
 };
 
