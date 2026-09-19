@@ -1,0 +1,153 @@
+{
+  "snapshots": {
+    "141512": {
+      "portfolio_id": 141512,
+      "captured_at": "2026-09-19T08:05:51.989925+00:00",
+      "portfolio_value": 2193444.58214,
+      "allocation": {
+        "AssetClass": {
+          "Bonds": 0.06822,
+          "Liquidity": 0.0,
+          "Real estate": 0.02393,
+          "Shares": 0.8064603106860027,
+          "Specialties andCommodities": 0.08585000000000001
+        },
+        "CurrencyGroup": {
+          "Andere": 0.042182891338999995,
+          "Euro": 0.11479173838299997,
+          "Swiss francs": 0.5295635864440003,
+          "US-Dollar": 0.29792209451999957
+        },
+        "CountryGroup": {
+          "Asia/Pacific (ex Japan)": 0.0039534148509999985,
+          "Great Britain": 0.034052517000000004,
+          "Japan": 0.012694707266999995,
+          "North America": 0.2876024917640004,
+          "Others": 0.09135792823099992,
+          "Rest of Europe": 0.130295490513,
+          "Switzerland": 0.4245037610599998
+        },
+        "Industry": {
+          "Consumer Discretionary": 0.054086381803999974,
+          "Consumer Staples": 0.095805057112,
+          "Energy": 0.011517639302000006,
+          "Financials": 0.14567319821099983,
+          "Health Care": 0.18564713918400005,
+          "Industrials": 0.14657113625999993,
+          "Information Technology": 0.10766455481899996,
+          "Materials": 0.040529696551,
+          "Real Estate": 0.008453559666000001,
+          "Telecommunication Services": 0.05791051862899985,
+          "Utilities": 0.014831429147999996
+        }
+      },
+      "top_positions": [
+        {
+          "SecurityId": 8449,
+          "SecurityName": "Anteile Exchange Traded Fund USD iShares VII PLC - iShares Core S&P 500 UCITS ETF",
+          "weight": 0.1081
+        },
+        {
+          "SecurityId": 8448,
+          "SecurityName": "Anteile Exchange Traded Fund USD iShares VII PLC - iShares Core S&P 500 UCITS ETF",
+          "weight": 0.08804
+        },
+        {
+          "SecurityId": 10878,
+          "SecurityName": "Anteile Multi Units Luxembourg SICAV - Lyxor DAX (DR) UCITS ETF",
+          "weight": 0.0501
+        },
+        {
+          "SecurityId": 230,
+          "SecurityName": "Namen-Aktie Zurich Insurance Group AG",
+          "weight": 0.03971
+        },
+        {
+          "SecurityId": 9093,
+          "SecurityName": "Anteile - USD ETF - iShares IV PLC - iShares Edge MSCI World Value Factor UCITS ETF",
+          "weight": 0.0395
+        }
+      ],
+      "violations": []
+    },
+    "140557": {
+      "portfolio_id": 140557,
+      "captured_at": "2026-09-19T08:05:51.989951+00:00",
+      "portfolio_value": 1619901.11531,
+      "allocation": {
+        "AssetClass": {
+          "Bonds": 0.09290999999999999,
+          "Liquidity": 0.0,
+          "Real estate": 0.03241,
+          "Shares": 0.7631802866589974,
+          "Specialties andCommodities": 0.09047
+        },
+        "CurrencyGroup": {
+          "Andere": 0.048560459104,
+          "Euro": 0.07407824028600002,
+          "Swiss francs": 0.575138668625,
+          "US-Dollar": 0.28119291864399987
+        },
+        "CountryGroup": {
+          "Asia/Pacific (ex Japan)": 0.003147669318000004,
+          "Great Britain": 0.042781634220999995,
+          "Japan": 0.015623286013999992,
+          "North America": 0.24492610359199984,
+          "Not classified": 0.0,
+          "Others": 0.09817933195100004,
+          "Rest of Europe": 0.09471199292700001,
+          "Switzerland": 0.4796002686359987
+        },
+        "Industry": {
+          "Consumer Discretionary": 0.05257864021800002,
+          "Consumer Staples": 0.11574268758600001,
+          "Energy": 0.010705579960999998,
+          "Financials": 0.12732756890300004,
+          "Health Care": 0.20493240408099972,
+          "Industrials": 0.15717868509700006,
+          "Information Technology": 0.09654382269199999,
+          "Materials": 0.03231500318799999,
+          "Real Estate": 0.008340080896,
+          "Telecommunication Services": 0.028890385410000014,
+          "Utilities": 0.013185428627
+        }
+      },
+      "top_positions": [
+        {
+          "SecurityId": 8449,
+          "SecurityName": "Anteile Exchange Traded Fund USD iShares VII PLC - iShares Core S&P 500 UCITS ETF",
+          "weight": 0.14638
+        },
+        {
+          "SecurityId": 9093,
+          "SecurityName": "Anteile - USD ETF - iShares IV PLC - iShares Edge MSCI World Value Factor UCITS ETF",
+          "weight": 0.05348
+        },
+        {
+          "SecurityId": 644,
+          "SecurityName": "Namen-Aktie Nestle SA",
+          "weight": 0.05054
+        },
+        {
+          "SecurityId": 2346,
+          "SecurityName": "Anteile -A- iShares ETF (CH) - iShares Swiss Dividend ETF   (CH)",
+          "weight": 0.04913
+        },
+        {
+          "SecurityId": 8409,
+          "SecurityName": "Anteile Exchange Traded Fund USD iShares VII PLC - iShares NASDAQ 100 UCITS ETF",
+          "weight": 0.04353
+        }
+      ],
+      "violations": [
+        "Overweight in the equity region \"Rest of Europe\"",
+        "Overweight in the equity sector \"Industrials\"",
+        "Underweight in the equity region \"Asia/Pacific (ex Japan)\""
+      ]
+    }
+  },
+  "events": [
+    "2026-09-19T08:05:51.989925+00:00: first briefing generated for this client",
+    "2026-09-19T08:05:51.989951+00:00: first briefing generated for this client"
+  ]
+}

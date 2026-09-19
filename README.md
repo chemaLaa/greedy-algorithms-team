@@ -3,9 +3,10 @@
 Full-stack briefing assistant for the UnRiskOmega "From Ping to Pitch" case:
 loads the case data, joins and normalises it, ranks what matters, compares it
 to a mock bank house view, pulls relevant market news, tracks client state
-across calls so "what changed" is exact, and calls `gpt-4o` to produce a
-structured 60-second advisor briefing — served through a FastAPI backend and
-a single-page demo front end.
+across calls so "what changed" is exact, calls `gpt-4o` to produce a
+structured 60-second advisor briefing, and provides a follow-up chat interface
+so the advisor can ask data-grounded questions after reading the briefing —
+all served through a FastAPI backend and a single-page demo front end.
 
 **Layers, in dependency order:**
 `data_layer` → `analysis_layer` → `state` / `enrichment` → `synthesis` → `server.py`
@@ -551,12 +552,13 @@ different system prompt and output schema — see `server.py` below.
 
 ## `server.py` — FastAPI entry point
 
-Orchestrates every layer and exposes two JSON endpoints plus the demo front end.
+Orchestrates every layer and exposes three JSON endpoints plus the demo front end.
 
 | Endpoint | What it does |
 |---|---|
 | `GET /api/clients` | Returns all clients sorted by name: `[{id, name, type, portfolios: [{id, name}]}]`. Populated from `clients.json` at startup — used by the demo picker. |
 | `POST /api/briefing` | Accepts `{client_id, portfolio_id?, scope?}`. Runs the full pipeline (data → analysis → state diff → house view → context → prompt → model) and returns the briefing. Results are cached in memory by `(client_id, portfolio_id)`. |
+| `POST /api/chat` | Accepts `{client_id, portfolio_id?, messages: [{role, content}]}`. Answers follow-up questions grounded in the client's data. See chat section below. |
 | `GET /` (and all static paths) | Serves `demo/static/` — the single-page demo front end. |
 
 **`POST /api/briefing` response shape:**
@@ -643,6 +645,73 @@ a different system prompt targeting the `headline/attention/since_last/talking_p
 schema above). The `generate_briefing()` function in `briefing_generator.py`
 uses a three-section prose schema and is used by standalone scripts and tests,
 not by the API.
+
+### `POST /api/chat` — follow-up Q&A
+
+Allows the advisor to ask data-grounded follow-up questions after reading the
+briefing. The conversation is stateless on the server: the client sends the
+full message history on every request and the server rebuilds context from
+scratch each time.
+
+**Request:**
+```json
+{
+  "client_id":    "49388",
+  "portfolio_id": "50110",
+  "messages": [
+    {"role": "user",      "content": "What is the total semiconductor exposure?"},
+    {"role": "assistant", "content": "Information Technology accounts for 26.0% …"},
+    {"role": "user",      "content": "How would reducing it affect the SAA deviation?"}
+  ]
+}
+```
+
+**Response:** `{"content": "…"}`
+
+**What the model receives** — richer than the briefing payload:
+
+| Section | Briefing (`_generate`) | Chat (`/api/chat`) |
+|---|---|---|
+| Client & portfolio summary | YES | YES |
+| Performance | YES | YES |
+| Issues & risks (priorities) | YES | YES |
+| SAA target deviations (all) | YES | YES |
+| Top risk contributors | YES | YES |
+| Changes since last interaction | YES | — (no state refresh on chat) |
+| House view | YES | YES |
+| Market news | YES | YES |
+| Client notes | — | YES |
+| Client interests | — | YES |
+| **All portfolio positions** (weight, CHF, risk share) | — | **YES** |
+| **All proposals** (status, date, reason) | — | **YES** |
+
+Positions and proposals are included only in the chat context because they
+increase token count significantly and the briefing prompt is already tight
+(150-word output budget). Chat has no output length constraint — answers are
+expected to be as long as the question needs.
+
+**Cost:** Each exchange costs roughly the same as one briefing generation
+(~$0.006 on GPT-4o). History is capped at the last 10 turns (`_CHAT_MAX_HISTORY`)
+to prevent unbounded context growth.
+
+**Latency:** Chat adds zero latency to briefing generation — the two are
+completely separate endpoints. The briefing renders in ~3s cold and <10ms
+cached; the chat section simply appears below it, idle, until the advisor
+types. Chat answers take ~3–4s each, which is acceptable for during-call
+follow-up. No data-pipeline caching between the two endpoints is needed:
+`build_client_view` + `build_client_priorities` re-run per chat message in
+~50–150ms, less than 5% of the model-call time and not perceptible.
+
+**Grounding rules baked into `_CHAT_SYSTEM`:**
+- Answer only from the provided data; quote numbers, %, CHF amounts, dates
+- Say "This information is not available in the data provided" when the data
+  is genuinely absent — never guess or extrapolate
+- Translate German terms to English
+- For rebalancing questions: reason from current allocation vs. SAA targets
+  (direction and magnitude only); never project future returns
+
+**UI:** The chat thread appears automatically in the briefing drawer after a
+briefing is generated. It clears when the advisor switches clients.
 
 ## `audit/` — output quality audit
 

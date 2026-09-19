@@ -349,6 +349,77 @@
       line-height: 1.5;
     }
     .error-box strong { display: block; margin-bottom: 4px; }
+
+    /* ── chat section ──────────────────────────────────────────────────────── */
+    .chat-divider {
+      margin: 20px 0 14px;
+      padding-top: 16px;
+      border-top: 1px solid #21262d;
+    }
+    .chat-thread {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .chat-bubble {
+      max-width: 90%;
+      padding: 9px 13px;
+      border-radius: 12px;
+      font-size: 13px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .chat-bubble.user {
+      align-self: flex-end;
+      background: #1f6feb;
+      color: #ffffff;
+      border-bottom-right-radius: 4px;
+    }
+    .chat-bubble.assistant {
+      align-self: flex-start;
+      background: #21262d;
+      color: #c9d1d9;
+      border-bottom-left-radius: 4px;
+    }
+    .chat-bubble.thinking {
+      align-self: flex-start;
+      background: #21262d;
+      color: #484f58;
+      font-style: italic;
+    }
+    .chat-input-row {
+      display: flex;
+      gap: 8px;
+    }
+    .chat-input {
+      flex: 1;
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      color: #e6edf3;
+      font-size: 13px;
+      font-family: inherit;
+      padding: 8px 12px;
+      outline: none;
+      transition: border-color .15s;
+    }
+    .chat-input:focus { border-color: #1f6feb; }
+    .chat-input::placeholder { color: #484f58; }
+    .chat-send {
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      color: #8b949e;
+      font-size: 18px;
+      padding: 0 12px;
+      cursor: pointer;
+      transition: color .15s, background .15s;
+      line-height: 1;
+    }
+    .chat-send:hover:not(:disabled) { background: #30363d; color: #e6edf3; }
+    .chat-send:disabled { opacity: .4; cursor: wait; }
   </style>
 </head>
 <body>
@@ -376,7 +447,7 @@
 <div class="screen-wrap">
   <div class="screen-frame">
 
-    <img id="screen-img" class="screen-img" src="img/list.png" alt="URO Advisor Pro screenshot"
+    <img id="screen-img" class="screen-img" src="img/client_Advisor_DB.png" alt="URO Advisor Pro screenshot"
          onerror="handleImgError(this)">
 
     <div id="screen-placeholder" class="screen-placeholder">
@@ -404,7 +475,21 @@
     <h2>Client Briefing — URO Advisor Pro</h2>
     <button class="drawer-close" onclick="closeDrawer()" aria-label="Close briefing">×</button>
   </div>
-  <div class="drawer-body" id="drawer-body"></div>
+  <div class="drawer-body" id="drawer-body">
+    <div id="briefing-content"></div>
+    <div id="chat-section" style="display:none">
+      <div class="chat-divider">
+        <div class="section-label">Ask a follow-up question</div>
+      </div>
+      <div class="chat-thread" id="chat-thread"></div>
+      <div class="chat-input-row">
+        <input id="chat-input" class="chat-input" type="text"
+               placeholder="e.g. What is the semiconductor exposure?"
+               onkeydown="if(event.key==='Enter')sendChat()">
+        <button id="chat-send" class="chat-send" onclick="sendChat()" title="&#9658;"></button>
+      </div>
+    </div>
+  </div>
   <div class="drawer-footer">
     <span>URO Advisor Pro</span>
     <span class="source-badge" id="source-badge">
@@ -482,6 +567,9 @@ const MOCK = {
   ]
 };
 
+// ── Chat state ─────────────────────────────────────────────────────────────────
+let _chatHistory = [];   // [{role, content}, ...] kept in sync with the thread
+
 // ── Client picker ──────────────────────────────────────────────────────────────
 async function loadClients() {
   try {
@@ -551,11 +639,12 @@ function switchScreen(tabEl) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   tabEl.classList.add('active');
 
-  // swap image
+  // swap image — always reset display first so a previous onerror doesn't
+  // leave the image permanently hidden when the user switches tabs
   const img = document.getElementById('screen-img');
   const ph  = document.getElementById('screen-placeholder');
-  img.style.display = 'block';
   ph.style.display  = 'none';
+  img.style.display = 'block';
   img.src           = SCREEN_IMGS[name];
 
   currentScope = (name === 'portfolio') ? 'portfolio' : 'client';
@@ -646,7 +735,12 @@ function renderBriefing(d, source) {
     .map(s => `<li>${esc(s)}</li>`).join('');
 
 
-  document.getElementById('drawer-body').innerHTML = `
+  // Reset chat on each new briefing
+  _chatHistory = [];
+  document.getElementById('chat-thread').innerHTML = '';
+  document.getElementById('chat-section').style.display = 'block';
+
+  document.getElementById('briefing-content').innerHTML = `
     <div class="client-card">
       <div class="client-name">${esc(c.name)}</div>
       <div class="client-meta">
@@ -672,11 +766,12 @@ function renderBriefing(d, source) {
 }
 
 function renderError(msg) {
-  document.getElementById('drawer-body').innerHTML = `
+  document.getElementById('briefing-content').innerHTML = `
     <div class="error-box">
       <strong>Briefing generation failed</strong>
       ${esc(msg)}
     </div>`;
+  document.getElementById('chat-section').style.display = 'none';
   setSourceBadge('error');
 }
 
@@ -696,10 +791,75 @@ function openDrawer() {
 function closeDrawer() {
   document.getElementById('drawer').classList.remove('open');
   document.getElementById('overlay').classList.remove('open');
+  // Clear briefing + chat so stale content from a previous client isn't shown
+  document.getElementById('briefing-content').innerHTML = '';
+  document.getElementById('chat-thread').innerHTML = '';
+  document.getElementById('chat-section').style.display = 'none';
+  _chatHistory = [];
 }
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeDrawer();
 });
+
+// ── Chat ───────────────────────────────────────────────────────────────────────
+function appendChatBubble(role, text) {
+  const thread = document.getElementById('chat-thread');
+  const div = document.createElement('div');
+  div.className = `chat-bubble ${role}`;
+  div.textContent = text;
+  thread.appendChild(div);
+  // scroll drawer body to show latest bubble
+  const body = document.getElementById('drawer-body');
+  body.scrollTop = body.scrollHeight;
+  return div;
+}
+
+async function sendChat() {
+  const input  = document.getElementById('chat-input');
+  const sendBtn = document.getElementById('chat-send');
+  const question = input.value.trim();
+  if (!question) return;
+
+  input.value   = '';
+  input.disabled = true;
+  sendBtn.disabled = true;
+
+  appendChatBubble('user', question);
+  _chatHistory.push({ role: 'user', content: question });
+
+  const thinking = appendChatBubble('thinking', 'Thinking…');
+
+  try {
+    const res = await fetch('/api/chat', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        client_id:    CLIENT.id,
+        portfolio_id: CLIENT.portfolio || null,
+        messages:     _chatHistory,
+      }),
+    });
+
+    thinking.remove();
+
+    if (!res.ok) {
+      let detail = res.statusText;
+      try { detail = (await res.json()).detail || detail; } catch (_) {}
+      appendChatBubble('assistant', `Error: ${detail}`);
+    } else {
+      const data = await res.json();
+      appendChatBubble('assistant', data.content);
+      _chatHistory.push({ role: 'assistant', content: data.content });
+    }
+  } catch (err) {
+    thinking.remove();
+    appendChatBubble('assistant', `Network error: ${err.message}`);
+  } finally {
+    input.disabled  = false;
+    sendBtn.disabled = false;
+    input.focus();
+  }
+}
 
 // Kick off client list fetch on page load
 loadClients();

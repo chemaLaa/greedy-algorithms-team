@@ -193,10 +193,9 @@ def _check_output(out: dict) -> list[str]:
         elif not _DATE_OR_AMOUNT_RE.search(entry):
             issues.append(f"since_last[{i}] has no date, CHF, or non-zero % amount: {entry!r}")
 
-    # talking_points must contain a digit (ensures specificity; verb choice is unconstrained)
-    for i, tp in enumerate(out.get("talking_points") or []):
-        if not _DIGIT_RE.search(tp):
-            issues.append(f"talking_points[{i}] has no number: {tp!r}")
+    # talking_points: no hard digit requirement — qualitative but client-specific
+    # points (e.g. ESG alternatives, proposal follow-up) are valid without a number.
+    # The system prompt encourages quantification; we don't retry on omissions here.
 
     # No vague word without a nearby digit
     all_text = " ".join(filter(None, [
@@ -447,6 +446,178 @@ def briefing(req: BriefingRequest, fresh: bool = False) -> BriefingResponse:
     result = BriefingResponse(client=client_info, sources=sources, **model_out)
     _cache[cache_key] = result
     return result
+
+
+# ── /api/chat ─────────────────────────────────────────────────────────────
+
+_CHAT_SYSTEM = """\
+You are an advisory assistant inside URO Advisor Pro. A wealth advisor is reviewing
+a specific client and asking follow-up questions after reading the briefing.
+You have access to the client's full portfolio data in the message below.
+
+Rules — follow exactly:
+- Answer ONLY from the data provided. Quote specific numbers (%, CHF amounts, dates,
+  security names) whenever they are relevant.
+- If the information needed to answer is not in the provided data, say explicitly:
+  "This information is not available in the data provided."
+- Keep answers concise and factual — the advisor needs quick, actionable answers.
+- Translate German terms to English in your responses.
+- Do not invent positions, rules, proposals, or news not present in the data.
+- For rebalancing-effect questions: reason from current allocation vs. SAA targets
+  (direction and magnitude only); never project future values or returns.
+- Do not repeat the full data section back — just answer the question.
+"""
+
+_CHAT_MAX_HISTORY = 10   # turns kept in context; controls cost
+
+
+class ChatMessage(BaseModel):
+    role: Literal["user", "assistant"]
+    content: str
+
+
+class ChatRequest(BaseModel):
+    client_id: str
+    portfolio_id: Optional[str] = None
+    messages: list[ChatMessage]   # full history including the new user message
+
+
+class ChatResponse(BaseModel):
+    content: str
+
+
+def _format_all_positions(portfolio: Optional[dict]) -> str:
+    """All portfolio positions sorted by risk contribution, with weight and CHF amount."""
+    if not portfolio:
+        return "No position data available."
+    positions = portfolio.get("SecurityPositions") or []
+    if not positions:
+        return "No positions in this portfolio."
+
+    total_vol = sum(p.get("ContributionVolatility") or 0 for p in positions)
+    sorted_pos = sorted(
+        positions,
+        key=lambda p: p.get("ContributionVolatility") or 0,
+        reverse=True,
+    )
+    from enrichment.market_news import clean_security_name
+    lines = []
+    for p in sorted_pos:
+        name = clean_security_name(p.get("SecurityName") or "Unknown")
+        parts = []
+        weight = p.get("PortfolioValuePercentage")
+        amount = p.get("TotalAmountInPortfolioCurrency")
+        vol    = p.get("ContributionVolatility")
+        if weight is not None:
+            parts.append(f"{weight:.1%} of portfolio")
+        if amount is not None:
+            parts.append(f"CHF {amount:,.0f}")
+        if vol is not None and total_vol > 0:
+            parts.append(f"{vol / total_vol:.0%} of portfolio risk")
+        lines.append(f"- {name}: {', '.join(parts)}" if parts else f"- {name}")
+    return "\n".join(lines)
+
+
+def _format_proposals(view: dict, portfolio_id: str) -> str:
+    """All proposals for this portfolio, most recent first."""
+    proposals = view.get("proposals") or []
+    port_proposals = [p for p in proposals if str(p.get("PortfolioId")) == portfolio_id]
+    if not port_proposals:
+        return "No proposals on file for this portfolio."
+
+    port_proposals.sort(key=lambda p: p.get("ProposedDateUTC") or "", reverse=True)
+    lines = []
+    for p in port_proposals:
+        date   = (p.get("ProposedDateUTC") or "")[:10]
+        status = p.get("ProposalStatusName") or "Unknown"
+        ptype  = p.get("AdvisoryTypeName") or ""
+        reason = p.get("Reason") or ""
+        notes  = p.get("Notes") or ""
+        line = f"- {date} [{status}] {ptype}"
+        if reason:
+            line += f": {reason}"
+        if notes and notes.lower() != "comment":
+            line += f" — {notes}"
+        lines.append(line)
+    return "\n".join(lines)
+
+
+@app.post("/api/chat", response_model=ChatResponse)
+def chat(req: ChatRequest) -> ChatResponse:
+    raw_client = _client_by_id.get(req.client_id)
+    if raw_client is None:
+        raise HTTPException(status_code=404, detail=f"Client '{req.client_id}' not found")
+
+    view    = build_client_view(raw_client, _ref)
+    bundles = build_client_priorities(view, _ref)
+    if not bundles:
+        raise HTTPException(status_code=404, detail="No portfolio found for this client")
+
+    if req.portfolio_id:
+        bundle = next(
+            (b for b in bundles if str(b.get("portfolio_id")) == req.portfolio_id),
+            bundles[0],
+        )
+    else:
+        bundle = bundles[0]
+
+    portfolio_id = str(bundle["portfolio_id"])
+    portfolio    = next(
+        (p for p in view["portfolios"] if str(p.get("PortfolioId")) == portfolio_id),
+        None,
+    )
+
+    # Build context — no state refresh here (avoids overwriting the briefing baseline;
+    # the advisor already saw "since last interaction" in the briefing itself)
+    house_view = compare_portfolio_to_house_view(portfolio) if portfolio else []
+    context    = build_briefing_context(view, bundle, None, house_view, [])
+    context["saa_target_deviations"] = bundle.get("saa_target_deviations") or []
+
+    fragments = context_to_prose(context)
+
+    data_block = (
+        f"{fragments['client_and_portfolio']}\n\n"
+        f"CLIENT NOTES / CIRCUMSTANCES:\n{fragments['client_notes']}\n\n"
+        f"CLIENT INTERESTS:\n{fragments['client_interests']}\n\n"
+        f"RECENT PERFORMANCE:\n{fragments['performance']}\n\n"
+        f"ISSUES AND RISKS:\n{fragments['priorities']}\n\n"
+        f"SAA TARGET DEVIATIONS:\n{_format_saa_deviations(context)}\n\n"
+        f"ALL PORTFOLIO POSITIONS (sorted by risk contribution):\n"
+        f"{_format_all_positions(portfolio)}\n\n"
+        f"TOP RISK CONTRIBUTORS:\n{fragments['risk_contributors']}\n\n"
+        f"HOUSE VIEW COMPARISON:\n{fragments['house_view']}\n\n"
+        f"OPEN PROPOSALS:\n{_format_proposals(view, portfolio_id)}\n\n"
+        f"MARKET NEWS:\n{fragments['news']}"
+    )
+
+    # Trim history and prepend the data block as a system-level context message
+    history = req.messages[-_CHAT_MAX_HISTORY:]
+    messages = [
+        {"role": "system",  "content": _CHAT_SYSTEM},
+        {"role": "user",    "content": f"CLIENT DATA:\n\n{data_block}"},
+        {"role": "assistant","content": "Understood. I have the full client data. What would you like to know?"},
+        *[{"role": m.role, "content": m.content} for m in history],
+    ]
+
+    try:
+        anthropic_client = _default_client()
+    except BriefingGenerationError as e:
+        raise HTTPException(status_code=502, detail=str(e))
+
+    try:
+        response = anthropic_client.chat.completions.create(
+            model=BRIEFING_MODEL,
+            max_tokens=400,
+            temperature=0.1,
+            messages=messages,
+        )
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=f"Chat model call failed: {e!r}")
+
+    answer = _extract_text(response).strip()
+    if not answer:
+        raise HTTPException(status_code=502, detail="Model returned an empty response.")
+    return ChatResponse(content=answer)
 
 
 # ── static demo front end ─────────────────────────────────────────────────
