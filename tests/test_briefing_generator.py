@@ -10,24 +10,28 @@ from synthesis.briefing_generator import (
 )
 
 
-class _FakeTextBlock:
-    def __init__(self, text, block_type="text"):
-        self.text = text
-        self.type = block_type
+class _FakeMessage:
+    def __init__(self, content):
+        self.content = content
+
+
+class _FakeChoice:
+    def __init__(self, content, finish_reason="stop"):
+        self.message = _FakeMessage(content)
+        self.finish_reason = finish_reason
 
 
 class _FakeResponse:
-    def __init__(self, blocks, stop_reason="end_turn"):
-        self.content = blocks
-        self.stop_reason = stop_reason
+    def __init__(self, content, finish_reason="stop"):
+        self.choices = [_FakeChoice(content, finish_reason=finish_reason)]
 
 
-class _FakeMessages:
-    def __init__(self, response_text=None, raise_error=None, stop_reason="end_turn", response_sequence=None):
+class _FakeCompletions:
+    def __init__(self, response_text=None, raise_error=None, finish_reason="stop", response_sequence=None):
         self._response_text = response_text
         self._raise_error = raise_error
-        self._stop_reason = stop_reason
-        self._response_sequence = response_sequence  # list of (text, stop_reason) tuples, consumed in order
+        self._finish_reason = finish_reason
+        self._response_sequence = response_sequence  # list of (text, finish_reason) tuples, consumed in order
         self.last_call_kwargs = None
         self.call_count = 0
 
@@ -37,19 +41,25 @@ class _FakeMessages:
         if self._raise_error is not None:
             raise self._raise_error
         if self._response_sequence is not None:
-            text, stop_reason = self._response_sequence[self.call_count - 1]
-            return _FakeResponse([_FakeTextBlock(text)], stop_reason=stop_reason)
-        return _FakeResponse([_FakeTextBlock(self._response_text)], stop_reason=self._stop_reason)
+            text, finish_reason = self._response_sequence[self.call_count - 1]
+            return _FakeResponse(text, finish_reason=finish_reason)
+        return _FakeResponse(self._response_text, finish_reason=self._finish_reason)
+
+
+class _FakeChat:
+    def __init__(self, completions):
+        self.completions = completions
 
 
 class _FakeClient:
-    def __init__(self, response_text=None, raise_error=None, stop_reason="end_turn", response_sequence=None):
-        self.messages = _FakeMessages(
+    def __init__(self, response_text=None, raise_error=None, finish_reason="stop", response_sequence=None):
+        self._completions = _FakeCompletions(
             response_text=response_text,
             raise_error=raise_error,
-            stop_reason=stop_reason,
+            finish_reason=finish_reason,
             response_sequence=response_sequence,
         )
+        self.chat = _FakeChat(self._completions)
 
 
 VALID_JSON_RESPONSE = json.dumps(
@@ -104,15 +114,23 @@ def test_generate_briefing_computes_read_time_from_word_count():
 def test_generate_briefing_passes_prompt_to_client():
     client = _FakeClient(response_text=VALID_JSON_RESPONSE)
     generate_briefing(_minimal_context(), client=client)
-    call_kwargs = client.messages.last_call_kwargs
-    assert "system" in call_kwargs
-    assert "Anna Meier" in call_kwargs["messages"][0]["content"]
+    call_kwargs = client.chat.completions.last_call_kwargs
+    messages = call_kwargs["messages"]
+    assert messages[0]["role"] == "system"
+    assert any("Anna Meier" in m["content"] for m in messages)
+
+
+def test_generate_briefing_requests_json_mode():
+    client = _FakeClient(response_text=VALID_JSON_RESPONSE)
+    generate_briefing(_minimal_context(), client=client)
+    call_kwargs = client.chat.completions.last_call_kwargs
+    assert call_kwargs["response_format"] == {"type": "json_object"}
 
 
 def test_generate_briefing_uses_custom_model_string():
     client = _FakeClient(response_text=VALID_JSON_RESPONSE)
     generate_briefing(_minimal_context(), model="some-other-model", client=client)
-    assert client.messages.last_call_kwargs["model"] == "some-other-model"
+    assert client.chat.completions.last_call_kwargs["model"] == "some-other-model"
 
 
 # --- markdown fence stripping ---
@@ -164,13 +182,15 @@ def test_generate_briefing_raises_when_api_call_fails():
 
 
 def test_generate_briefing_raises_clear_error_when_truncated_by_max_tokens():
-    # Real bug found via live testing: a genuine response got cut off
+    # Real bug found via live testing (against Anthropic; the same failure
+    # mode applies to any provider): a genuine response got cut off
     # mid-sentence because max_tokens was too low, producing an
     # "Unterminated string" JSON error that didn't explain the real
-    # cause. This must be caught explicitly and reported as truncation,
-    # not surfaced as a generic JSON-parsing failure.
+    # cause. This must be caught explicitly (OpenAI signals this via
+    # finish_reason == "length") and reported as truncation, not surfaced
+    # as a generic JSON-parsing failure.
     truncated_json = '{"recent_development": "This got cut off mid-sen'
-    client = _FakeClient(response_text=truncated_json, stop_reason="max_tokens")
+    client = _FakeClient(response_text=truncated_json, finish_reason="length")
     try:
         generate_briefing(_minimal_context(), client=client, max_tokens=500)
         assert False, "expected BriefingGenerationError"
@@ -183,7 +203,7 @@ def test_generate_briefing_raises_clear_error_when_truncated_by_max_tokens():
 def test_generate_briefing_passes_custom_max_tokens_to_client():
     client = _FakeClient(response_text=VALID_JSON_RESPONSE)
     generate_briefing(_minimal_context(), client=client, max_tokens=8000)
-    assert client.messages.last_call_kwargs["max_tokens"] == 8000
+    assert client.chat.completions.last_call_kwargs["max_tokens"] == 8000
 
 
 def test_generate_briefing_default_max_tokens_has_real_headroom():
@@ -199,15 +219,15 @@ def test_generate_briefing_default_max_tokens_has_real_headroom():
 
 def test_generate_briefing_retries_after_malformed_response_and_succeeds():
     # Real bug found via live testing: one real client (CASE-002) got a
-    # response missing "outlook_and_actions" entirely, with stop_reason
-    # "end_turn" (not a max_tokens truncation) — genuine occasional LLM
+    # response missing "outlook_and_actions" entirely, with finish_reason
+    # "stop" (not a max_tokens truncation) — genuine occasional LLM
     # unreliability in structured output. A retry is the fix; confirm it
     # actually works: first call malformed, second call valid.
     malformed = '{"recent_development": "x", "health_check": "y"},'  # missing outlook_and_actions
-    client = _FakeClient(response_sequence=[(malformed, "end_turn"), (VALID_JSON_RESPONSE, "end_turn")])
+    client = _FakeClient(response_sequence=[(malformed, "stop"), (VALID_JSON_RESPONSE, "stop")])
     result = generate_briefing(_minimal_context(), client=client)
     assert result["recent_development"]
-    assert client.messages.call_count == 2
+    assert client.chat.completions.call_count == 2
 
 
 def test_generate_briefing_raises_after_exhausting_all_attempts():
@@ -218,7 +238,7 @@ def test_generate_briefing_raises_after_exhausting_all_attempts():
         assert False, "expected BriefingGenerationError"
     except BriefingGenerationError:
         pass
-    assert client.messages.call_count == 3
+    assert client.chat.completions.call_count == 3
 
 
 def test_generate_briefing_max_attempts_one_disables_retrying():
@@ -229,32 +249,31 @@ def test_generate_briefing_max_attempts_one_disables_retrying():
         assert False, "expected BriefingGenerationError"
     except BriefingGenerationError:
         pass
-    assert client.messages.call_count == 1
+    assert client.chat.completions.call_count == 1
 
 
 def test_generate_briefing_first_attempt_success_does_not_retry():
     client = _FakeClient(response_text=VALID_JSON_RESPONSE)
     generate_briefing(_minimal_context(), client=client)
-    assert client.messages.call_count == 1
+    assert client.chat.completions.call_count == 1
 
 
 # --- _extract_text ---
 
 
-def test_extract_text_concatenates_multiple_text_blocks():
-    response = _FakeResponse([_FakeTextBlock("part1 "), _FakeTextBlock("part2")])
-    assert _extract_text(response) == "part1 part2"
+def test_extract_text_returns_message_content():
+    response = _FakeResponse("hello world")
+    assert _extract_text(response) == "hello world"
 
 
-def test_extract_text_skips_non_text_blocks():
-    response = _FakeResponse(
-        [_FakeTextBlock("real text", block_type="text"), _FakeTextBlock("ignored", block_type="tool_use")]
-    )
-    assert _extract_text(response) == "real text"
+def test_extract_text_empty_choices_returns_empty_string():
+    response = _FakeResponse.__new__(_FakeResponse)
+    response.choices = []
+    assert _extract_text(response) == ""
 
 
-def test_extract_text_empty_content():
-    response = _FakeResponse([])
+def test_extract_text_missing_content_returns_empty_string():
+    response = _FakeResponse(None)
     assert _extract_text(response) == ""
 
 
@@ -294,10 +313,10 @@ def test_parse_json_response_handles_literal_newline_in_string_value():
 
 
 def test_default_client_raises_without_api_key_or_package():
-    # Whichever fails first (missing 'anthropic' package, or missing
-    # ANTHROPIC_API_KEY) — both should surface as BriefingGenerationError,
+    # Whichever fails first (missing 'openai' package, or missing
+    # OPENAI_API_KEY) — both should surface as BriefingGenerationError,
     # never a raw ImportError or KeyError leaking out.
-    original = os.environ.pop("ANTHROPIC_API_KEY", None)
+    original = os.environ.pop("OPENAI_API_KEY", None)
     try:
         try:
             _default_client()
@@ -306,4 +325,4 @@ def test_default_client_raises_without_api_key_or_package():
             pass
     finally:
         if original is not None:
-            os.environ["ANTHROPIC_API_KEY"] = original
+            os.environ["OPENAI_API_KEY"] = original

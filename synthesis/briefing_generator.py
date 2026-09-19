@@ -2,18 +2,25 @@
 The actual model call: builds the prompt via prompt_builder, calls the
 model, parses the JSON response into a Briefing.
 
-NETWORK / DEPENDENCY LIMITATION — not testable in this sandbox (no
-network access here, and the `anthropic` package isn't installed). Every
-piece of logic EXCEPT the real API call is tested via a fake client
-object that mimics anthropic.Anthropic's interface (see
+Uses OpenAI's Chat Completions API (`client.chat.completions.create()`),
+requesting strict JSON mode via `response_format={"type": "json_object"}`
+rather than relying on prompt-only instructions — more reliable than hoping
+the model remembers not to wrap the JSON in prose or a markdown fence
+(though the fence-stripping fallback in _parse_json_response() is kept
+regardless, since models still do this occasionally even under JSON mode).
+
+NETWORK / DEPENDENCY LIMITATION: no OPENAI_API_KEY was available where this
+was last verified, so the real API call itself (`_default_client()`
+building a genuine openai.OpenAI() and `generate_briefing()` calling it with
+no `client=` override) has NOT been executed against a live OpenAI account.
+Every piece of logic EXCEPT the real API call is tested via a fake client
+object that mimics openai.OpenAI()'s interface (see
 tests/test_briefing_generator.py) — parsing, error handling, the
 markdown-fence-stripping fallback, and the read-time estimate are all
-verified without hitting a network. The real call itself (`_default_client()`
-building a genuine anthropic.Anthropic() and `generate_briefing()` calling
-it with no `client=` override) has NOT been executed here — verify on
-your own machine:
-    pip install anthropic
-    export ANTHROPIC_API_KEY=...
+verified without hitting a network. Verify the real call on your own
+machine:
+    pip install openai
+    export OPENAI_API_KEY=...
     python3 -c "
 from synthesis.briefing_generator import generate_briefing
 # build a real context first (see README), then:
@@ -21,9 +28,9 @@ briefing = generate_briefing(context)
 print(briefing)
 "
 
-DEFAULT_MODEL below is set from Anthropic's current model string as of
-this writing — double-check it's still valid for your API key before
-relying on it; model strings change.
+DEFAULT_MODEL below is set to a current OpenAI model that supports JSON
+mode as of this writing — double-check it's still valid for your API key
+before relying on it; model strings change.
 """
 from __future__ import annotations
 
@@ -34,12 +41,12 @@ from typing import Optional
 
 from .prompt_builder import build_prompt
 
-DEFAULT_MODEL = "claude-sonnet-5"
+DEFAULT_MODEL = "gpt-4o"
 # 1024 was tried first and proved too tight in practice — a real model
 # response got cut off mid-sentence before finishing the JSON structure
 # (three ~150-220 word sections plus JSON syntax overhead adds up).
 # 4096 leaves real headroom; still fails loudly and specifically (see the
-# stop_reason check in generate_briefing) if a model ever runs long
+# finish_reason check in generate_briefing) if a model ever runs long
 # enough to hit even this.
 DEFAULT_MAX_TOKENS = 4096
 REQUIRED_KEYS = ("recent_development", "health_check", "outlook_and_actions")
@@ -68,15 +75,15 @@ def generate_briefing(
 ) -> dict:
     """
     context: a BriefingContext (synthesis.context_builder.build_briefing_context() output)
-    model: the Anthropic model string to use (see DEFAULT_MODEL note above)
+    model: the OpenAI model string to use (see DEFAULT_MODEL note above)
     client: an already-constructed client object exposing
-        `.messages.create(model=, max_tokens=, system=, messages=)` and
-        returning an object with a `.content` list of blocks each having
-        `.type` and `.text`, and a `.stop_reason` attribute — matches
-        anthropic.Anthropic()'s interface. Pass one explicitly for custom
-        auth/timeout config, for tests (a fake client), or leave None to
-        construct a default anthropic.Anthropic() from the
-        ANTHROPIC_API_KEY environment variable.
+        `.chat.completions.create(model=, max_tokens=, messages=,
+        response_format=)` and returning an object with a `.choices` list
+        whose first element has `.message.content` (a plain string) and a
+        `.finish_reason` attribute — matches openai.OpenAI()'s interface.
+        Pass one explicitly for custom auth/timeout config, for tests (a
+        fake client), or leave None to construct a default openai.OpenAI()
+        from the OPENAI_API_KEY environment variable.
     max_tokens: passed straight through to the API call. Raise this if
         you see a "truncated" BriefingGenerationError (see below) —
         that's the model running out of room mid-response, not a bug in
@@ -85,11 +92,11 @@ def generate_briefing(
         many times if the model returns malformed/incomplete JSON —
         confirmed necessary in practice: a real run produced valid JSON
         for 3 of 4 clients and, for the 4th, a response missing a
-        required key entirely with stop_reason "end_turn" (i.e. the
-        model itself believed it was done) — not a max_tokens
-        truncation, genuine occasional unreliability in structured JSON
-        generation. A fresh attempt is the standard, effective fix for
-        this failure mode. Set to 1 to disable retrying.
+        required key entirely with finish_reason "stop" (i.e. the model
+        itself believed it was done) — not a max_tokens truncation,
+        genuine occasional unreliability in structured JSON generation. A
+        fresh attempt is the standard, effective fix for this failure
+        mode. Set to 1 to disable retrying.
 
     Returns:
         {
@@ -127,21 +134,23 @@ def generate_briefing(
 
 def _generate_once(context: dict, model: str, client, max_tokens: int) -> dict:
     prompt = build_prompt(context)
+    messages = [{"role": "system", "content": prompt["system"]}, *prompt["messages"]]
 
     try:
-        response = client.messages.create(
+        response = client.chat.completions.create(
             model=model,
             max_tokens=max_tokens,
-            system=prompt["system"],
-            messages=prompt["messages"],
+            messages=messages,
+            response_format={"type": "json_object"},
         )
     except BriefingGenerationError:
         raise
     except Exception as e:
         raise BriefingGenerationError(f"Model call failed: {e!r}") from e
 
-    stop_reason = getattr(response, "stop_reason", None)
-    if stop_reason == "max_tokens":
+    choices = getattr(response, "choices", None) or []
+    finish_reason = getattr(choices[0], "finish_reason", None) if choices else None
+    if finish_reason == "length":
         raise BriefingGenerationError(
             f"Model response was truncated — it hit the max_tokens limit ({max_tokens}) "
             f"before finishing. This is not a JSON-formatting bug; increase max_tokens "
@@ -169,10 +178,10 @@ def _generate_once(context: dict, model: str, client, max_tokens: int) -> dict:
 
 def _default_client(timeout_seconds: float = 90.0):
     try:
-        import anthropic
+        import openai
     except ImportError as e:
         raise BriefingGenerationError(
-            "The 'anthropic' package isn't installed — run `pip install anthropic`."
+            "The 'openai' package isn't installed — run `pip install openai`."
         ) from e
 
     # Some Python installations (notably python.org builds and certain
@@ -180,10 +189,12 @@ def _default_client(timeout_seconds: float = 90.0):
     # system trust store the way `curl` does — TLS handshakes then fail
     # or hang entirely, surfacing as a slow APIConnectionError rather
     # than a clear SSL error. Confirmed as the real root cause of a real
-    # ~60-75s hang-then-fail in testing. Relying on the user's shell
-    # having SSL_CERT_FILE exported is fragile (it doesn't persist across
-    # terminal sessions, as happened in practice) — set it here, in code,
-    # every time this runs, so it never depends on shell state again.
+    # ~60-75s hang-then-fail in testing (against Anthropic's API, but the
+    # same underlying httpx/SSL issue applies to any HTTPS client here).
+    # Relying on the user's shell having SSL_CERT_FILE exported is
+    # fragile (it doesn't persist across terminal sessions, as happened
+    # in practice) — set it here, in code, every time this runs, so it
+    # never depends on shell state again.
     try:
         import certifi
 
@@ -192,31 +203,33 @@ def _default_client(timeout_seconds: float = 90.0):
     except ImportError:
         pass  # certifi not installed — best-effort, fall through to whatever's configured
 
-    api_key = os.environ.get("ANTHROPIC_API_KEY")
+    api_key = os.environ.get("OPENAI_API_KEY")
     if not api_key:
-        raise BriefingGenerationError("ANTHROPIC_API_KEY environment variable is not set.")
+        raise BriefingGenerationError("OPENAI_API_KEY environment variable is not set.")
 
-    return anthropic.Anthropic(api_key=api_key, timeout=timeout_seconds)
+    return openai.OpenAI(api_key=api_key, timeout=timeout_seconds)
 
 
 def _extract_text(response) -> str:
     """
-    A response's .content is a list of content blocks; a plain-text
-    reply has one block with .text and .type == "text". Concatenates all
-    text blocks defensively (skipping any non-text block type) rather
-    than assuming exactly one block.
+    An OpenAI chat completion's `.choices[0].message.content` is already a
+    plain string (unlike Anthropic's list-of-content-blocks shape) — this
+    just guards against an empty/missing choices list rather than
+    assuming there's always exactly one.
     """
-    parts = [
-        block.text for block in getattr(response, "content", []) if getattr(block, "type", None) == "text"
-    ]
-    return "".join(parts)
+    choices = getattr(response, "choices", None) or []
+    if not choices:
+        return ""
+    message = getattr(choices[0], "message", None)
+    return getattr(message, "content", None) or ""
 
 
 def _parse_json_response(raw_text: str) -> dict:
     """
     Models sometimes wrap JSON in a markdown code fence (```json ... ```)
-    despite being told not to — stripped here before parsing rather than
-    failing on a purely cosmetic wrapper.
+    despite being told not to — and despite JSON mode being requested —
+    stripped here before parsing rather than failing on a purely cosmetic
+    wrapper.
 
     strict=False: a model writing multi-paragraph prose inside a JSON
     string value sometimes emits a literal newline character instead of

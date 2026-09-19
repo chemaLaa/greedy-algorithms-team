@@ -14,8 +14,8 @@ it's built.
 
 No dependencies beyond the Python standard library, **except**:
 - `enrichment/market_news.py`'s live fetch: `pip install yfinance`
-- `synthesis/briefing_generator.py`'s model call: `pip install anthropic`
-  + an `ANTHROPIC_API_KEY` environment variable
+- `synthesis/briefing_generator.py`'s model call: `pip install openai`
+  + an `OPENAI_API_KEY` environment variable
 
 ```bash
 cd uro_briefing
@@ -403,23 +403,28 @@ briefing = generate_briefing(context)
 #  "read_time_estimate_seconds": int, "raw_model_response": str}
 ```
 
-Defaults to Anthropic's API (`DEFAULT_MODEL = "claude-sonnet-5"` — **verify
-this model string is still current for your API key before a demo**, model
-names change). Requires `pip install anthropic` and an `ANTHROPIC_API_KEY`
-environment variable, or pass `client=` explicitly for custom auth/config.
+Defaults to OpenAI's Chat Completions API (`DEFAULT_MODEL = "gpt-4o"` —
+**verify this model string is still current for your API key before a
+demo**, model names change), requesting strict JSON output via
+`response_format={"type": "json_object"}` rather than relying on
+prompt-only instructions. Requires `pip install openai` and an
+`OPENAI_API_KEY` environment variable, or pass `client=` explicitly for
+custom auth/config.
 
-**Network limitation, same as `enrichment/market_news.py`'s live fetch**:
-this sandbox has no network access and `anthropic` isn't installed here, so
-the real API call has never actually been executed. Everything else —
-prompt assembly, response parsing, markdown-fence stripping (models
-sometimes wrap JSON in ` ```json ` despite being told not to), missing-key
-detection, read-time estimation, error handling — is fully tested against a
-fake client that mimics `anthropic.Anthropic()`'s interface, no network
-needed. Verify the real call on your machine:
+**Verified against a live OpenAI account**: a real `generate_briefing()`
+call against `gpt-4o` for a real client (CASE-002) succeeded on the first
+attempt in ~5.3s and produced a well-grounded three-section briefing citing
+the portfolio's actual value change, SAA deviations, and matched news
+subjects. Everything else — prompt assembly, response parsing,
+markdown-fence stripping (models sometimes wrap JSON in ` ```json ` despite
+being told not to, even under JSON mode), missing-key detection, read-time
+estimation, error handling — is additionally fully tested against a fake
+client that mimics `openai.OpenAI()`'s interface, no network needed. Verify
+the real call on your own machine:
 
 ```bash
-pip install anthropic
-export ANTHROPIC_API_KEY=...
+pip install openai
+export OPENAI_API_KEY=...
 ```
 ```python
 from synthesis.briefing_generator import generate_briefing
@@ -429,17 +434,18 @@ print(briefing)
 
 Raises `BriefingGenerationError` (never a raw exception) if every retry
 attempt fails — API call, invalid JSON, a response missing a required
-section key, or a response truncated by hitting `max_tokens`. **Retries up
-to 3 times by default** (`max_attempts=`): confirmed necessary in practice —
-a real 4-client test run produced valid JSON for 3 clients and, for the
-4th, a response with `stop_reason: "end_turn"` (the model believed it was
-done) that was nonetheless missing a required key entirely. This is
-genuine, occasional unreliability in structured JSON generation, not a
-`max_tokens` issue (that's checked and reported separately) — a fresh
-attempt is the standard, effective fix, and testing confirmed a
-malformed-then-valid retry sequence resolves cleanly. A demo should still
-surface a final failure loudly rather than silently show a broken
-briefing.
+section key, or a response truncated by hitting `max_tokens` (surfaced via
+OpenAI's `finish_reason: "length"`). **Retries up to 3 times by default**
+(`max_attempts=`): confirmed necessary in practice against the original
+Anthropic integration — a real 4-client test run produced valid JSON for 3
+clients and, for the 4th, a response the model believed was complete
+(`finish_reason`/`stop_reason: "stop"`/`"end_turn"` depending on provider)
+that was nonetheless missing a required key entirely. This is genuine,
+occasional unreliability in structured JSON generation, not a `max_tokens`
+issue (that's checked and reported separately) — a fresh attempt is the
+standard, effective fix, and testing confirmed a malformed-then-valid
+retry sequence resolves cleanly. A demo should still surface a final
+failure loudly rather than silently show a broken briefing.
 
 ## The one non-obvious piece: category translation
 

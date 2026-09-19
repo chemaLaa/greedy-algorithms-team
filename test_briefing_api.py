@@ -1,5 +1,5 @@
 """
-Smoke-test the Anthropic API call in synthesis/briefing_generator.py directly,
+Smoke-test the OpenAI API call in synthesis/briefing_generator.py directly,
 plus the market-news fetch step (relevant_search_terms + budget-capped
 fetch_relevant_news_bundle) timed separately — so a slow briefing can be
 attributed to the LLM call vs. the news search rather than lumped together.
@@ -12,8 +12,8 @@ Usage:
                                                    # in isolation, with zero network calls
 
 Requires:
-    pip install anthropic certifi
-    export ANTHROPIC_API_KEY=sk-ant-...
+    pip install openai certifi
+    export OPENAI_API_KEY=sk-...
     (real news fetch also needs: pip install yfinance, and network access)
 """
 import argparse
