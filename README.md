@@ -531,13 +531,35 @@ from synthesis.briefing_generator import generate_briefing
 
 briefing = generate_briefing(context)
 # {"recent_development": str, "health_check": str, "outlook_and_actions": str,
-#  "read_time_estimate_seconds": int, "raw_model_response": str}
+#  "read_time_estimate_seconds": int, "raw_model_response": str,
+#  "sources": list[dict]}  # see below — never written by the model
 ```
 
+<<<<<<< HEAD
 Uses OpenAI Chat Completions (`DEFAULT_MODEL = "gpt-4o"`), strict JSON mode
 (`response_format={"type": "json_object"}`), retries up to 3 times.
 Raises `BriefingGenerationError` on every failure mode (API error, invalid
 JSON, missing required key, `finish_reason: "length"` truncation).
+=======
+**Sources are code-built, never model-generated.** `briefing["sources"]` is
+`context["sources"]` (from `context_builder._sources_section()`) passed
+through as-is — an LLM asked to cite its own sources will happily invent
+plausible-looking ones, so this list is instead assembled directly from
+the same facts the rest of the pipeline already computed: every priority
+(with its v2 `fact_id`), every risk contributor, the house view feed
+(with `as_of`/mock status), every retained news article (with its real
+`url`), and every CRM note/interest tag actually used. Each entry is
+`{"type", "label", "url", "date", "fact_id"}` — `url` is only ever
+populated for a genuine news-article link.
+
+Defaults to OpenAI's Chat Completions API (`DEFAULT_MODEL = "gpt-4o"` —
+**verify this model string is still current for your API key before a
+demo**, model names change), requesting strict JSON output via
+`response_format={"type": "json_object"}` rather than relying on
+prompt-only instructions. Requires `pip install openai` and an
+`OPENAI_API_KEY` environment variable, or pass `client=` explicitly for
+custom auth/config.
+>>>>>>> d883739d74b4ac5f7de2ad283ced3a18357047ed
 
 **Note:** `server.py` does **not** call `generate_briefing()`. It has its own
 `_generate()` function that uses the same OpenAI client and JSON mode but a

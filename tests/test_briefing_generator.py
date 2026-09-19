@@ -71,8 +71,8 @@ VALID_JSON_RESPONSE = json.dumps(
 )
 
 
-def _minimal_context():
-    return {
+def _minimal_context(**overrides):
+    base = {
         "client": {"name": "Anna Meier", "risk_profile": "Balanced", "esg_profile": None},
         "portfolio": {
             "portfolio_id": 1,
@@ -87,6 +87,8 @@ def _minimal_context():
         "house_view_alignment": [],
         "market_news": [],
     }
+    base.update(overrides)
+    return base
 
 
 # --- generate_briefing, happy path ---
@@ -100,6 +102,23 @@ def test_generate_briefing_returns_all_required_keys():
     assert "outlook_and_actions" in result
     assert "read_time_estimate_seconds" in result
     assert "raw_model_response" in result
+    assert "sources" in result
+
+
+def test_generate_briefing_passes_through_sources_from_context_unmodified():
+    # "sources" must be an exact pass-through of context["sources"] — a
+    # code-built audit trail, never something the model wrote or the
+    # model call is allowed to alter.
+    client = _FakeClient(response_text=VALID_JSON_RESPONSE)
+    fake_sources = [{"type": "news_article", "label": "Test", "url": "http://x", "date": None, "fact_id": None}]
+    result = generate_briefing(_minimal_context(sources=fake_sources), client=client)
+    assert result["sources"] == fake_sources
+
+
+def test_generate_briefing_sources_defaults_to_empty_list_when_absent_from_context():
+    client = _FakeClient(response_text=VALID_JSON_RESPONSE)
+    result = generate_briefing(_minimal_context(), client=client)
+    assert result["sources"] == []
 
 
 def test_generate_briefing_computes_read_time_from_word_count():

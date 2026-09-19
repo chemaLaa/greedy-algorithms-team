@@ -302,6 +302,41 @@ def render_client_detail(clients: list[dict], ref: ReferenceIndex, client_ref: s
         st.markdown("### 🎯 Outlook & Actions")
         st.write(briefing["outlook_and_actions"])
 
+        _render_sources(briefing.get("sources") or [])
+
+
+def _render_sources(sources: list[dict]) -> None:
+    """
+    Renders synthesis.context_builder's code-built audit trail — never
+    text the model wrote. A news_article entry with a real link gets a
+    clickable reference; everything else (priority facts, risk
+    contributors, house view, CRM notes/tags) is traceable by its label
+    and fact_id instead, since none of those have a natural URL.
+    """
+    st.markdown("### 🔗 Sources")
+    if not sources:
+        st.caption("No sourced facts were used to produce this briefing.")
+        return
+
+    labels = {
+        "priority_fact": "Portfolio priorities",
+        "risk_contributor": "Risk contributors",
+        "house_view": "Bank house view",
+        "news_article": "Market news",
+        "client_note": "CRM notes",
+        "client_interest_tag": "CRM interest tags",
+    }
+    for source_type, heading in labels.items():
+        group = [s for s in sources if s["type"] == source_type]
+        if not group:
+            continue
+        with st.expander(f"{heading} ({len(group)})"):
+            for source in group:
+                if source.get("url"):
+                    st.markdown(f"- [{source['label']}]({source['url']})")
+                else:
+                    st.markdown(f"- {source['label']}")
+
 
 def main() -> None:
     clients, ref = _load_clients_and_ref()
