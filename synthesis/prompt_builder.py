@@ -94,6 +94,16 @@ Critical rules:
   something the client "holds" or "is invested in"; if news happens to \
   match one, frame it as relevant to the client's stated interest, not \
   as commentary on an actual position.
+- "BANK'S CURRENT EXPECTED RETURN" is the bank's own live risk-engine \
+  estimate — present it as the bank's current estimate (e.g. "the \
+  bank's risk engine currently estimates..."), never as a promise or \
+  guarantee of future results, and never blend it into your account of \
+  what already happened. It is a distinct, forward-looking figure, not \
+  something derived from or confirming the historical performance \
+  numbers elsewhere in this message — do not present the two as if one \
+  explains the other unless another fact you were given actually \
+  supports that link. If it isn't available for this portfolio, say so \
+  rather than omitting any mention of it or estimating one yourself.
 - Write in fluent English throughout, even where a source fact was in \
   German — translate rather than mixing languages in your output.
 - Plain prose, no markdown headers or bullet lists inside each section.
@@ -115,6 +125,7 @@ def context_to_prose(context: dict) -> dict[str, str]:
         "client_notes": _format_client_notes(context.get("client_notes", [])),
         "client_interests": _format_client_interests(context.get("client_interests", [])),
         "performance": _format_performance(context["portfolio"].get("performance_trend")),
+        "current_risk_return": _format_current_risk_return(context.get("current_risk_return")),
         "attribution_caveat": _format_attribution_caveat(context.get("attribution_caveat")),
         "priorities": _format_priorities(context.get("priorities", [])),
         "risk_contributors": _format_risk_contributors(context.get("top_risk_contributors", [])),
@@ -138,6 +149,8 @@ def build_prompt(context: dict) -> dict:
         f"CLIENT'S OWN STATED INTERESTS (CRM tags — personal interest, NOT necessarily a portfolio "
         f"holding):\n{fragments['client_interests']}\n\n"
         f"RECENT PERFORMANCE:\n{fragments['performance']}\n\n"
+        f"BANK'S CURRENT EXPECTED RETURN (forward-looking risk-engine estimate, NOT a guarantee and NOT "
+        f"derived from the historical performance above):\n{fragments['current_risk_return']}\n\n"
         f"DATA AVAILABILITY FOR ATTRIBUTING THIS CHANGE:\n{fragments['attribution_caveat']}\n\n"
         f"CURRENT ISSUES AND RISKS (ranked by rule-based severity, not necessarily by "
         f"real-world importance — use your own judgment):\n{fragments['priorities']}\n\n"
@@ -229,6 +242,42 @@ def _format_performance(trend: Optional[dict]) -> str:
         f"Portfolio value moved from {previous:,.0f} to {latest:,.0f} "
         f"({change_str}) between {previous_date} and {latest_date}."
     )
+
+
+def _format_current_risk_return(snapshot: Optional[dict]) -> str:
+    """
+    The bank's own live risk-engine snapshot (synthesis.context_builder's
+    current_risk_return, from analysis_layer.performance's
+    current_risk_return_snapshot()) — the ONE genuinely forward-looking
+    figure in this whole prompt, as opposed to everything else here,
+    which describes what already happened.
+
+    Never silently defaults: an "unavailable" status (or a bundle that
+    never had this data at all) is stated plainly rather than presenting
+    a stale number or omitting the section without explanation — the
+    model should know the bank's own expected-return estimate isn't
+    available for this portfolio, not just see the section vanish.
+    """
+    if not snapshot or snapshot.get("status") in (None, "unavailable"):
+        return "Not available for this portfolio."
+
+    expected_return = snapshot.get("expected_return")
+    volatility = snapshot.get("volatility")
+    value_at_risk = snapshot.get("value_at_risk")
+
+    parts = []
+    if expected_return is not None:
+        parts.append(f"expected return {expected_return:+.1%} (forward-looking risk-engine estimate, not a guarantee)")
+    if volatility is not None:
+        parts.append(f"current volatility {volatility:.1%}")
+    if value_at_risk is not None:
+        parts.append(f"value-at-risk {value_at_risk:.1%}")
+
+    if not parts:
+        return "Not available for this portfolio."
+
+    prefix = "Partial data — " if snapshot.get("status") == "partial" else ""
+    return prefix + "; ".join(parts) + "."
 
 
 def _format_attribution_caveat(caveat: Optional[dict]) -> str:

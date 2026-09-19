@@ -2,6 +2,7 @@ from synthesis.prompt_builder import (
     build_prompt,
     context_to_prose,
     _format_attribution_caveat,
+    _format_current_risk_return,
     _format_client_and_portfolio,
     _format_client_interests,
     _format_client_notes,
@@ -35,6 +36,7 @@ def _minimal_context(**overrides):
         "client_interests": [],
         "priorities": [],
         "top_risk_contributors": [],
+        "current_risk_return": {"status": "ok", "reasons": [], "expected_return": 0.045, "volatility": 0.08, "value_at_risk": 0.12},
         "change_since_last_interaction": {"source": "state_diff", "is_first_interaction": True, "details": {}},
         "house_view_alignment": [],
         "market_news": [],
@@ -147,6 +149,39 @@ def test_performance_handles_none():
 
 def test_performance_handles_insufficient_history():
     assert "No prior performance history" in _format_performance({"change_since_previous_point": None})
+
+
+# --- _format_current_risk_return ---
+
+
+def test_current_risk_return_none_is_not_available():
+    assert _format_current_risk_return(None) == "Not available for this portfolio."
+
+
+def test_current_risk_return_unavailable_status_is_not_available():
+    snapshot = {"status": "unavailable", "reasons": ["current_risk_return_metrics_missing"], "expected_return": None}
+    assert _format_current_risk_return(snapshot) == "Not available for this portfolio."
+
+
+def test_current_risk_return_ok_formats_expected_return_as_forward_looking():
+    snapshot = {"status": "ok", "expected_return": 0.045, "volatility": 0.08, "value_at_risk": 0.12}
+    text = _format_current_risk_return(snapshot)
+    assert "+4.5%" in text
+    assert "forward-looking risk-engine estimate, not a guarantee" in text
+    assert "8.0%" in text
+    assert "12.0%" in text
+
+
+def test_current_risk_return_negative_expected_return_formats_with_sign():
+    snapshot = {"status": "ok", "expected_return": -0.02, "volatility": None, "value_at_risk": None}
+    text = _format_current_risk_return(snapshot)
+    assert "-2.0%" in text
+
+
+def test_current_risk_return_partial_status_is_labeled_partial():
+    snapshot = {"status": "partial", "expected_return": 0.03, "volatility": None, "value_at_risk": None}
+    text = _format_current_risk_return(snapshot)
+    assert text.startswith("Partial data —")
 
 
 # --- _format_attribution_caveat ---
@@ -467,8 +502,9 @@ def test_news_distinguishes_fetch_failed_from_no_news_found():
 def test_context_to_prose_has_all_expected_keys():
     fragments = context_to_prose(_minimal_context())
     assert set(fragments.keys()) == {
-        "client_and_portfolio", "client_notes", "client_interests", "performance", "attribution_caveat",
-        "priorities", "risk_contributors", "change_since_last_interaction", "house_view", "news",
+        "client_and_portfolio", "client_notes", "client_interests", "performance", "current_risk_return",
+        "attribution_caveat", "priorities", "risk_contributors", "change_since_last_interaction",
+        "house_view", "news",
     }
 
 
@@ -534,6 +570,20 @@ def test_build_prompt_user_message_includes_client_interests_section():
 def test_build_prompt_system_forbids_treating_interest_tags_as_holdings():
     system = " ".join(build_prompt(_minimal_context())["system"].split())
     assert "not a portfolio holding" in system or "NOT a portfolio holding" in system
+
+
+def test_build_prompt_user_message_includes_current_risk_return_section():
+    prompt = build_prompt(
+        _minimal_context(current_risk_return={"status": "ok", "expected_return": 0.06, "volatility": None, "value_at_risk": None})
+    )
+    content = prompt["messages"][0]["content"]
+    assert "BANK'S CURRENT EXPECTED RETURN" in content
+    assert "+6.0%" in content
+
+
+def test_build_prompt_system_forbids_treating_expected_return_as_a_guarantee():
+    system = " ".join(build_prompt(_minimal_context())["system"].split())
+    assert "never as a promise or guarantee" in system.lower() or "not as a promise or guarantee" in system.lower()
 
 
 def test_build_prompt_system_mentions_client_circumstances_and_staleness_judgment():

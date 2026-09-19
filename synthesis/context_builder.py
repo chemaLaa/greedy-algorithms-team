@@ -80,6 +80,8 @@ def build_briefing_context(
     priorities = priority_bundle.get("priorities", [])
     top_risk_contributors = priority_bundle.get("top_risk_contributors", [])
 
+    current_risk_return = _current_risk_return_section(priority_bundle)
+
     return {
         "client": _client_section(client_view),
         "client_notes": client_notes,
@@ -87,6 +89,7 @@ def build_briefing_context(
         "portfolio": _portfolio_section(client_view, portfolio, priority_bundle),
         "priorities": priorities,
         "top_risk_contributors": top_risk_contributors,
+        "current_risk_return": current_risk_return,
         "change_since_last_interaction": _change_section(priority_bundle, state_result),
         "house_view_alignment": house_view_alignment,
         "market_news": market_news,
@@ -99,6 +102,7 @@ def build_briefing_context(
             market_news=market_news,
             client_notes=client_notes,
             client_interests=client_interests,
+            current_risk_return=current_risk_return,
         ),
     }
 
@@ -173,6 +177,33 @@ def _client_interests_section(client_view: dict) -> list[dict]:
     ]
 
 
+def _current_risk_return_section(priority_bundle: dict) -> dict:
+    """
+    The bank's own current risk/expected-return snapshot
+    (analysis_layer.performance.current_risk_return_snapshot(), already
+    computed and quality-gated in every priority_bundle) — genuinely
+    forward-looking, unlike everything else in this pipeline, which
+    describes what already happened. Previously computed and then
+    dropped: build_portfolio_priorities() puts it in the bundle as
+    "current_risk_return" but nothing downstream ever read it, the same
+    class of gap as client_notes/client_tags before them.
+
+    ExpectedReturn is the bank's live risk-engine output (DATA.md), not
+    a number this pipeline predicts or estimates itself — surfaced here
+    exactly as computed, with its own status, so an unavailable/invalid
+    figure for a given portfolio is stated plainly rather than silently
+    omitted or guessed at.
+    """
+    snapshot = priority_bundle.get("current_risk_return") or {}
+    return {
+        "status": snapshot.get("status"),
+        "reasons": snapshot.get("reasons") or [],
+        "volatility": snapshot.get("volatility"),
+        "expected_return": snapshot.get("expected_return"),
+        "value_at_risk": snapshot.get("value_at_risk"),
+    }
+
+
 def _priority_source_label(item: dict) -> str:
     ptype = item.get("type")
     if ptype == "violation":
@@ -193,6 +224,7 @@ def _sources_section(
     market_news: list[dict],
     client_notes: list[dict],
     client_interests: list[dict],
+    current_risk_return: Optional[dict] = None,
 ) -> list[dict]:
     """
     A deterministic, code-built audit trail of what actually went into
@@ -282,6 +314,19 @@ def _sources_section(
                 "fact_id": None,
             }
         )
+
+    if current_risk_return and current_risk_return.get("status") not in (None, "unavailable"):
+        expected_return = current_risk_return.get("expected_return")
+        if expected_return is not None:
+            sources.append(
+                {
+                    "type": "expected_return",
+                    "label": f"Bank's current expected-return estimate (forward-looking risk engine): {expected_return:+.1%}",
+                    "url": None,
+                    "date": None,
+                    "fact_id": None,
+                }
+            )
 
     return sources
 

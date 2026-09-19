@@ -225,6 +225,30 @@ def test_client_interests_skips_tags_with_no_name():
     assert context["client_interests"] == []
 
 
+# --- current_risk_return ---
+
+
+def test_current_risk_return_surfaces_the_bundles_expected_return():
+    # The fixture bundle already has a real current_risk_return snapshot
+    # (analysis_layer.performance.current_risk_return_snapshot()) that
+    # was previously computed and dropped — never read by anything.
+    view, bundle = _view_and_bundle()
+    context = build_briefing_context(view, bundle)
+    crr = context["current_risk_return"]
+    assert crr["status"] == bundle["current_risk_return"]["status"]
+    assert crr["expected_return"] == bundle["current_risk_return"]["expected_return"]
+    assert crr["volatility"] == bundle["current_risk_return"]["volatility"]
+
+
+def test_current_risk_return_missing_from_bundle_reports_unavailable_status():
+    view, bundle = _view_and_bundle()
+    sparse_bundle = {k: v for k, v in bundle.items() if k != "current_risk_return"}
+    context = build_briefing_context(view, sparse_bundle)
+    crr = context["current_risk_return"]
+    assert crr["status"] is None
+    assert crr["expected_return"] is None
+
+
 # --- sources ---
 
 
@@ -301,6 +325,24 @@ def test_sources_includes_client_notes_and_interests():
     assert len(interest_sources) == len(context["client_interests"]) > 0
 
 
+def test_sources_includes_expected_return_when_available():
+    view, bundle = _view_and_bundle()
+    context = build_briefing_context(view, bundle)
+    expected_return_sources = [s for s in context["sources"] if s["type"] == "expected_return"]
+    assert len(expected_return_sources) == 1
+    assert "forward-looking" in expected_return_sources[0]["label"]
+
+
+def test_sources_excludes_expected_return_when_unavailable():
+    view, bundle = _view_and_bundle()
+    bundle_without_expected_return = {
+        **bundle,
+        "current_risk_return": {"status": "unavailable", "reasons": ["current_risk_return_metrics_missing"], "expected_return": None},
+    }
+    context = build_briefing_context(view, bundle_without_expected_return)
+    assert not [s for s in context["sources"] if s["type"] == "expected_return"]
+
+
 def test_sources_empty_when_nothing_to_cite():
     view, bundle = _view_and_bundle()
     minimal_bundle = {
@@ -308,6 +350,7 @@ def test_sources_empty_when_nothing_to_cite():
         "priorities": [],
         "top_risk_contributors": [],
         "concentrations": {},
+        "current_risk_return": {"status": "unavailable", "reasons": [], "expected_return": None},
     }
     minimal_view = {**view, "notes": [], "tags": []}
     context = build_briefing_context(minimal_view, minimal_bundle)

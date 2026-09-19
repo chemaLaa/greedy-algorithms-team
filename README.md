@@ -531,6 +531,37 @@ gaps worth an advisor's follow-up.
   be due to... cash flows, fees, or currency movements" for exactly this
   fixture.
 
+**Surfacing the bank's own forward-looking estimate, not building a new
+one.** `analysis_layer.performance.current_risk_return_snapshot()` already
+computes and quality-gates the bank's own `ExpectedReturn` — a genuine
+forward-looking figure from their live risk engine (per `DATA.md`), not
+something this pipeline predicts or models itself. It was being computed
+and put in every priority bundle, then silently dropped — the same class
+of gap as `client_notes`/`client_tags` before it.
+
+- `context_builder.py`'s `current_risk_return` surfaces it (with its own
+  `status`, so an unavailable/invalid figure for a given portfolio is
+  stated plainly rather than omitted without explanation or guessed at).
+- `prompt_builder.py` gives it its own `BANK'S CURRENT EXPECTED RETURN`
+  section and a `SYSTEM_PROMPT` rule: present it as the bank's own
+  estimate, never as a promise or guarantee, and never blend it into the
+  historical-performance narrative as if one explained the other.
+- Also added to `sources` when present, so it's traceable the same way
+  every other fact in the briefing is.
+- Verified across all 47 real clients (43 `ok` / 1 `partial` / 3
+  `unavailable`, zero crashes) and live against `gpt-4o`: the model
+  correctly placed it in `outlook_and_actions` as *"the bank's risk
+  engine expects a 5.4% return..."*, kept fully separate from the
+  historical decline discussed in `recent_development`.
+
+This is deliberately **not** a step toward a predictive model of our
+own — the schema has no per-security historical return series and
+nothing resembling a training set; a model built on it would produce a
+number that *looks* confident without being any more reliable than a
+guess. The safe move is surfacing a real, already-computed, already-
+labeled forward-looking figure the bank stands behind — not inventing a
+new one.
+
 ### `briefing_generator.py` — standalone model call (scripts / tests)
 
 ```python
