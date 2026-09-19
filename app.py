@@ -1,17 +1,29 @@
 """
-Simplest possible demo UI for the UnRiskOmega briefing assistant — one
-Streamlit app that calls the pipeline directly in-process. No API layer,
-no separate frontend build, no CORS — just Python calling the modules
-already built and tested.
+Demo UI for the UnRiskOmega briefing assistant, styled to sit inside the
+mocked URO Advisor Pro interface rather than as a bare upload-a-file form.
+
+Two views, matching the two real screens the briefing feature would live
+across (see data/core-case/GUI-screenshots/):
+  1. Kundenberater-Dashboard — a client list (Client_Advisor_DB.png), with
+     a warnings/violations count per row computed by the SAME analysis
+     pipeline the briefing itself uses, and a "Generate Briefing" entry
+     point per client. This is the "clear entry point" the case brief
+     asks for — not a sidebar dropdown.
+  2. Client detail — a header bar in the style of Client_DB.png, the
+     "Active priorities" section (now defensive against None fields and
+     unknown priority types — see _render_priority), and the briefing
+     generation flow itself.
+
+Header color (#5499E4) sampled directly from Client_Advisor_DB.png's top
+bar; this is a demo restyle, not a pixel-perfect clone of a real Angular/
+React enterprise app — the goal is "clearly belongs in this interface",
+not a frontend rebuild.
 
 Run: streamlit run app.py
-
-This is a starting point, not a visual match to UnRiskOmega's actual
-screenshots yet — once those are available, the styling here (or a
-follow-up FastAPI + HTML version) can be adjusted to match.
 """
 from pathlib import Path
 
+import pandas as pd
 import streamlit as st
 
 from data_layer import ReferenceIndex, build_client_view, load_clients, load_reference
@@ -26,7 +38,41 @@ DEFAULT_CLIENTS_PATH = "data/core-case/portfolio-data/clients.json"
 DEFAULT_REFERENCE_PATH = "data/core-case/portfolio-data/reference.json"
 STATE_DIR = Path(".state")
 
-st.set_page_config(page_title="URO Advisor Pro — Briefing Assistant", layout="wide")
+URO_BLUE = "#5499E4"
+SEVERITY_RED = "#D0342C"
+SEVERITY_AMBER = "#E8A33D"
+
+st.set_page_config(page_title="URO Advisor Pro — Briefing Assistant", layout="wide", page_icon="🔔")
+
+st.markdown(
+    f"""
+    <style>
+    .block-container {{ padding-top: 1rem; }}
+    .uro-topbar {{
+        background: {URO_BLUE};
+        color: white;
+        padding: 0.7rem 1.4rem;
+        margin: -1rem -1rem 1.2rem -1rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-family: -apple-system, "Segoe UI", sans-serif;
+    }}
+    .uro-topbar .brand {{ font-size: 1.25rem; font-weight: 700; letter-spacing: 0.03em; }}
+    .uro-topbar .user {{ font-size: 0.9rem; opacity: 0.92; }}
+    .uro-client-header {{
+        background: #f2f2f2;
+        border-bottom: 1px solid #ddd;
+        padding: 0.7rem 1.2rem;
+        margin: -0.5rem -1rem 1rem -1rem;
+        font-family: -apple-system, "Segoe UI", sans-serif;
+    }}
+    .uro-client-header .name {{ font-size: 1.1rem; font-weight: 700; }}
+    .uro-client-header .meta {{ font-size: 0.85rem; color: #555; margin-top: 0.15rem; }}
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
 
 
 @st.cache_resource
@@ -35,7 +81,7 @@ def load_reference_index(reference_path: str) -> ReferenceIndex:
     return ReferenceIndex(reference)
 
 
-def _client_label(client: dict) -> str:
+def _display_name(client: dict) -> str:
     """
     Matches data_layer.flatten's own display-name fallback logic: company
     clients don't have FirstName/LastName at all, so falling back to
@@ -45,90 +91,226 @@ def _client_label(client: dict) -> str:
     """
     client_ref = client.get("ClientRef", "Unknown")
     if client.get("IsClientACompany"):
-        name = client.get("Company") or client_ref
-    else:
-        name = f"{(client.get('FirstName') or '')} {(client.get('LastName') or '')}".strip() or client_ref
-    return f"{client_ref} — {name}"
+        return client.get("Company") or client_ref
+    name = f"{(client.get('FirstName') or '')} {(client.get('LastName') or '')}".strip()
+    return name or client_ref
 
 
-st.title("URO Advisor Pro — AI Briefing Assistant")
+@st.cache_data(show_spinner="Loading client overview...")
+def _client_summary_table(_ref: ReferenceIndex, clients: list[dict]) -> pd.DataFrame:
+    """
+    One row per client for the dashboard list — counts computed via the
+    SAME analysis_layer pipeline the briefing itself uses (build_client_priorities),
+    so a "2 warnings" badge here can never drift out of sync with what
+    "Active priorities" actually shows once you drill into that client.
+    `_ref` is prefixed with an underscore so Streamlit's cache doesn't try
+    (and fail) to hash a ReferenceIndex object.
+    """
+    rows = []
+    for client in clients:
+        view = build_client_view(client, _ref)
+        if not view["portfolios"]:
+            continue
+        bundle = build_client_priorities(view, _ref)[0]
+        priorities = bundle["priorities"]
+        violations = sum(1 for p in priorities if p["type"] == "violation" and p.get("severity") == "Error")
+        warnings = len(priorities) - violations
 
-with st.sidebar:
-    st.header("Client data")
-    uploaded = st.file_uploader(
-        "Upload a new clients.json (optional — defaults to the case dataset)", type="json"
-    )
-    if uploaded is not None:
-        clients = load_clients(uploaded)
-    else:
-        clients = load_clients(DEFAULT_CLIENTS_PATH)
-
-    ref = load_reference_index(DEFAULT_REFERENCE_PATH)
-
-    client_options = {_client_label(c): c for c in clients}
-    selected_label = st.selectbox("Select client", list(client_options.keys()))
-    selected_client = client_options[selected_label]
-
-view = build_client_view(selected_client, ref)
-portfolio = view["portfolios"][0]
-
-col1, col2, col3 = st.columns(3)
-col1.metric("Client", view["display_name"])
-value = portfolio.get("AssetsUnderManagementInDefaultCurrency")
-currency = view.get("reporting_currency", "")
-col2.metric("Portfolio value", f"{value:,.0f} {currency}" if value is not None else "—")
-risk_profile = view.get("risk_profile")
-col3.metric("Risk profile", risk_profile["Name"] if risk_profile else "—")
-
-bundles = build_client_priorities(view, ref)
-bundle = bundles[0]
-
-st.subheader("Active priorities")
-if bundle["priorities"]:
-    for item in bundle["priorities"]:
-        if item["type"] == "violation":
-            st.warning(f"[{item['severity']}] {item['description']}")
-        elif item["type"] == "saa_breach":
-            direction = "below" if item["breach"] == "min" else "above"
-            st.info(
-                f"{item['category']} ({item['dimension']}): {item['actual']:.1%} vs. "
-                f"target {item['target']:.1%} — {direction} range"
-            )
-        elif item["type"] == "single_position_concentration":
-            st.warning(f"{item['security_name']} — {item['weight']:.1%} of portfolio")
-else:
-    st.success("No active issues flagged.")
-
-st.divider()
-
-if st.button("🔔 Generate Briefing", type="primary"):
-    with st.spinner("Generating briefing..."):
-        state_result = refresh_client_state(view, bundles, state_dir=STATE_DIR)
-        portfolio_id = str(portfolio["PortfolioId"])
-        house_view = compare_portfolio_to_house_view(portfolio)
-
-        terms = relevant_search_terms(portfolio, bundle, ref=ref)
-        news_bundle = fetch_relevant_news_bundle(terms, YahooFinanceNewsProvider())
-        if news_bundle["status"] == "fetch_failed":
-            st.warning("Market news search failed (network/provider error) — briefing will note this rather than claim no news exists.")
-
-        context = build_briefing_context(
-            view, bundle, state_result["portfolios"][portfolio_id], house_view, news_bundle=news_bundle
+        portfolio = view["portfolios"][0]
+        rows.append(
+            {
+                "Client Ref": client.get("ClientRef"),
+                "Name": _display_name(client),
+                "AUM": portfolio.get("AssetsUnderManagementInDefaultCurrency"),
+                "Currency": view.get("reporting_currency") or "",
+                "Risk Profile": (view.get("risk_profile") or {}).get("Name") or "—",
+                "Violations": violations,
+                "Warnings": warnings,
+            }
         )
+    return pd.DataFrame(rows)
 
-        try:
-            briefing = generate_briefing(context)
-        except BriefingGenerationError as e:
-            st.error(f"Briefing generation failed: {e}")
-            st.stop()
 
-    st.success(f"Briefing ready — ~{briefing['read_time_estimate_seconds']}s read")
+def _pct(value) -> str:
+    return f"{value:.1%}" if isinstance(value, (int, float)) else "n/a"
 
-    st.markdown("### 📊 Recent Development")
-    st.write(briefing["recent_development"])
 
-    st.markdown("### ⚠️ Health Check")
-    st.write(briefing["health_check"])
+def _render_priority(item: dict) -> None:
+    """
+    Renders one priorities-bundle item defensively: every field is read
+    with .get() and formatted through _pct() rather than an f-string
+    ':.1%' spec, which raises TypeError outright on a None value (the
+    original bug — a saa_breach row can legitimately have no `target`
+    when its SAA mapping sets Min/Max without a Target). Every known
+    priority `type` is handled, and an unrecognized one still renders
+    (generically) rather than silently vanishing from the list.
+    """
+    ptype = item.get("type")
+    severity = item.get("severity") or "Info"
 
-    st.markdown("### 🎯 Outlook & Actions")
-    st.write(briefing["outlook_and_actions"])
+    if ptype == "violation":
+        st.error(f"🔴 **[{severity}]** {item.get('description') or item.get('rule_code') or 'Unspecified violation'}")
+    elif ptype == "saa_breach":
+        direction = "below" if item.get("breach") == "min" else "above"
+        st.warning(
+            f"🟡 **{item.get('category', 'Unknown category')}** ({item.get('dimension', '—')}): "
+            f"{_pct(item.get('actual'))} vs. target {_pct(item.get('target'))} — {direction} allowed range"
+        )
+    elif ptype == "single_position_concentration":
+        st.warning(f"🟡 **{item.get('security_name') or 'Unknown position'}** — {_pct(item.get('weight'))} of portfolio")
+    elif ptype == "high_liquidity":
+        st.info(f"ℹ️ Portfolio liquidity is **{_pct(item.get('liquidity_ratio'))}** of AUM — may warrant discussion.")
+    else:
+        st.info(f"ℹ️ **[{severity}]** {ptype or 'unclassified item'}")
+
+
+def _render_topbar() -> None:
+    st.markdown(
+        """
+        <div class="uro-topbar">
+          <div class="brand">◆ UNRISKOMEGA</div>
+          <div class="user">👤 Hans Muster</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def _load_clients_and_ref():
+    with st.sidebar:
+        st.header("Client data")
+        uploaded = st.file_uploader(
+            "Upload a new clients.json (optional — defaults to the case dataset)", type="json"
+        )
+        clients = load_clients(uploaded) if uploaded is not None else load_clients(DEFAULT_CLIENTS_PATH)
+    ref = load_reference_index(DEFAULT_REFERENCE_PATH)
+    return clients, ref
+
+
+def render_client_list(clients: list[dict], ref: ReferenceIndex) -> None:
+    _render_topbar()
+    st.subheader("Kundenberater-Dashboard")
+
+    table = _client_summary_table(ref, clients)
+    total_violations = int(table["Violations"].sum()) if not table.empty else 0
+    total_warnings = int(table["Warnings"].sum()) if not table.empty else 0
+
+    col1, col2, col3 = st.columns(3)
+    col1.metric("Clients", len(table))
+    col2.metric("Active violations", total_violations)
+    col3.metric("Warnings", total_warnings)
+
+    st.caption("Select a client row to open their briefing entry point.")
+    event = st.dataframe(
+        table,
+        use_container_width=True,
+        hide_index=True,
+        on_select="rerun",
+        selection_mode="single-row",
+        column_config={
+            "AUM": st.column_config.NumberColumn(format="%d"),
+            "Violations": st.column_config.NumberColumn(),
+            "Warnings": st.column_config.NumberColumn(),
+        },
+    )
+
+    selected_rows = event.selection.rows if event.selection else []
+    if selected_rows:
+        st.session_state["selected_client_ref"] = table.iloc[selected_rows[0]]["Client Ref"]
+        st.rerun()
+
+
+def render_client_detail(clients: list[dict], ref: ReferenceIndex, client_ref: str) -> None:
+    _render_topbar()
+
+    if st.button("← Back to client list"):
+        del st.session_state["selected_client_ref"]
+        st.rerun()
+
+    client = next((c for c in clients if c.get("ClientRef") == client_ref), None)
+    if client is None:
+        st.error(f"Client '{client_ref}' not found in the currently loaded dataset.")
+        return
+
+    view = build_client_view(client, ref)
+    if not view["portfolios"]:
+        st.warning(f"{_display_name(client)} ({client_ref}) has no portfolios in this dataset.")
+        return
+    portfolio = view["portfolios"][0]
+
+    risk_profile = view.get("risk_profile")
+    value = portfolio.get("AssetsUnderManagementInDefaultCurrency")
+    currency = view.get("reporting_currency") or ""
+    value_str = f"{value:,.0f} {currency}" if value is not None else "—"
+
+    st.markdown(
+        f"""
+        <div class="uro-client-header">
+          <div class="name">{_display_name(client)} ({client_ref})</div>
+          <div class="meta">Risk profile: {risk_profile['Name'] if risk_profile else '—'}
+              &nbsp;|&nbsp; Portfolio value: {value_str}
+              &nbsp;|&nbsp; {portfolio.get('Name') or 'Portfolio'}</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    bundles = build_client_priorities(view, ref)
+    bundle = bundles[0]
+
+    st.subheader("Active priorities")
+    if bundle["priorities"]:
+        for item in bundle["priorities"]:
+            _render_priority(item)
+    else:
+        st.success("No active issues flagged.")
+
+    st.divider()
+
+    if st.button("🔔 Generate Briefing", type="primary"):
+        with st.spinner("Generating briefing..."):
+            state_result = refresh_client_state(view, bundles, state_dir=STATE_DIR)
+            portfolio_id = str(portfolio["PortfolioId"])
+            house_view = compare_portfolio_to_house_view(portfolio)
+
+            terms = relevant_search_terms(portfolio, bundle, ref=ref)
+            news_bundle = fetch_relevant_news_bundle(terms, YahooFinanceNewsProvider())
+            if news_bundle["status"] == "fetch_failed":
+                st.warning(
+                    "Market news search failed (network/provider error) — "
+                    "briefing will note this rather than claim no news exists."
+                )
+
+            context = build_briefing_context(
+                view, bundle, state_result["portfolios"][portfolio_id], house_view, news_bundle=news_bundle
+            )
+
+            try:
+                briefing = generate_briefing(context)
+            except BriefingGenerationError as e:
+                st.error(f"Briefing generation failed: {e}")
+                st.stop()
+
+        st.success(f"Briefing ready — ~{briefing['read_time_estimate_seconds']}s read")
+
+        st.markdown("### 📊 Recent Development")
+        st.write(briefing["recent_development"])
+
+        st.markdown("### ⚠️ Health Check")
+        st.write(briefing["health_check"])
+
+        st.markdown("### 🎯 Outlook & Actions")
+        st.write(briefing["outlook_and_actions"])
+
+
+def main() -> None:
+    clients, ref = _load_clients_and_ref()
+    selected_client_ref = st.session_state.get("selected_client_ref")
+
+    if selected_client_ref:
+        render_client_detail(clients, ref, selected_client_ref)
+    else:
+        render_client_list(clients, ref)
+
+
+main()
