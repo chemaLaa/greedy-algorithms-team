@@ -1,0 +1,81 @@
+{
+  "snapshots": {
+    "181172": {
+      "portfolio_id": 181172,
+      "captured_at": "2026-09-19T06:11:11.627484+00:00",
+      "portfolio_value": 534191.14,
+      "allocation": {
+        "AssetClass": {
+          "Bonds": 0.20526999999999998,
+          "Liquidity": 0.0,
+          "Real estate": 0.03112,
+          "Shares": 0.6367305804160073,
+          "Specialties andCommodities": 0.11035999999999999
+        },
+        "CurrencyGroup": {
+          "Andere": 0.08776255484799991,
+          "Euro": 0.026147305107999994,
+          "Swiss francs": 0.620048738124,
+          "US-Dollar": 0.2495219823360001
+        },
+        "CountryGroup": {
+          "Asia/Pacific (ex Japan)": 0.030974881215000003,
+          "Great Britain": 0.127189714933,
+          "Japan": 0.02616574618200001,
+          "North America": 0.253339543373,
+          "Not classified": 0.0,
+          "Others": 0.1281952795919999,
+          "Rest of Europe": 0.03130889044999999,
+          "Switzerland": 0.386306524671
+        },
+        "Industry": {
+          "Consumer Discretionary": 0.034684927604999985,
+          "Consumer Staples": 0.10993284437100004,
+          "Energy": 0.033474219667999995,
+          "Financials": 0.13860455302599983,
+          "Health Care": 0.158868543465,
+          "Industrials": 0.07476534526899997,
+          "Information Technology": 0.06185349788100002,
+          "Materials": 0.020617526176999995,
+          "Real Estate": 0.007069983532999997,
+          "Telecommunication Services": 0.05473853004999998,
+          "Utilities": 0.0055706093710000005
+        }
+      },
+      "top_positions": [
+        {
+          "SecurityId": 9093,
+          "SecurityName": "Anteile - USD ETF - iShares IV PLC - iShares Edge MSCI World Value Factor UCITS ETF",
+          "weight": 0.08145
+        },
+        {
+          "SecurityId": 4092,
+          "SecurityName": "Anteile -D CHF- BlackRock Invest Fund Switzerland - iShares SMI(R) Equity Index Fund (CH)",
+          "weight": 0.07641
+        },
+        {
+          "SecurityId": 6721,
+          "SecurityName": "Anteile -Hedged CHF- SSGA SPDR ETFs Europe I PLC - SPDR Bloomberg Global Aggregate Bond UCITS ETF",
+          "weight": 0.07543
+        },
+        {
+          "SecurityId": 14758,
+          "SecurityName": "Anteile -USD- iShares IV PLC  - iShares Edge MSCI USA Quality Factor UCITS ETF",
+          "weight": 0.06604
+        },
+        {
+          "SecurityId": 2346,
+          "SecurityName": "Anteile -A- iShares ETF (CH) - iShares Swiss Dividend ETF   (CH)",
+          "weight": 0.06101
+        }
+      ],
+      "violations": [
+        "Overweight in the equity sector \"Energy\"",
+        "Significant overweight in the equity region \"Japan\""
+      ]
+    }
+  },
+  "events": [
+    "2026-09-19T05:52:54.277379+00:00: first briefing generated for this client"
+  ]
+}

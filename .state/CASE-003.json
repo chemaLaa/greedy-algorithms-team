@@ -1,0 +1,44 @@
+{
+  "snapshots": {
+    "443": {
+      "portfolio_id": 443,
+      "captured_at": "2026-09-19T06:15:09.351678+00:00",
+      "portfolio_value": 140591.95,
+      "allocation": {
+        "AssetClass": {
+          "Bonds": 0.0,
+          "Liquidity": 0.0,
+          "Real estate": 0.0,
+          "Shares": 0.97026,
+          "Specialties andCommodities": 0.0
+        },
+        "CurrencyGroup": {
+          "Swiss francs": 0.97026
+        },
+        "CountryGroup": {
+          "Switzerland": 0.97026
+        },
+        "Industry": {
+          "Consumer Staples": 0.73404,
+          "Information Technology": 0.23622
+        }
+      },
+      "top_positions": [
+        {
+          "SecurityId": 188,
+          "SecurityName": "Namen-Aktie Chocoladefabriken Lindt & Spruengli AG",
+          "weight": 0.73404
+        },
+        {
+          "SecurityId": 4673,
+          "SecurityName": "Namen-Aktie Sensirion Holding AG",
+          "weight": 0.23622
+        }
+      ],
+      "violations": []
+    }
+  },
+  "events": [
+    "2026-09-19T06:15:09.351678+00:00: first briefing generated for this client"
+  ]
+}

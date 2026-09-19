@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>URO Advisor Pro · Demo</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0d1117;
+      color: #c9d1d9;
+      min-height: 100vh;
+    }
+
+    /* ── client picker ────────────────────────────────────────────────────── */
+    .picker-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: #161b22;
+      border-bottom: 1px solid #21262d;
+    }
+    .picker-label { font-size: 12px; color: #8b949e; white-space: nowrap; }
+    .picker-select {
+      flex: 1;
+      max-width: 280px;
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      color: #e6edf3;
+      font-size: 13px;
+      font-family: inherit;
+      padding: 5px 10px;
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238b949e'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      padding-right: 28px;
+    }
+    .picker-select:focus { outline: none; border-color: #1f6feb; }
+    .picker-portfolio {
+      max-width: 220px;
+    }
+    .picker-meta { font-size: 12px; color: #484f58; }
+
+    /* ── tabs ──────────────────────────────────────────────────────────────── */
+    .tab-bar {
+      display: flex;
+      gap: 2px;
+      padding: 10px 14px 0;
+      background: #161b22;
+      border-bottom: 1px solid #21262d;
+    }
+    .tab {
+      padding: 7px 18px;
+      background: transparent;
+      border: 1px solid transparent;
+      border-bottom: none;
+      color: #8b949e;
+      cursor: pointer;
+      border-radius: 6px 6px 0 0;
+      font-size: 13px;
+      font-family: inherit;
+      transition: color .15s, background .15s;
+    }
+    .tab:hover { color: #c9d1d9; background: #21262d; }
+    .tab.active {
+      color: #e6edf3;
+      background: #0d1117;
+      border-color: #21262d;
+      border-bottom-color: #0d1117;
+      margin-bottom: -1px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── screen frame ──────────────────────────────────────────────────────── */
+    .screen-wrap {
+      padding: 14px;
+      overflow: auto;
+    }
+    .screen-frame {
+      position: relative;
+      display: inline-block;
+      line-height: 0;
+    }
+    .screen-img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      border: 1px solid #21262d;
+      border-radius: 6px;
+    }
+    /* shown when image file is missing */
+    .screen-placeholder {
+      display: none;
+      width: 1100px;
+      height: 640px;
+      background: #161b22;
+      border: 2px dashed #21262d;
+      border-radius: 6px;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 10px;
+      color: #484f58;
+      font-size: 14px;
+      line-height: 1.5;
+      text-align: center;
+    }
+    .screen-placeholder .ph-title { font-size: 16px; color: #6e7681; }
+
+    /* ── generate button ───────────────────────────────────────────────────── */
+    #btn-generate {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 18px;
+      background: #1f6feb;
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(0,0,0,.5);
+      transition: background .15s, transform .1s;
+      z-index: 10;
+    }
+    #btn-generate:hover:not(:disabled) { background: #388bfd; }
+    #btn-generate:active:not(:disabled) { transform: scale(.97); }
+    #btn-generate:disabled { background: #21262d; color: #6e7681; cursor: wait; }
+
+    .spinner {
+      display: none;
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(255,255,255,.25);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .6s linear infinite;
+      flex-shrink: 0;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── overlay ───────────────────────────────────────────────────────────── */
+    #overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.55);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s ease;
+      z-index: 40;
+    }
+    #overlay.open { opacity: 1; pointer-events: all; }
+
+    /* ── drawer ────────────────────────────────────────────────────────────── */
+    #drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 430px;
+      max-width: 100vw;
+      background: #161b22;
+      border-left: 1px solid #21262d;
+      transform: translateX(100%);
+      transition: transform .25s ease-out;
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+    }
+    #drawer.open { transform: translateX(0); }
+
+    .drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      background: #21262d;
+      border-bottom: 1px solid #30363d;
+      flex-shrink: 0;
+    }
+    .drawer-header h2 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #e6edf3;
+      letter-spacing: .02em;
+    }
+    .drawer-close {
+      background: none;
+      border: none;
+      color: #8b949e;
+      font-size: 22px;
+      line-height: 1;
+      cursor: pointer;
+      padding: 2px 4px;
+      border-radius: 4px;
+      transition: color .15s, background .15s;
+    }
+    .drawer-close:hover { color: #e6edf3; background: #30363d; }
+
+    .drawer-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 18px;
+    }
+    .drawer-body::-webkit-scrollbar { width: 6px; }
+    .drawer-body::-webkit-scrollbar-track { background: #161b22; }
+    .drawer-body::-webkit-scrollbar-thumb { background: #30363d; border-radius: 3px; }
+
+    .drawer-footer {
+      padding: 10px 18px;
+      border-top: 1px solid #21262d;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #484f58;
+      flex-shrink: 0;
+    }
+
+    /* ── source badge ──────────────────────────────────────────────────────── */
+    .source-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      background: #21262d;
+      color: #8b949e;
+    }
+    .source-badge.live { background: #0d2b1f; color: #3fb950; }
+    .source-badge.mock { background: #2b1e0d; color: #d29922; }
+    .source-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+    /* ── briefing content ──────────────────────────────────────────────────── */
+    .client-card {
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+    .client-name { font-size: 16px; font-weight: 700; color: #e6edf3; margin-bottom: 5px; }
+    .client-meta { font-size: 12px; color: #8b949e; display: flex; flex-wrap: wrap; gap: 8px; }
+    .client-meta span { display: inline-flex; align-items: center; gap: 4px; }
+
+    .headline-box {
+      background: #0d1e3b;
+      border-left: 3px solid #1f6feb;
+      padding: 11px 14px;
+      border-radius: 0 6px 6px 0;
+      font-size: 14px;
+      color: #79c0ff;
+      line-height: 1.5;
+      margin-bottom: 18px;
+    }
+
+    .section { margin-bottom: 18px; }
+    .section-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: #484f58;
+      margin-bottom: 8px;
+    }
+
+    .attention-item {
+      border-radius: 6px;
+      padding: 10px 13px;
+      margin-bottom: 7px;
+      border-left: 3px solid;
+      font-size: 13px;
+    }
+    .attention-item.critical { background: #2d1515; border-color: #f85149; }
+    .attention-item.warning  { background: #2b1e0d; border-color: #d29922; }
+    .attention-item.info     { background: #0d1e3b; border-color: #1f6feb; }
+
+    .attn-title {
+      font-weight: 600;
+      color: #e6edf3;
+      margin-bottom: 4px;
+    }
+    .attention-item.critical .attn-title { color: #f85149; }
+    .attention-item.warning  .attn-title { color: #d29922; }
+    .attention-item.info     .attn-title { color: #79c0ff; }
+
+    .attn-detail { color: #c9d1d9; line-height: 1.45; margin-bottom: 5px; }
+    .attn-source { font-size: 11px; color: #484f58; font-family: 'SFMono-Regular', monospace; }
+
+    .bullet-list { list-style: none; }
+    .bullet-list li {
+      padding: 7px 0 7px 16px;
+      border-bottom: 1px solid #21262d;
+      font-size: 13px;
+      color: #c9d1d9;
+      line-height: 1.45;
+      position: relative;
+    }
+    .bullet-list li:last-child { border-bottom: none; padding-bottom: 0; }
+    .bullet-list li::before {
+      content: '›';
+      position: absolute;
+      left: 2px;
+      color: #1f6feb;
+      font-size: 15px;
+      line-height: 1.3;
+    }
+
+    .sources-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    .sources-table tr { border-bottom: 1px solid #21262d; }
+    .sources-table tr:last-child { border-bottom: none; }
+    .sources-table td { padding: 6px 4px; vertical-align: top; }
+    .sources-table .src-section { color: #8b949e; white-space: nowrap; padding-right: 10px; }
+    .sources-table .src-field {
+      font-family: 'SFMono-Regular', monospace;
+      color: #484f58;
+      white-space: nowrap;
+      padding-right: 10px;
+    }
+    .sources-table .src-detail { color: #6e7681; }
+
+    .error-box {
+      background: #2d1515;
+      border: 1px solid #f85149;
+      border-radius: 6px;
+      padding: 14px;
+      font-size: 13px;
+      color: #f85149;
+      line-height: 1.5;
+    }
+    .error-box strong { display: block; margin-bottom: 4px; }
+  </style>
+</head>
+<body>
+
+<!-- ── CLIENT PICKER ────────────────────────────────────────────────────────── -->
+<div class="picker-bar">
+  <span class="picker-label">Client</span>
+  <select id="client-select" class="picker-select" onchange="onClientChange()">
+    <option value="">Loading clients…</option>
+  </select>
+  <select id="portfolio-select" class="picker-select picker-portfolio" onchange="onPortfolioChange()">
+    <option value="">— all portfolios —</option>
+  </select>
+  <span class="picker-meta" id="picker-meta"></span>
+</div>
+
+<!-- ── TABS ────────────────────────────────────────────────────────────────── -->
+<div class="tab-bar">
+  <button class="tab active" data-screen="list"      onclick="switchScreen(this)">Client List</button>
+  <button class="tab"        data-screen="client"    onclick="switchScreen(this)">Client Detail</button>
+  <button class="tab"        data-screen="portfolio" onclick="switchScreen(this)">Portfolio</button>
+</div>
+
+<!-- ── SCREEN FRAME ────────────────────────────────────────────────────────── -->
+<div class="screen-wrap">
+  <div class="screen-frame">
+
+    <img id="screen-img" class="screen-img" src="img/list.png" alt="URO Advisor Pro screenshot"
+         onerror="handleImgError(this)">
+
+    <div id="screen-placeholder" class="screen-placeholder">
+      <span class="ph-title">Screenshot not found</span>
+      <span>Copy your URO Advisor Pro screenshots to<br>
+            <code style="color:#8b949e">demo/static/img/list.png</code>&nbsp;·&nbsp;
+            <code style="color:#8b949e">client.png</code>&nbsp;·&nbsp;
+            <code style="color:#8b949e">portfolio.png</code></span>
+    </div>
+
+    <button id="btn-generate" onclick="generate()">
+      <span class="spinner" id="spinner"></span>
+      Generate Briefing
+    </button>
+
+  </div>
+</div>
+
+<!-- ── OVERLAY ──────────────────────────────────────────────────────────────── -->
+<div id="overlay" onclick="closeDrawer()"></div>
+
+<!-- ── DRAWER ───────────────────────────────────────────────────────────────── -->
+<div id="drawer" role="dialog" aria-modal="true" aria-label="Client Briefing">
+  <div class="drawer-header">
+    <h2>Client Briefing — URO Advisor Pro</h2>
+    <button class="drawer-close" onclick="closeDrawer()" aria-label="Close briefing">×</button>
+  </div>
+  <div class="drawer-body" id="drawer-body"></div>
+  <div class="drawer-footer">
+    <span>URO Advisor Pro</span>
+    <span class="source-badge" id="source-badge">
+      <span class="source-dot"></span>
+      <span id="source-label">—</span>
+    </span>
+  </div>
+</div>
+
+<script>
+// ── CONFIG ─────────────────────────────────────────────────────────────────────
+const API_URL = '/api/briefing';
+// Default client shown until the picker loads. Change to any ClientId from
+// clients.json if you want a different starting selection.
+const DEFAULT_CLIENT_ID = '49388';
+// ───────────────────────────────────────────────────────────────────────────────
+
+// Append ?mock=1 to the URL to use the built-in mock response below
+// without hitting the backend (useful for UI review offline).
+const USE_MOCK = new URLSearchParams(location.search).has('mock');
+
+// ── Client state (set by picker) ────────────────────────────────────────────────
+let _clients = [];   // full list from /api/clients
+let CLIENT = { id: DEFAULT_CLIENT_ID, name: '', portfolio: null };
+
+const MOCK = {
+  client: {
+    name: 'Pikachu',
+    id: '49388',
+    type: 'Individual',
+    profile: 'Anlageprofil 7',
+    assets_chf: 'CHF 698,978',
+    age: null
+  },
+  headline: 'Seven suitability violations and a 24 pp CHF overweight require immediate discussion.',
+  attention: [
+    {
+      level: 'critical',
+      title: 'CHF currency overweight',
+      detail: 'Swiss franc exposure at 75.2 % vs SAA target of 51.5 % — a +23.7 pp breach flagged as Error-severity by seven suitability rules.',
+      source: 'saa_target_deviations'
+    },
+    {
+      level: 'critical',
+      title: 'Switzerland concentration',
+      detail: 'Swiss country-group weight at 71.8 % vs 51.6 % target (+20.3 pp); overlaps directly with the CHF overweight and amplifies compliance exposure.',
+      source: 'active_violations'
+    },
+    {
+      level: 'warning',
+      title: 'IT sector overweight',
+      detail: 'Information Technology at 26.0 % vs 10.9 % SAA target (+15.1 pp); Comet Holding AG alone drives 48.6 % of total portfolio volatility at 21.9 % weight.',
+      source: 'saa_target_deviations'
+    },
+    {
+      level: 'warning',
+      title: 'North America & USD underweight',
+      detail: 'North America -14.3 pp below target (17.2 % vs 31.5 %); USD -13.9 pp (16.6 % vs 30.5 %). Both simultaneously below band.',
+      source: 'saa_target_deviations'
+    },
+    {
+      level: 'info',
+      title: 'Liquidity near floor',
+      detail: 'Portfolio liquidity at 0.6 % (CHF 3,977). Client notes a preference for a cash reserve for medical expenses — confirm this level is sufficient.',
+      source: 'liquidity'
+    }
+  ],
+  since_last: [
+    'First briefing for this client — baseline snapshot set today; no prior diff available.',
+    'Seven Error-level and seven Warning-level suitability violations currently active.',
+    'Comet Holding AG is 21.9 % of the portfolio and accounts for 48.6 % of total volatility.'
+  ],
+  talking_points: [
+    'CHF at 75 % is nearly double the SAA band — confirm whether overweight is intentional or drift, agree rebalancing path.',
+    'North America and USD both ~14 pp below target simultaneously — explore US-listed positions to close both gaps in one move.',
+    'Comet Holding dominates risk; confirm client understands single-stock volatility contribution before next review.',
+    'Seven Error-level violations are compliance-reportable — confirm compliance team has been notified.',
+    'Liquidity at 0.6 % may not cover stated cash-reserve preference; address before any further rebalancing.'
+  ],
+  sources: [
+    { section: 'Suitability violations',  field: 'active_violations',       detail: '13 active — 7 Error, 6 Warning' },
+    { section: 'SAA target deviations',   field: 'saa_target_deviations',   detail: '5 dimensions out of band; largest: Swiss francs +23.7 pp' },
+    { section: 'Risk contributors',       field: 'risk_attribution',        detail: 'Top 3 positions by contribution volatility; largest: Namen-Aktie Comet Holding AG (48.6% of portfolio vol)' },
+    { section: 'Performance history',     field: 'PerformanceHistory',      detail: '2 data points (2026-06-01 to 2026-07-01)' },
+    { section: 'House view',              field: 'house_view',              detail: '11 asset-class stances, as of 2026-09-01 (mock)' },
+    { section: 'Client notes',            field: 'ClientNotes',             detail: '3 notes, latest 2026-09-04' },
+    { section: 'Client interest tags',    field: 'Tags',                    detail: 'Consumer Staples, Japan, North America' }
+  ]
+};
+
+// ── Client picker ──────────────────────────────────────────────────────────────
+async function loadClients() {
+  try {
+    const res = await fetch('/api/clients');
+    _clients = await res.json();
+  } catch (e) {
+    console.warn('Could not load client list:', e);
+    _clients = [{ id: DEFAULT_CLIENT_ID, name: 'Pikachu', type: 'Individual', portfolios: [{ id: '50110', name: 'Depotberatung' }] }];
+  }
+
+  const sel = document.getElementById('client-select');
+  sel.innerHTML = _clients.map(c =>
+    `<option value="${esc(c.id)}">${esc(c.name)} — ${esc(c.type)}</option>`
+  ).join('');
+
+  // Select default
+  sel.value = DEFAULT_CLIENT_ID;
+  if (!sel.value && _clients.length) sel.value = _clients[0].id;
+  onClientChange();
+}
+
+function onClientChange() {
+  const sel  = document.getElementById('client-select');
+  const c    = _clients.find(x => x.id === sel.value);
+  if (!c) return;
+
+  CLIENT.id   = c.id;
+  CLIENT.name = c.name;
+
+  // Rebuild portfolio dropdown
+  const pSel = document.getElementById('portfolio-select');
+  pSel.innerHTML =
+    '<option value="">— all portfolios —</option>' +
+    c.portfolios.map(p =>
+      `<option value="${esc(p.id)}">${esc(p.name)}</option>`
+    ).join('');
+  CLIENT.portfolio = c.portfolios.length === 1 ? c.portfolios[0].id : null;
+  pSel.value = CLIENT.portfolio || '';
+
+  updatePickerMeta(c);
+  closeDrawer();   // clear any open briefing from the previous client
+}
+
+function onPortfolioChange() {
+  const val = document.getElementById('portfolio-select').value;
+  CLIENT.portfolio = val || null;
+}
+
+function updatePickerMeta(c) {
+  const nPortfolios = c.portfolios.length;
+  document.getElementById('picker-meta').textContent =
+    `${nPortfolios} portfolio${nPortfolios !== 1 ? 's' : ''}`;
+}
+
+// ── Screen state ───────────────────────────────────────────────────────────────
+const SCREEN_IMGS = {
+  list:      'img/client_Advisor_DB.png',
+  client:    'img/client_DB.png',
+  portfolio: 'img/portfolio_DB.png'
+};
+let currentScope = 'client';   // updated by switchScreen()
+
+function switchScreen(tabEl) {
+  const name = tabEl.dataset.screen;
+
+  // update tabs
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  tabEl.classList.add('active');
+
+  // swap image
+  const img = document.getElementById('screen-img');
+  const ph  = document.getElementById('screen-placeholder');
+  img.style.display = 'block';
+  ph.style.display  = 'none';
+  img.src           = SCREEN_IMGS[name];
+
+  currentScope = (name === 'portfolio') ? 'portfolio' : 'client';
+}
+
+function handleImgError(img) {
+  img.style.display = 'none';
+  document.getElementById('screen-placeholder').style.display = 'flex';
+}
+
+// ── API call ────────────────────────────────────────────────────────────────────
+async function generate() {
+  const btn     = document.getElementById('btn-generate');
+  const spinner = document.getElementById('spinner');
+
+  btn.disabled          = true;
+  spinner.style.display = 'block';
+
+  try {
+    let data;
+
+    if (USE_MOCK) {
+      // simulate a short network delay so the spinner is visible
+      await new Promise(r => setTimeout(r, 700));
+      data = MOCK;
+    } else {
+      const res = await fetch(API_URL + '?fresh=true', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          client_id:    CLIENT.id,
+          portfolio_id: CLIENT.portfolio || null,
+          scope:        currentScope
+        })
+      });
+
+      if (!res.ok) {
+        let detail = res.statusText;
+        try { detail = (await res.json()).detail || detail; } catch (_) {}
+        throw new Error(`HTTP ${res.status}: ${detail}`);
+      }
+
+      data = await res.json();
+    }
+
+    renderBriefing(data, USE_MOCK ? 'mock' : 'live');
+    openDrawer();
+
+  } catch (err) {
+    renderError(err.message);
+    openDrawer();
+  } finally {
+    btn.disabled          = false;
+    spinner.style.display = 'none';
+  }
+}
+
+// ── Render helpers ──────────────────────────────────────────────────────────────
+function esc(s) {
+  return String(s ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function renderBriefing(d, source) {
+  const c = d.client;
+
+  const metaItems = [
+    c.type,
+    c.profile,
+    c.assets_chf,
+    c.age != null ? `Age\u00a0${c.age}` : null
+  ].filter(Boolean);
+
+  const attentionHtml = (d.attention || []).map(a => `
+    <div class="attention-item ${esc(a.level)}">
+      <div class="attn-title">${esc(a.title)}</div>
+      <div class="attn-detail">${esc(a.detail)}</div>
+      <div class="attn-source">source:\u00a0${esc(a.source)}</div>
+    </div>`).join('');
+
+  const sinceHtml = (d.since_last || [])
+    .map(s => `<li>${esc(s)}</li>`).join('');
+
+  const tpHtml = (d.talking_points || [])
+    .map(s => `<li>${esc(s)}</li>`).join('');
+
+
+  document.getElementById('drawer-body').innerHTML = `
+    <div class="client-card">
+      <div class="client-name">${esc(c.name)}</div>
+      <div class="client-meta">
+        ${metaItems.map(m => `<span>${esc(m)}</span>`).join('<span style="color:#30363d">·</span>')}
+      </div>
+    </div>
+    <div class="headline-box">${esc(d.headline)}</div>
+    <div class="section">
+      <div class="section-label">Attention required</div>
+      ${attentionHtml}
+    </div>
+    <div class="section">
+      <div class="section-label">Since last interaction</div>
+      <ul class="bullet-list">${sinceHtml}</ul>
+    </div>
+    <div class="section">
+      <div class="section-label">Talking points</div>
+      <ul class="bullet-list">${tpHtml}</ul>
+    </div>
+  `;
+
+  setSourceBadge(source);
+}
+
+function renderError(msg) {
+  document.getElementById('drawer-body').innerHTML = `
+    <div class="error-box">
+      <strong>Briefing generation failed</strong>
+      ${esc(msg)}
+    </div>`;
+  setSourceBadge('error');
+}
+
+function setSourceBadge(source) {
+  const badge = document.getElementById('source-badge');
+  const label = document.getElementById('source-label');
+  badge.className = `source-badge ${source}`;
+  label.textContent = source === 'live' ? 'live' : source === 'mock' ? 'demo data' : 'error';
+}
+
+// ── Drawer open / close ─────────────────────────────────────────────────────────
+function openDrawer() {
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('drawer').focus();
+}
+function closeDrawer() {
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeDrawer();
+});
+
+// Kick off client list fetch on page load
+loadClients();
+</script>
+</body>
+</html>

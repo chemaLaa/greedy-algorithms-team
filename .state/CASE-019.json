@@ -1,0 +1,92 @@
+{
+  "snapshots": {
+    "50110": {
+      "portfolio_id": 50110,
+      "captured_at": "2026-09-19T06:15:20.403084+00:00",
+      "portfolio_value": 698977.5483,
+      "allocation": {
+        "AssetClass": {
+          "Bonds": 0.0,
+          "Liquidity": 0.0,
+          "Real estate": 0.0,
+          "Shares": 0.9606106546429999,
+          "Specialties andCommodities": 0.033710000000000004
+        },
+        "CurrencyGroup": {
+          "Andere": 0.06173454143999991,
+          "Euro": 0.014341474730000005,
+          "Swiss francs": 0.7518902726220001,
+          "US-Dollar": 0.16635436585099997
+        },
+        "CountryGroup": {
+          "Asia/Pacific (ex Japan)": 0.022349018362000005,
+          "Great Britain": 0.009917098444,
+          "Japan": 0.007435327911000003,
+          "North America": 0.17209788626,
+          "Not classified": 0.0,
+          "Others": 0.04089828947099999,
+          "Rest of Europe": 0.023276653916999998,
+          "Switzerland": 0.7183463802779989
+        },
+        "Industry": {
+          "Consumer Discretionary": 0.006678126565000001,
+          "Consumer Staples": 0.09640118400900001,
+          "Energy": 0.0006571327509999998,
+          "Financials": 0.0729037159980001,
+          "Health Care": 0.35305730082599995,
+          "Industrials": 0.08466890570000005,
+          "Information Technology": 0.26016138546000034,
+          "Materials": 0.023285968544000002,
+          "Real Estate": 0.0015467828420000001,
+          "Telecommunication Services": 0.002520242769,
+          "Utilities": 0.052859909178999964
+        }
+      },
+      "top_positions": [
+        {
+          "SecurityId": 4101,
+          "SecurityName": "Namen-Aktie Comet Holding AG",
+          "weight": 0.21889
+        },
+        {
+          "SecurityId": 347,
+          "SecurityName": "Namen-Aktie Ypsomed Holding AG",
+          "weight": 0.15523
+        },
+        {
+          "SecurityId": 644,
+          "SecurityName": "Namen-Aktie Nestle SA",
+          "weight": 0.09264
+        },
+        {
+          "SecurityId": 261,
+          "SecurityName": "Genussschein Roche Holding AG",
+          "weight": 0.06763
+        },
+        {
+          "SecurityId": 8147,
+          "SecurityName": "Anteile Exchange Traded Fund USD iShares II PLC - iShares Global Water UCITS ETF",
+          "weight": 0.06633
+        }
+      ],
+      "violations": [
+        "Cluster risk of a single financial instrument",
+        "Share is not part of the investment universe for individual shares and therefore not monitored.",
+        "Significant overweight in the equity region \"Switzerland\"",
+        "Significant overweight in the equity sector \"Health Care\"",
+        "Significant overweight in the equity sector \"Information Technology\"",
+        "Significant underweight in the equity region \"North America\"",
+        "Underweight in the equity sector \"Consumer Discretionary\"",
+        "Underweight in the equity sector \"Consumer Staples\"",
+        "Underweight in the equity sector \"Financials\""
+      ]
+    }
+  },
+  "events": [
+    "30 days ago: First briefing baseline captured. Portfolio at CHF 725,000.",
+    "2026-09-19T06:10:40.029795+00:00: new violation \u2014 Significant overweight in the equity sector \"Information Technology\"",
+    "2026-09-19T06:10:40.029795+00:00: new violation \u2014 Underweight in the equity sector \"Financials\"",
+    "2026-09-19T06:10:40.029795+00:00: Anteile Exchange Traded Fund USD iShares II PLC - iShares Global Water UCITS ETF entered top positions (6.6%)",
+    "2026-09-19T06:10:40.029795+00:00: Placeholder Position (exited top 5) dropped out of top positions"
+  ]
+}

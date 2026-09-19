@@ -1,0 +1,77 @@
+{
+  "snapshots": {
+    "107634": {
+      "portfolio_id": 107634,
+      "captured_at": "2026-09-19T06:16:00.800397+00:00",
+      "portfolio_value": 23451.97912,
+      "allocation": {
+        "AssetClass": {
+          "Bonds": 0.1935,
+          "Liquidity": 0.0,
+          "Real estate": 0.02891,
+          "Shares": 0.7565414066389966,
+          "Specialties andCommodities": 0.0
+        },
+        "CurrencyGroup": {
+          "Andere": 0.10166274842799962,
+          "Euro": 0.02965032500000002,
+          "Swiss francs": 0.6031897314760001,
+          "US-Dollar": 0.244448601735
+        },
+        "CountryGroup": {
+          "Asia/Pacific (ex Japan)": 0.048566075337000025,
+          "Great Britain": 0.012039073304000005,
+          "Japan": 0.02175941859199998,
+          "North America": 0.25409224550499915,
+          "Others": 0.12226090727500002,
+          "Rest of Europe": 0.03952716251400008,
+          "Switzerland": 0.4807065241119996
+        },
+        "Industry": {
+          "Consumer Discretionary": 0.06513618229399999,
+          "Consumer Staples": 0.06759669741099988,
+          "Energy": 0.015280559507999995,
+          "Financials": 0.14530751449400003,
+          "Health Care": 0.14386628896599987,
+          "Industrials": 0.10214275033699995,
+          "Information Technology": 0.10788348406199985,
+          "Materials": 0.04261366684700005,
+          "Real Estate": 0.01579701593,
+          "Telecommunication Services": 0.042082562557,
+          "Utilities": 0.008834684233000005
+        }
+      },
+      "top_positions": [
+        {
+          "SecurityId": 2534,
+          "SecurityName": "Anteile -QBH- Credit Suisse Index Fd (CH) I Umbr. - CSIF (CH) I Equity World ex CH Blue",
+          "weight": 0.18743
+        },
+        {
+          "SecurityId": 4421,
+          "SecurityName": "Anteile -W- UBS (CH) Investment Fund - Equities Switzerland Passive Leader",
+          "weight": 0.17726
+        },
+        {
+          "SecurityId": 5115,
+          "SecurityName": "Anteile -QB- Credit Suisse Index Fd (CH) Umbrella  - CSIF (CH) Equity World ex CH ESG Blue",
+          "weight": 0.14695
+        },
+        {
+          "SecurityId": 2346,
+          "SecurityName": "Anteile -A- iShares ETF (CH) - iShares Swiss Dividend ETF   (CH)",
+          "weight": 0.09888
+        },
+        {
+          "SecurityId": 5447,
+          "SecurityName": "Anteile -GT CHF- Swisscanto (CH) Index Fund V  - Index Equity Fund Small & Mid Caps Switzerland",
+          "weight": 0.09854
+        }
+      ],
+      "violations": []
+    }
+  },
+  "events": [
+    "2026-09-19T06:16:00.800397+00:00: first briefing generated for this client"
+  ]
+}

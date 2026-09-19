@@ -1,0 +1,91 @@
+{
+  "snapshots": {
+    "194980": {
+      "portfolio_id": 194980,
+      "captured_at": "2026-09-19T06:00:10.236960+00:00",
+      "portfolio_value": 172264.92879,
+      "allocation": {
+        "AssetClass": {
+          "Bonds": 0.0,
+          "Liquidity": 0.0,
+          "Real estate": 0.14106,
+          "Shares": 0.5061601903179999,
+          "Specialties andCommodities": 0.12683
+        },
+        "CurrencyGroup": {
+          "Andere": 0.024892784817999985,
+          "Euro": 0.035641076655,
+          "Swiss francs": 0.48737718647099987,
+          "US-Dollar": 0.22613914237399996
+        },
+        "CountryGroup": {
+          "Asia/Pacific (ex Japan)": 0.0009427262439999999,
+          "Great Britain": 0.013309307504000003,
+          "Japan": 0.002115603216,
+          "North America": 0.145863926581,
+          "Not classified": 0.0,
+          "Others": 0.12683,
+          "Rest of Europe": 0.054365511947000005,
+          "Switzerland": 0.4306231148259999
+        },
+        "Industry": {
+          "Consumer Discretionary": 0.004215793704,
+          "Consumer Staples": 0.053913472807000005,
+          "Energy": 0.0,
+          "Financials": 0.01149088189,
+          "Health Care": 0.09707882982699993,
+          "Industrials": 0.25549661578499994,
+          "Information Technology": 0.03262106557,
+          "Materials": 0.011719198350000001,
+          "Real Estate": 0.007112350300000001,
+          "Telecommunication Services": 0.00063904671,
+          "Utilities": 0.031872935375
+        }
+      },
+      "top_positions": [
+        {
+          "SecurityId": 59471,
+          "SecurityName": "Units -A CHF- RP Investment Funds - GSC Green Tech ESG Fund",
+          "weight": 0.15185
+        },
+        {
+          "SecurityId": 1628,
+          "SecurityName": "Anteile   SF Sustainable Property Fund",
+          "weight": 0.14106
+        },
+        {
+          "SecurityId": 59470,
+          "SecurityName": "Shs Global X Data Center REITs & Digital Infrastructure ETF",
+          "weight": 0.06845
+        },
+        {
+          "SecurityId": 39314,
+          "SecurityName": "Namen-Aktie Georg Fischer AG",
+          "weight": 0.06603
+        },
+        {
+          "SecurityId": 2756,
+          "SecurityName": "Namen-Aktie -A-  Zehnder Group AG",
+          "weight": 0.06502
+        }
+      ],
+      "violations": [
+        "Cluster risk of a single financial instrument",
+        "Compliance with maximum volatility",
+        "Knowledge of portfolio funds and mixed funds",
+        "Knowledge of structured products",
+        "Overweight in the equity region \"Rest of Europe\"",
+        "Overweight in the equity region \"Switzerland\"",
+        "Significant overweight in the equity sector \"Industrials\"",
+        "Significant underweight in the equity sector \"Financials\"",
+        "Underweight in the equity region \"Asia/Pacific (ex Japan)\"",
+        "Underweight in the equity sector \"Consumer Discretionary\"",
+        "Underweight in the equity sector \"Consumer Staples\"",
+        "Underweight in the equity sector \"Health Care\""
+      ]
+    }
+  },
+  "events": [
+    "2026-09-19T05:52:23.323006+00:00: first briefing generated for this client"
+  ]
+}

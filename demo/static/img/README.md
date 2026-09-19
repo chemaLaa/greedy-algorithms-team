@@ -1,14 +1,14 @@
 # uro_briefing
 
-Full-stack briefing assistant for the UnRiskOmega "From Ping to Pitch" case:
-loads the case data, joins and normalises it, ranks what matters, compares it
-to a mock bank house view, pulls relevant market news, tracks client state
-across calls so "what changed" is exact, and calls `gpt-4o` to produce a
-structured 60-second advisor briefing — served through a FastAPI backend and
-a single-page demo front end.
+Backend pipeline for the UnRiskOmega "From Ping to Pitch" briefing assistant:
+loads the case data, joins and normalizes it, ranks what matters, compares it
+to a mock bank house view, pulls relevant market news, and tracks client
+state across calls so "what changed" is exact, not guessed. No LLM yet — this
+is everything the synthesis (prompt + model call) layer will consume once
+it's built.
 
 **Layers, in dependency order:**
-`data_layer` → `analysis_layer` → `state` / `enrichment` → `synthesis` → `server.py`
+`data_layer` → `analysis_layer` → `state` / `enrichment` → *(not yet built)* `synthesis`
 
 ## Demo front end
 
@@ -29,62 +29,23 @@ Then open **http://localhost:8000/**
 placeholder is shown — but the screenshots make the demo look real):
 
 ```
-demo/static/img/client_Advisor_DB.png   # client-list view
-demo/static/img/client_DB.png           # client-detail view
-demo/static/img/portfolio_DB.png        # portfolio view
+demo/static/img/list.png        # client-list view
+demo/static/img/client.png      # client-detail view
+demo/static/img/portfolio.png   # portfolio view
 ```
 
 ### Change the demo client
 
-Use the **Client** dropdown in the page header — it loads all 47 clients
-from `GET /api/clients` on page load, sorted alphabetically. The adjacent
-**Portfolio** dropdown is populated automatically from the selected client's
-portfolios.
-
-To change the client that is pre-selected on first load, edit `DEFAULT_CLIENT_ID`
-in the `CONFIG` block at the top of `demo/static/index.html`:
+Edit the `CONFIG` block at the top of `demo/static/index.html`:
 
 ```js
-const DEFAULT_CLIENT_ID = '49388';   // any ClientId from clients.json
+const CLIENT = { id: '49388', name: 'Pikachu', portfolio: '50110' };
 ```
 
-The client with the most ranked priorities and SAA deviations in the core
-dataset is **Company 001 AG** (`35050`).
-
-### Demonstrating "Since Last Interaction"
-
-The briefing's *Since last interaction* section is powered by the `state/`
-layer: it diffs the current portfolio snapshot against the one saved on the
-previous briefing call. On a fresh server with no prior state, every call is
-a "first interaction" and the diff is empty.
-
-To show a meaningful diff during a demo, plant a fake "30 days ago" snapshot
-before you start:
-
-```bash
-python3 seed_demo_state.py        # writes .state/CASE-019.json with stale values
-```
-
-Then generate a briefing in the browser. The model receives a real diff in
-its prompt:
-
-```
-- Portfolio value changed -3.6 % (from 725,000 to 698,978) since the last briefing.
-- New issues since last time: IT sector overweight, Financials underweight.
-- Swiss francs +7.2 pp / US-Dollar −7.8 pp / North America −6.6 pp since last briefing.
-- iShares Global Water ETF newly entered the top positions.
-```
-
-| Command | Effect |
-|---|---|
-| `python3 seed_demo_state.py` | Plant the stale snapshot — run before each demo presentation |
-| `python3 seed_demo_state.py --reset` | Delete the state file, next call is "first interaction" again |
-
-**Why you need to re-seed between demo runs:** `refresh_client_state()` saves
-a new snapshot as a side effect of every briefing call. After the first click
-the baseline is today's data, so a second click correctly shows an empty diff
-(nothing changed since the last call). Re-run the seed script to restore the
-"30 days ago" baseline.
+Replace `id` with any `ClientId` from `clients.json`, `portfolio` with
+the matching `PortfolioId` (or `null` for the primary portfolio), and `name`
+with the display name. The client with the most ranked priorities and SAA
+deviations in the core dataset is **Company 001 AG** (`id: '35050'`).
 
 ### Mock mode (no API key needed)
 
@@ -102,11 +63,12 @@ The drawer footer shows **demo data** (mock) or **live** (real API call).
 ## Install / run
 
 No dependencies beyond the Python standard library, **except**:
-- `server.py` (the API + demo): `pip install fastapi uvicorn openai`
-  + an `OPENAI_API_KEY` environment variable
 - `enrichment/market_news.py`'s live fetch: `pip install yfinance`
+- `synthesis/briefing_generator.py`'s model call: `pip install openai`
+  + an `OPENAI_API_KEY` environment variable
 
 ```bash
+cd uro_briefing
 python3 run_example.py            # data_layer against the synthetic fixture
 python3 run_analysis_example.py   # analysis_layer against the synthetic fixture
 ```
@@ -439,7 +401,7 @@ exists for writing tests without hitting the network.
 |---|---|
 | `context_builder.py` | Assembles every upstream layer's output into one `BriefingContext` dict, per portfolio. Plain data, no prose. |
 | `prompt_builder.py` | Turns a `BriefingContext` into the actual `{system, messages}` prompt. This is where the case's "one coherent narrative, not stitched summaries" requirement is enforced. |
-| `briefing_generator.py` | Standalone model call used by scripts and tests: calls OpenAI Chat Completions, returns `{recent_development, health_check, outlook_and_actions, read_time_estimate_seconds}`. Not called by `server.py` — see below. |
+| `briefing_generator.py` | *(not yet built)* — the actual model call. |
 
 ```python
 from synthesis.context_builder import build_briefing_context
@@ -524,7 +486,7 @@ gaps worth an advisor's follow-up.
   be due to... cash flows, fees, or currency movements" for exactly this
   fixture.
 
-### `briefing_generator.py` — standalone model call (scripts / tests)
+### `briefing_generator.py` — the actual model call
 
 ```python
 from synthesis.briefing_generator import generate_briefing
@@ -534,56 +496,49 @@ briefing = generate_briefing(context)
 #  "read_time_estimate_seconds": int, "raw_model_response": str}
 ```
 
-Uses OpenAI Chat Completions (`DEFAULT_MODEL = "gpt-4o"`), strict JSON mode
-(`response_format={"type": "json_object"}`), retries up to 3 times.
-Raises `BriefingGenerationError` on every failure mode (API error, invalid
-JSON, missing required key, `finish_reason: "length"` truncation).
+Defaults to OpenAI's Chat Completions API (`DEFAULT_MODEL = "gpt-4o"` —
+**verify this model string is still current for your API key before a
+demo**, model names change), requesting strict JSON output via
+`response_format={"type": "json_object"}` rather than relying on
+prompt-only instructions. Requires `pip install openai` and an
+`OPENAI_API_KEY` environment variable, or pass `client=` explicitly for
+custom auth/config.
 
-**Note:** `server.py` does **not** call `generate_briefing()`. It has its own
-`_generate()` function that uses the same OpenAI client and JSON mode but a
-different system prompt and output schema — see `server.py` below.
+**Verified against a live OpenAI account**: a real `generate_briefing()`
+call against `gpt-4o` for a real client (CASE-002) succeeded on the first
+attempt in ~5.3s and produced a well-grounded three-section briefing citing
+the portfolio's actual value change, SAA deviations, and matched news
+subjects. Everything else — prompt assembly, response parsing,
+markdown-fence stripping (models sometimes wrap JSON in ` ```json ` despite
+being told not to, even under JSON mode), missing-key detection, read-time
+estimation, error handling — is additionally fully tested against a fake
+client that mimics `openai.OpenAI()`'s interface, no network needed. Verify
+the real call on your own machine:
 
-## `server.py` — FastAPI entry point
-
-Orchestrates every layer and exposes two JSON endpoints plus the demo front end.
-
-| Endpoint | What it does |
-|---|---|
-| `GET /api/clients` | Returns all clients sorted by name: `[{id, name, type, portfolios: [{id, name}]}]`. Populated from `clients.json` at startup — used by the demo picker. |
-| `POST /api/briefing` | Accepts `{client_id, portfolio_id?, scope?}`. Runs the full pipeline (data → analysis → state diff → house view → context → prompt → model) and returns the briefing. Results are cached in memory by `(client_id, portfolio_id)`. |
-| `GET /` (and all static paths) | Serves `demo/static/` — the single-page demo front end. |
-
-**`POST /api/briefing` response shape:**
-
-```json
-{
-  "client":   {"name": "…", "id": "…", "type": "…", "profile": "…", "assets_chf": "…", "age": null},
-  "headline": "One sentence — the single most important thing right now.",
-  "attention": [
-    {"level": "critical|warning|info", "title": "…", "detail": "…", "source": "<data field name>"}
-  ],
-  "since_last":     ["…"],
-  "talking_points": ["…"],
-  "sources": [
-    {"section": "Suitability violations", "field": "active_violations", "detail": "13 active — 7 Error, 6 Warning"},
-    {"section": "SAA target deviations",  "field": "saa_target_deviations", "detail": "5 dimensions out of band; largest: Swiss francs +23.7 pp"},
-    "…"
-  ]
-}
+```bash
+pip install openai
+export OPENAI_API_KEY=...
+```
+```python
+from synthesis.briefing_generator import generate_briefing
+briefing = generate_briefing(context)  # context from build_briefing_context()
+print(briefing)
 ```
 
-`sources` is built deterministically from the pipeline data before the model
-call — it lists every data section that was included in the prompt, with exact
-counts and values. It is never generated by the model, so it is always
-traceable back to a specific field in the source data.
-
-**`_generate()` vs `generate_briefing()`:** `server.py` defines its own
-`_generate()` that calls OpenAI Chat Completions directly (same `_default_client()`
-and `response_format={"type":"json_object"}` from `briefing_generator.py`, but
-a different system prompt targeting the `headline/attention/since_last/talking_points`
-schema above). The `generate_briefing()` function in `briefing_generator.py`
-uses a three-section prose schema and is used by standalone scripts and tests,
-not by the API.
+Raises `BriefingGenerationError` (never a raw exception) if every retry
+attempt fails — API call, invalid JSON, a response missing a required
+section key, or a response truncated by hitting `max_tokens` (surfaced via
+OpenAI's `finish_reason: "length"`). **Retries up to 3 times by default**
+(`max_attempts=`): confirmed necessary in practice against the original
+Anthropic integration — a real 4-client test run produced valid JSON for 3
+clients and, for the 4th, a response the model believed was complete
+(`finish_reason`/`stop_reason: "stop"`/`"end_turn"` depending on provider)
+that was nonetheless missing a required key entirely. This is genuine,
+occasional unreliability in structured JSON generation, not a `max_tokens`
+issue (that's checked and reported separately) — a fresh attempt is the
+standard, effective fix, and testing confirmed a malformed-then-valid
+retry sequence resolves cleanly. A demo should still surface a final
+failure loudly rather than silently show a broken briefing.
 
 ## The one non-obvious piece: category translation
 

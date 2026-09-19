@@ -1,0 +1,86 @@
+{
+  "snapshots": {
+    "50110": {
+      "portfolio_id": 50110,
+      "captured_at": "2026-08-20T06:06:25.820483+00:00",
+      "portfolio_value": 725000.0,
+      "allocation": {
+        "AssetClass": {
+          "Bonds": 0.0,
+          "Liquidity": 0.025,
+          "Real estate": 0.0,
+          "Shares": 0.942,
+          "Specialties andCommodities": 0.033
+        },
+        "CurrencyGroup": {
+          "Andere": 0.055,
+          "Euro": 0.021,
+          "Swiss francs": 0.68,
+          "US-Dollar": 0.244
+        },
+        "CountryGroup": {
+          "Asia/Pacific (ex Japan)": 0.022,
+          "Great Britain": 0.01,
+          "Japan": 0.007,
+          "North America": 0.238,
+          "Not classified": 0.0,
+          "Others": 0.041,
+          "Rest of Europe": 0.023,
+          "Switzerland": 0.659
+        },
+        "Industry": {
+          "Consumer Discretionary": 0.007,
+          "Consumer Staples": 0.082,
+          "Energy": 0.001,
+          "Financials": 0.073,
+          "Health Care": 0.368,
+          "Industrials": 0.085,
+          "Information Technology": 0.218,
+          "Materials": 0.023,
+          "Real Estate": 0.002,
+          "Telecommunication Services": 0.003,
+          "Utilities": 0.053
+        }
+      },
+      "top_positions": [
+        {
+          "SecurityId": 4101,
+          "SecurityName": "Namen-Aktie Comet Holding AG",
+          "weight": 0.195
+        },
+        {
+          "SecurityId": 347,
+          "SecurityName": "Namen-Aktie Ypsomed Holding AG",
+          "weight": 0.148
+        },
+        {
+          "SecurityId": 644,
+          "SecurityName": "Namen-Aktie Nestle SA",
+          "weight": 0.091
+        },
+        {
+          "SecurityId": 261,
+          "SecurityName": "Genussschein Roche Holding AG",
+          "weight": 0.068
+        },
+        {
+          "SecurityId": 999,
+          "SecurityName": "Placeholder Position (exited top 5)",
+          "weight": 0.055
+        }
+      ],
+      "violations": [
+        "Cluster risk of a single financial instrument",
+        "Share is not part of the investment universe for individual shares and therefore not monitored.",
+        "Significant overweight in the equity region \"Switzerland\"",
+        "Significant overweight in the equity sector \"Health Care\"",
+        "Significant underweight in the equity region \"North America\"",
+        "Underweight in the equity sector \"Consumer Discretionary\"",
+        "Underweight in the equity sector \"Consumer Staples\""
+      ]
+    }
+  },
+  "events": [
+    "30 days ago: First briefing baseline captured. Portfolio at CHF 725,000."
+  ]
+}
