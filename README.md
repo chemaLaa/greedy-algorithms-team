@@ -296,11 +296,20 @@ silently drops the most important subject.
   "no relevant news exists"). `fetch_relevant_news()` remains as a
   backward-compatible list-only wrapper around it.
 
+Subjects are fetched **concurrently** (`concurrent.futures.ThreadPoolExecutor`,
+capped at `MAX_CONCURRENT_FETCHES`) rather than one at a time — these are
+small, independent, I/O-bound HTTP calls, so wall time is dominated by the
+slowest single subject rather than their sum. One subject's fetch raising
+never aborts the others; results are reassembled in the original `terms`
+order before merging, so behavior (budgets, ranking, statuses, dedup) is
+identical to a sequential fetch, just faster.
+
 **Verified on the real API** (originally by Hamza without network access;
-re-confirmed live during the house-view/market-news v2 integration —
-3 search subjects for a real client, `YahooFinanceNewsProvider`, budget
-caps applied, took ~8.2s end-to-end and returned `status="ok"` with 6
-articles retained): individual operating companies (e.g. `"Novartis AG"`,
+re-confirmed live during the house-view/market-news v2 integration — 3
+search subjects for a real client, `YahooFinanceNewsProvider`, budget caps
+applied: **~8.2s sequential → ~1.6-2.1s concurrent** end-to-end for the same
+3 subjects and same `status="ok"` / 6-articles-retained result):
+individual operating companies (e.g. `"Novartis AG"`,
 `"Sandoz Group AG"`) return real news reliably. **Fund/ETF/index names
 return nothing** (0/6 in testing) — they aren't "story" securities with
 their own coverage. Since a large share of this dataset's holdings are

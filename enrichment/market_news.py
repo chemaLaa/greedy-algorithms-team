@@ -42,6 +42,7 @@ requirement than company news about the ETF issuer would be anyway.
 """
 from __future__ import annotations
 
+import concurrent.futures
 import re
 from datetime import datetime, timezone
 from typing import Optional, Protocol
@@ -54,6 +55,13 @@ BUDGET_MAX_RETAINED_ARTICLES = 6
 
 FRESHNESS_PREFERRED_DAYS = 7
 FRESHNESS_FALLBACK_DAYS = 14
+
+# Search subjects are fetched concurrently (small, independent, I/O-bound
+# HTTP calls) rather than one at a time. Capped independently of
+# BUDGET_MAX_SEARCH_SUBJECTS so a caller that passes a larger custom
+# `terms` list directly to fetch_relevant_news_bundle() never spins up an
+# unbounded number of threads.
+MAX_CONCURRENT_FETCHES = 8
 
 # A look-through industry exposure at or above this absolute share of the
 # portfolio is "material" enough to warrant a news subject on its own,
@@ -476,11 +484,15 @@ def fetch_relevant_news_bundle(
     max_per_term: int = BUDGET_MAX_ARTICLES_PER_SUBJECT,
     max_total: int = BUDGET_MAX_RETAINED_ARTICLES,
     now: Optional[datetime] = None,
+    max_workers: int = MAX_CONCURRENT_FETCHES,
 ) -> dict:
     """
-    Fetches news for each search term via the given provider, applies the
-    freshness window, merges cross-query duplicates, enforces the
-    retained-article budget, and reports an explicit status:
+    Fetches news for each search term via the given provider CONCURRENTLY
+    (a ThreadPoolExecutor — these are small, independent, I/O-bound HTTP
+    calls, not CPU work, so threads are the right tool and the GIL isn't a
+    bottleneck here), applies the freshness window, merges cross-query
+    duplicates, enforces the retained-article budget, and reports an
+    explicit status:
 
       "ok"            — at least one article retained; every subject that
                          was searched fetched successfully.
@@ -499,10 +511,20 @@ def fetch_relevant_news_bundle(
                          was found" when the truth is the search itself
                          didn't work.
 
+    One subject's fetch raising never aborts the others — each subject's
+    result (success or exception) is collected independently, exactly as
+    when fetching sequentially.
+
+    Results are reassembled in the ORIGINAL `terms` order before merging,
+    not completion order — concurrency changes how fast this runs, never
+    which article wins a duplicate-merge or which articles survive the
+    `max_total` cut, so behavior is otherwise identical to a sequential
+    fetch.
+
     `reasons` (a list of strings, same pattern as analysis_layer.validation)
     always explains a non-"ok" status, and `term_results` gives a per-term
-    breakdown for debugging. `now` is injectable for deterministic tests;
-    defaults to the real current time.
+    breakdown for debugging, in the same order as `terms`. `now` is
+    injectable for deterministic tests; defaults to the real current time.
     """
     now = now or datetime.now(timezone.utc)
 
@@ -515,24 +537,30 @@ def fetch_relevant_news_bundle(
             "freshness_window_used": None,
         }
 
-    raw_articles: list[dict] = []
-    term_results: list[dict] = []
+    term_results: list[Optional[dict]] = [None] * len(terms)
+    per_term_articles: list[list[dict]] = [[] for _ in terms]
     any_success = False
     any_error = False
 
-    for term in terms:
-        try:
-            fetched = provider.fetch(term["query"], max_results=max_per_term)
-        except Exception as e:  # provider/network failure — never silently swallowed
-            any_error = True
-            term_results.append({"query": term["query"], "status": "error", "error": f"{type(e).__name__}: {e}"})
-            continue
+    with concurrent.futures.ThreadPoolExecutor(max_workers=min(len(terms), max_workers)) as executor:
+        future_to_index = {
+            executor.submit(provider.fetch, term["query"], max_results=max_per_term): i
+            for i, term in enumerate(terms)
+        }
+        for future in concurrent.futures.as_completed(future_to_index):
+            i = future_to_index[future]
+            term = terms[i]
+            try:
+                fetched = future.result()
+            except Exception as e:  # provider/network failure — never silently swallowed
+                any_error = True
+                term_results[i] = {"query": term["query"], "status": "error", "error": f"{type(e).__name__}: {e}"}
+                continue
 
-        any_success = True
-        fetched = fetched[:max_per_term]
-        term_results.append({"query": term["query"], "status": "ok", "article_count": len(fetched)})
-        for article in fetched:
-            raw_articles.append(
+            any_success = True
+            fetched = fetched[:max_per_term]
+            term_results[i] = {"query": term["query"], "status": "ok", "article_count": len(fetched)}
+            per_term_articles[i] = [
                 {
                     **article,
                     "matched_query": term["query"],
@@ -540,7 +568,10 @@ def fetch_relevant_news_bundle(
                     "match_type": term["type"],
                     "fact_id": term.get("fact_id"),
                 }
-            )
+                for article in fetched
+            ]
+
+    raw_articles: list[dict] = [article for bucket in per_term_articles for article in bucket]
 
     def _within(article: dict, days: int) -> bool:
         published = _parse_published_at(article.get("published_at"))
