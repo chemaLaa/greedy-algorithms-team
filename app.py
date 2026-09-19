@@ -18,6 +18,7 @@ from data_layer import ReferenceIndex, build_client_view, load_clients, load_ref
 from analysis_layer import build_client_priorities
 from state import refresh_client_state
 from enrichment.house_view import compare_portfolio_to_house_view
+from enrichment.market_news import YahooFinanceNewsProvider, fetch_relevant_news_bundle, relevant_search_terms
 from synthesis.briefing_generator import BriefingGenerationError, generate_briefing
 from synthesis.context_builder import build_briefing_context
 
@@ -105,8 +106,14 @@ if st.button("🔔 Generate Briefing", type="primary"):
         state_result = refresh_client_state(view, bundles, state_dir=STATE_DIR)
         portfolio_id = str(portfolio["PortfolioId"])
         house_view = compare_portfolio_to_house_view(portfolio)
+
+        terms = relevant_search_terms(portfolio, bundle, ref=ref)
+        news_bundle = fetch_relevant_news_bundle(terms, YahooFinanceNewsProvider())
+        if news_bundle["status"] == "fetch_failed":
+            st.warning("Market news search failed (network/provider error) — briefing will note this rather than claim no news exists.")
+
         context = build_briefing_context(
-            view, bundle, state_result["portfolios"][portfolio_id], house_view, []
+            view, bundle, state_result["portfolios"][portfolio_id], house_view, news_bundle=news_bundle
         )
 
         try:

@@ -21,6 +21,7 @@ from __future__ import annotations
 
 from typing import Optional
 
+from enrichment.house_view import HOUSE_VIEW_PRECEDENCE_NOTE
 from enrichment.market_news import clean_security_name
 
 SYSTEM_PROMPT = """\
@@ -85,7 +86,7 @@ def context_to_prose(context: dict) -> dict[str, str]:
         "risk_contributors": _format_risk_contributors(context.get("top_risk_contributors", [])),
         "change_since_last_interaction": _format_change(context.get("change_since_last_interaction")),
         "house_view": _format_house_view(context.get("house_view_alignment", [])),
-        "news": _format_news(context.get("market_news", [])),
+        "news": _format_news(context.get("market_news", []), context.get("market_news_status")),
     }
 
 
@@ -270,47 +271,92 @@ def _format_note_proxy(details: dict) -> str:
 
 def _format_house_view(alignment: list[dict], max_actionable: int = 5) -> str:
     """
-    Leads with what's actually actionable (underexposed/overexposed —
-    where the client diverges from the bank's tactical call) and
-    compresses "aligned" items into one summary line rather than listing
-    each individually. Without this, a portfolio with many SAA categories
-    can produce a house-view section longer than the rest of the prompt
-    combined, for mostly "nothing to act on here" content — exactly the
-    kind of noise a 60-second-target briefing shouldn't have to filter
-    out itself.
+    Always opens with HOUSE_VIEW_PRECEDENCE_NOTE — this is the ONE place
+    that sentence reaches the model's actual input text, regardless of
+    whether there's anything else to say about the house view at all.
+    Without that, "suitability/SAA takes precedence over the house view"
+    would only ever be an internal assumption this code makes, never
+    something the model is actually told.
+
+    Then leads with what's actually actionable ("opposite" — where the
+    client's position tilts away from the bank's tactical call) and
+    compresses "aligned" and "at_target" items into one summary line each
+    rather than listing every category individually. Without this, a
+    portfolio with many SAA categories can produce a house-view section
+    longer than the rest of the prompt combined, for mostly "nothing to
+    act on here" content — exactly the kind of noise a 60-second-target
+    briefing shouldn't have to filter out itself.
+
+    "aligned" and "at_target" are kept as two separate summary lines, not
+    merged into one: being at_target means the client hasn't acted on the
+    house view's tactical call in either direction, which is a distinct
+    fact from actually being tilted the same way the bank recommends.
     """
-    actionable = [
-        item for item in alignment if item.get("relative_position") in ("underexposed", "overexposed")
-    ][:max_actionable]
+    lines = [HOUSE_VIEW_PRECEDENCE_NOTE]
+
+    opposite = [item for item in alignment if item.get("relative_position") == "opposite"][:max_actionable]
     aligned = [item for item in alignment if item.get("relative_position") == "aligned"]
+    at_target = [item for item in alignment if item.get("relative_position") == "at_target"]
 
-    if not actionable and not aligned:
-        return "No notable alignment or divergence from the bank's current house view."
+    if not opposite and not aligned and not at_target:
+        lines.append("No notable alignment or divergence from the bank's current house view.")
+    else:
+        for item in opposite:
+            lines.append(
+                f"- {item.get('category')} ({item.get('dimension')}): the bank is "
+                f"{item.get('house_view_stance')} — client is currently positioned opposite this "
+                f"view (client actual {item.get('client_actual'):.1%} vs. "
+                f"target {item.get('client_target'):.1%}). Rationale: {item.get('rationale')}"
+            )
 
-    lines = []
-    for item in actionable:
-        lines.append(
-            f"- {item.get('category')} ({item.get('dimension')}): the bank is "
-            f"{item.get('house_view_stance')} — client is currently {item.get('relative_position')} "
-            f"relative to this view (client actual {item.get('client_actual'):.1%} vs. "
-            f"target {item.get('client_target'):.1%}). Rationale: {item.get('rationale')}"
-        )
+        if aligned:
+            categories = ", ".join(item["category"] for item in aligned)
+            lines.append(f"- Already aligned with the house view on: {categories}.")
 
-    if aligned:
-        categories = ", ".join(item["category"] for item in aligned)
-        lines.append(f"- Already aligned with the house view on: {categories}.")
+        if at_target:
+            categories = ", ".join(item["category"] for item in at_target)
+            lines.append(
+                f"- Exactly at the client's own SAA target, no tactical tilt in either "
+                f"direction yet, for: {categories}."
+            )
+
+    if any(item.get("is_mock") for item in alignment):
+        lines.append("(This house view is MOCK data for demonstration purposes, not a real bank publication.)")
 
     return "\n".join(lines)
 
 
-def _format_news(articles: list[dict]) -> str:
+def _format_news(articles: list[dict], status: Optional[dict] = None) -> str:
+    """
+    `status` (enrichment.market_news.fetch_relevant_news_bundle() output,
+    or context_builder's best-effort equivalent) lets this distinguish a
+    genuine search failure from a real "nothing found" result — these
+    must never collapse into the same sentence, or the model could narrate
+    a fetch failure as if the market were simply quiet.
+    """
+    if status and status.get("status") == "fetch_failed":
+        return (
+            "Market news search could not be completed (a provider or network error occurred). "
+            "This is NOT the same as finding no relevant news — do not state or imply that no "
+            "news exists; say the search itself failed."
+        )
+
     if not articles:
         return "No relevant market news found for this portfolio's holdings."
 
     lines = []
     for article in articles:
+        queries = article.get("matched_queries")
+        if queries is None:
+            queries = [article["matched_query"]] if article.get("matched_query") else []
+        reasons = article.get("match_reasons")
+        if reasons is None:
+            reasons = [article["match_reason"]] if article.get("match_reason") else []
+
+        query_str = ", ".join(q for q in queries if q) or "the portfolio"
+        reason_str = "; ".join(r for r in reasons if r) or "relevant to portfolio holdings"
         lines.append(
             f"- \"{article.get('title')}\" ({article.get('publisher')}) — relevant to "
-            f"{article.get('matched_query')} ({article.get('match_reason')})."
+            f"{query_str} ({reason_str})."
         )
     return "\n".join(lines)

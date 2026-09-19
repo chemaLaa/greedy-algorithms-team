@@ -230,9 +230,9 @@ def test_change_handles_none():
 def test_house_view_leads_with_actionable_items():
     alignment = [
         {"category": "Shares", "dimension": "AssetClass", "house_view_stance": "overweight",
-         "relative_position": "aligned", "client_actual": 0.5, "client_target": 0.5, "rationale": "r"},
+         "relative_position": "aligned", "client_actual": 0.55, "client_target": 0.5, "rationale": "r"},
         {"category": "Bonds", "dimension": "AssetClass", "house_view_stance": "underweight",
-         "relative_position": "underexposed", "client_actual": 0.1, "client_target": 0.3, "rationale": "r"},
+         "relative_position": "opposite", "client_actual": 0.1, "client_target": 0.3, "rationale": "r"},
     ]
     text = _format_house_view(alignment)
     assert "Bonds" in text
@@ -242,7 +242,7 @@ def test_house_view_leads_with_actionable_items():
 def test_house_view_caps_actionable_items():
     alignment = [
         {"category": f"Cat{i}", "dimension": "AssetClass", "house_view_stance": "overweight",
-         "relative_position": "underexposed", "client_actual": 0.1, "client_target": 0.3, "rationale": "r"}
+         "relative_position": "opposite", "client_actual": 0.1, "client_target": 0.3, "rationale": "r"}
         for i in range(10)
     ]
     text = _format_house_view(alignment, max_actionable=3)
@@ -262,6 +262,48 @@ def test_house_view_skips_not_applicable_without_mentioning():
     assert "Real estate" not in text
 
 
+def test_house_view_always_includes_precedence_note():
+    # This must reach the LLM-facing text regardless of what's in
+    # alignment — even an empty list.
+    assert "suitability" in _format_house_view([]).lower()
+    alignment = [
+        {"category": "Shares", "dimension": "AssetClass", "house_view_stance": "overweight",
+         "relative_position": "aligned", "client_actual": 0.55, "client_target": 0.5, "rationale": "r"},
+    ]
+    assert "suitability" in _format_house_view(alignment).lower()
+
+
+def test_house_view_at_target_is_reported_separately_from_aligned():
+    alignment = [
+        {"category": "Shares", "dimension": "AssetClass", "house_view_stance": "overweight",
+         "relative_position": "at_target", "client_actual": 0.5, "client_target": 0.5, "rationale": "r"},
+    ]
+    text = _format_house_view(alignment)
+    assert "Shares" in text
+    assert "Already aligned with the house view on" not in text
+    assert "target" in text.lower()
+
+
+def test_house_view_notes_mock_data_when_any_row_is_mock():
+    alignment = [
+        {"category": "Shares", "dimension": "AssetClass", "house_view_stance": "overweight",
+         "relative_position": "aligned", "client_actual": 0.55, "client_target": 0.5, "rationale": "r",
+         "is_mock": True},
+    ]
+    text = _format_house_view(alignment)
+    assert "MOCK" in text
+
+
+def test_house_view_no_mock_note_when_not_mock():
+    alignment = [
+        {"category": "Shares", "dimension": "AssetClass", "house_view_stance": "overweight",
+         "relative_position": "aligned", "client_actual": 0.55, "client_target": 0.5, "rationale": "r",
+         "is_mock": False},
+    ]
+    text = _format_house_view(alignment)
+    assert "MOCK" not in text
+
+
 # --- _format_news ---
 
 
@@ -276,6 +318,26 @@ def test_news_formats_article():
     assert "Test headline" in text
     assert "Reuters" in text
     assert "Nestle SA" in text
+
+
+def test_news_formats_article_with_merged_matched_queries():
+    text = _format_news(
+        [{
+            "title": "Test headline", "publisher": "Reuters",
+            "matched_queries": ["Nestle SA", "Consumer Staples"],
+            "match_reasons": ["top contributor", "SAA breach"],
+        }]
+    )
+    assert "Nestle SA" in text
+    assert "Consumer Staples" in text
+
+
+def test_news_distinguishes_fetch_failed_from_no_news_found():
+    failed_text = _format_news([], {"status": "fetch_failed", "reasons": ["all_search_subjects_failed"]})
+    no_news_text = _format_news([], {"status": "no_news_found", "reasons": []})
+    assert failed_text != no_news_text
+    assert "fail" in failed_text.lower()
+    assert "no relevant market news" in no_news_text.lower()
 
 
 # --- integration: context_to_prose and build_prompt ---

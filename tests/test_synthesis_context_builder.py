@@ -77,6 +77,29 @@ def test_house_view_and_news_pass_through_when_given():
     context = build_briefing_context(view, bundle, house_view_alignment=house_view, news_articles=news)
     assert context["house_view_alignment"] == house_view
     assert context["market_news"] == news
+    assert context["market_news_status"]["status"] == "ok"
+
+
+def test_news_articles_empty_defaults_status_to_unavailable_not_fetch_failed():
+    # Without a real news_bundle, the most that can honestly be claimed
+    # from an empty list is "nothing came back" — never fabricate a
+    # provider-failure claim this caller never actually reported.
+    view, bundle = _view_and_bundle()
+    context = build_briefing_context(view, bundle, news_articles=[])
+    assert context["market_news_status"]["status"] == "unavailable"
+
+
+def test_news_bundle_takes_precedence_and_carries_status_through():
+    view, bundle = _view_and_bundle()
+    news_bundle = {
+        "status": "fetch_failed",
+        "reasons": ["all_search_subjects_failed"],
+        "articles": [],
+    }
+    context = build_briefing_context(view, bundle, news_bundle=news_bundle)
+    assert context["market_news"] == []
+    assert context["market_news_status"]["status"] == "fetch_failed"
+    assert context["market_news_status"]["reasons"] == ["all_search_subjects_failed"]
 
 
 def test_missing_portfolio_id_does_not_crash():

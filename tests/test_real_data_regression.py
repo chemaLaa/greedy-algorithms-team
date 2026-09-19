@@ -244,7 +244,7 @@ def test_house_view_comparison_runs_clean_across_all_47_clients():
     # All four outcomes should genuinely occur somewhere across 47 real
     # clients — if only one or two ever show up, the comparison logic is
     # probably not discriminating correctly.
-    assert seen_positions == {"aligned", "underexposed", "overexposed", "not_applicable"}
+    assert seen_positions == {"aligned", "opposite", "at_target", "not_applicable"}
 
 
 def test_briefing_context_builder_runs_clean_across_all_47_clients():

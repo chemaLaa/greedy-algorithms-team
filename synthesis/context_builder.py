@@ -20,6 +20,7 @@ def build_briefing_context(
     state_result: Optional[dict] = None,
     house_view_alignment: Optional[list[dict]] = None,
     news_articles: Optional[list[dict]] = None,
+    news_bundle: Optional[dict] = None,
 ) -> dict:
     """
     client_view: data_layer.build_client_view() output
@@ -35,8 +36,14 @@ def build_briefing_context(
         below)
     house_view_alignment: enrichment.house_view.compare_portfolio_to_house_view()
         output for this portfolio
-    news_articles: enrichment.market_news.fetch_relevant_news() output
-        for this portfolio
+    news_articles: enrichment.market_news.fetch_relevant_news() output for
+        this portfolio (backward-compatible list-only form; prefer
+        news_bundle when you have it)
+    news_bundle: enrichment.market_news.fetch_relevant_news_bundle() output
+        for this portfolio — preferred over news_articles because it
+        carries the fetch status (a genuine provider/network failure must
+        never be narrated the same way as "no relevant news found"; see
+        market_news.py). When both are given, news_bundle wins.
 
     Returns a BriefingContext dict (see README for the full shape).
     """
@@ -46,6 +53,19 @@ def build_briefing_context(
         None,
     )
 
+    if news_bundle is not None:
+        market_news = news_bundle.get("articles") or []
+        market_news_status = {
+            "status": news_bundle.get("status"),
+            "reasons": news_bundle.get("reasons", []),
+        }
+    else:
+        market_news = news_articles or []
+        # No bundle to consult, so the most that can honestly be said is
+        # whether anything came back — never fabricate a fetch_failed vs.
+        # no_news_found distinction this caller didn't actually provide.
+        market_news_status = {"status": "ok" if market_news else "unavailable", "reasons": []}
+
     return {
         "client": _client_section(client_view),
         "portfolio": _portfolio_section(client_view, portfolio, priority_bundle),
@@ -53,7 +73,8 @@ def build_briefing_context(
         "top_risk_contributors": priority_bundle.get("top_risk_contributors", []),
         "change_since_last_interaction": _change_section(priority_bundle, state_result),
         "house_view_alignment": house_view_alignment or [],
-        "market_news": news_articles or [],
+        "market_news": market_news,
+        "market_news_status": market_news_status,
     }
 
 

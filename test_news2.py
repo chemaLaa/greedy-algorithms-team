@@ -1,8 +1,15 @@
+from datetime import datetime, timezone
+
 from enrichment.market_news import (
-    clean_security_name,
-    relevant_search_terms,
-    fetch_relevant_news,
+    BUDGET_MAX_ARTICLES_PER_SUBJECT,
+    BUDGET_MAX_RETAINED_ARTICLES,
+    BUDGET_MAX_SEARCH_SUBJECTS,
+    FailingNewsProvider,
     FakeNewsProvider,
+    clean_security_name,
+    fetch_relevant_news,
+    fetch_relevant_news_bundle,
+    relevant_search_terms,
 )
 
 
@@ -105,6 +112,35 @@ def test_relevant_search_terms_fund_with_industry_breakdown_uses_largest_sector(
     assert terms[0]["query"] == "Financials"  # 70% > 30%, largest wins
 
 
+def test_relevant_search_terms_fund_theme_uses_largest_absolute_weight_not_signed_max():
+    # A short/hedging position can carry a large NEGATIVE weight in
+    # FundUnbundlingMappings. Picking by plain max() would pick a small
+    # positive weight over a much larger short exposure just because of
+    # sign — the fund's real largest bet must win regardless of sign.
+    from data_layer import ReferenceIndex
+
+    reference = {
+        "Securities": [
+            {"Id": 100, "Name": "Hedged Fund", "IsUnbundlingEnabled": True, "SAA_AssetClassName": "Shares"},
+            {"Id": 200, "IndustryName": "Energy", "SAA_IndustryName": "Energy"},
+            {"Id": 201, "IndustryName": "Utilities", "SAA_IndustryName": "Utilities"},
+        ],
+        "FundUnbundlingMappings": [
+            {"FundSecurityId": 100, "IndustryName": "Energy", "Weight": -80.0},
+            {"FundSecurityId": 100, "IndustryName": "Utilities", "Weight": 20.0},
+        ],
+    }
+    ref = ReferenceIndex(reference)
+    priorities_bundle = {
+        "top_risk_contributors": [
+            {"SecurityId": 100, "SecurityName": "Hedged Fund", "share_of_portfolio_volatility": 0.2}
+        ],
+        "priorities": [],
+    }
+    terms = relevant_search_terms({}, priorities_bundle, ref=ref)
+    assert terms[0]["query"] == "Energy"  # |-80| > |20|
+
+
 def test_relevant_search_terms_fund_without_breakdown_falls_back_to_asset_class():
     from data_layer import ReferenceIndex
 
@@ -200,18 +236,254 @@ def test_relevant_search_terms_deduplicates_by_query():
     assert queries.count("Nestle SA") == 1
 
 
+def test_relevant_search_terms_skips_unresolved_structured_product_names():
+    # "PERLES" is a known structured-product marker clean_security_name()
+    # can't reliably resolve — never guess an issuer for it.
+    priorities_bundle = {
+        "top_risk_contributors": [
+            {"SecurityName": "PERLES on SMI Index", "share_of_portfolio_volatility": 0.15}
+        ],
+        "priorities": [],
+    }
+    terms = relevant_search_terms({}, priorities_bundle)
+    assert terms == []
+
+
+def test_relevant_search_terms_skips_bare_truncated_stub_names():
+    priorities_bundle = {
+        "top_risk_contributors": [],
+        "priorities": [
+            {"type": "single_position_concentration", "security_name": "12.", "weight": 0.25},
+        ],
+    }
+    terms = relevant_search_terms({}, priorities_bundle)
+    assert terms == []
+
+
+def test_relevant_search_terms_excludes_risk_contributors_when_risk_attribution_invalid():
+    priorities_bundle = {
+        "risk_attribution": {"status": "invalid"},
+        "top_risk_contributors": [
+            {"SecurityName": "Namen-Aktie Nestle SA", "share_of_portfolio_volatility": 0.5}
+        ],
+        "priorities": [],
+    }
+    terms = relevant_search_terms({}, priorities_bundle)
+    assert terms == []
+
+
+def test_relevant_search_terms_excludes_risk_contributors_when_risk_attribution_unavailable():
+    priorities_bundle = {
+        "risk_attribution": {"status": "unavailable"},
+        "top_risk_contributors": [
+            {"SecurityName": "Namen-Aktie Nestle SA", "share_of_portfolio_volatility": 0.5}
+        ],
+        "priorities": [],
+    }
+    terms = relevant_search_terms({}, priorities_bundle)
+    assert terms == []
+
+
+def test_relevant_search_terms_includes_risk_contributors_when_risk_attribution_ok():
+    priorities_bundle = {
+        "risk_attribution": {"status": "ok"},
+        "top_risk_contributors": [
+            {"SecurityName": "Namen-Aktie Nestle SA", "share_of_portfolio_volatility": 0.5}
+        ],
+        "priorities": [],
+    }
+    terms = relevant_search_terms({}, priorities_bundle)
+    assert any(t["query"] == "Nestle SA" for t in terms)
+
+
+def test_relevant_search_terms_material_industry_exposure_without_breach():
+    priorities_bundle = {
+        "top_risk_contributors": [],
+        "priorities": [],  # no SAA breach at all
+        "concentrations": {
+            "dimensions": {
+                "Industry": [{"category": "Financials", "weight": 0.22, "absolute_weight": 0.22}]
+            }
+        },
+    }
+    terms = relevant_search_terms({}, priorities_bundle)
+    assert any(t["query"] == "Financials" and t["type"] == "sector" for t in terms)
+
+
+def test_relevant_search_terms_ignores_immaterial_industry_exposure():
+    priorities_bundle = {
+        "top_risk_contributors": [],
+        "priorities": [],
+        "concentrations": {
+            "dimensions": {
+                "Industry": [{"category": "Financials", "weight": 0.02, "absolute_weight": 0.02}]
+            }
+        },
+    }
+    terms = relevant_search_terms({}, priorities_bundle)
+    assert terms == []
+
+
+def test_relevant_search_terms_ranks_by_priority_score_and_caps_at_budget():
+    priorities_bundle = {
+        "top_risk_contributors": [],
+        "priorities": [
+            {"type": "saa_breach", "dimension": "AssetClass", "category": f"Cat{i}", "breach": "max", "priority_score": float(i)}
+            for i in range(10)
+        ],
+    }
+    terms = relevant_search_terms({}, priorities_bundle)
+    assert len(terms) == BUDGET_MAX_SEARCH_SUBJECTS
+    scores = [t["priority_score"] for t in terms]
+    assert scores == sorted(scores, reverse=True)
+    assert terms[0]["query"] == "Cat9"  # highest priority_score wins the budget slot
+
+
 def test_fetch_relevant_news_tags_articles_with_match_info():
     terms = [{"type": "security", "query": "Nestle SA", "reason": "top risk contributor"}]
     provider = FakeNewsProvider(
         {"Nestle SA": [{"title": "Nestle news", "publisher": "X", "link": "http://x", "published_at": "2026-01-01", "summary": ""}]}
     )
-    articles = fetch_relevant_news(terms, provider)
+    now = datetime(2026, 1, 3, tzinfo=timezone.utc)
+    articles = fetch_relevant_news(terms, provider, now=now)
     assert len(articles) == 1
-    assert articles[0]["matched_query"] == "Nestle SA"
-    assert articles[0]["match_reason"] == "top risk contributor"
+    assert articles[0]["matched_queries"] == ["Nestle SA"]
+    assert articles[0]["match_reasons"] == ["top risk contributor"]
 
 
 def test_fetch_relevant_news_empty_for_unmatched_query():
     terms = [{"type": "security", "query": "Unknown Co", "reason": "x"}]
     provider = FakeNewsProvider({})
     assert fetch_relevant_news(terms, provider) == []
+
+
+def test_fetch_relevant_news_bundle_no_news_found_vs_fetch_failed_are_different_statuses():
+    terms = [{"type": "security", "query": "Quiet Co", "reason": "x"}]
+
+    no_news_bundle = fetch_relevant_news_bundle(terms, FakeNewsProvider({}))
+    assert no_news_bundle["status"] == "no_news_found"
+
+    failed_bundle = fetch_relevant_news_bundle(terms, FailingNewsProvider())
+    assert failed_bundle["status"] == "fetch_failed"
+
+    assert no_news_bundle["status"] != failed_bundle["status"]
+    assert no_news_bundle["articles"] == []
+    assert failed_bundle["articles"] == []
+
+
+def test_fetch_relevant_news_bundle_partial_when_some_subjects_fail_but_others_return_articles():
+    terms = [
+        {"type": "security", "query": "Nestle SA", "reason": "r1"},
+        {"type": "security", "query": "Broken Co", "reason": "r2"},
+    ]
+
+    class MixedProvider:
+        def fetch(self, query, max_results=5):
+            if query == "Broken Co":
+                raise ConnectionError("boom")
+            return [{"title": "Nestle news", "publisher": "X", "link": "http://x", "published_at": "2026-01-01"}]
+
+    now = datetime(2026, 1, 3, tzinfo=timezone.utc)
+    bundle = fetch_relevant_news_bundle(terms, MixedProvider(), now=now)
+    assert bundle["status"] == "partial"
+    assert len(bundle["articles"]) == 1
+    assert "some_search_subjects_failed" in bundle["reasons"]
+
+
+def test_fetch_relevant_news_bundle_prefers_7day_window_over_14day():
+    terms = [{"type": "security", "query": "Q", "reason": "r"}]
+    now = datetime(2026, 1, 10, tzinfo=timezone.utc)
+    provider = FakeNewsProvider(
+        {
+            "Q": [
+                {"title": "Fresh", "publisher": "X", "link": "http://fresh", "published_at": "2026-01-09"},
+                {"title": "Stale-ish", "publisher": "X", "link": "http://stale", "published_at": "2026-01-01"},
+            ]
+        }
+    )
+    bundle = fetch_relevant_news_bundle(terms, provider, now=now)
+    assert bundle["freshness_window_used"] == "preferred_7d"
+    titles = [a["title"] for a in bundle["articles"]]
+    assert titles == ["Fresh"]
+
+
+def test_fetch_relevant_news_bundle_falls_back_to_14day_window_when_nothing_within_7():
+    terms = [{"type": "security", "query": "Q", "reason": "r"}]
+    now = datetime(2026, 1, 10, tzinfo=timezone.utc)
+    provider = FakeNewsProvider(
+        {"Q": [{"title": "Twelve days old", "publisher": "X", "link": "http://x", "published_at": "2025-12-29"}]}
+    )
+    bundle = fetch_relevant_news_bundle(terms, provider, now=now)
+    assert bundle["freshness_window_used"] == "fallback_14d"
+    assert len(bundle["articles"]) == 1
+
+
+def test_fetch_relevant_news_bundle_excludes_articles_older_than_14_days():
+    terms = [{"type": "security", "query": "Q", "reason": "r"}]
+    now = datetime(2026, 1, 10, tzinfo=timezone.utc)
+    provider = FakeNewsProvider(
+        {"Q": [{"title": "Very old", "publisher": "X", "link": "http://x", "published_at": "2025-11-01"}]}
+    )
+    bundle = fetch_relevant_news_bundle(terms, provider, now=now)
+    assert bundle["status"] == "no_news_found"
+    assert bundle["articles"] == []
+
+
+def test_fetch_relevant_news_bundle_excludes_undated_articles_never_assumes_freshness():
+    terms = [{"type": "security", "query": "Q", "reason": "r"}]
+    provider = FakeNewsProvider({"Q": [{"title": "No date", "publisher": "X", "link": "http://x"}]})
+    bundle = fetch_relevant_news_bundle(terms, provider)
+    assert bundle["articles"] == []
+    assert bundle["status"] == "no_news_found"
+
+
+def test_fetch_relevant_news_bundle_merges_cross_query_duplicates_keeping_all_provenance():
+    terms = [
+        {"type": "security", "query": "Nestle SA", "reason": "top risk contributor", "fact_id": "1:risk_contributor:5"},
+        {"type": "sector", "query": "Consumer Staples", "reason": "SAA breach", "fact_id": "1:saa_breach:AssetClass:0"},
+    ]
+    same_article = {"title": "Nestle news", "publisher": "X", "link": "http://x", "published_at": "2026-01-01"}
+    provider = FakeNewsProvider({"Nestle SA": [same_article], "Consumer Staples": [same_article]})
+    now = datetime(2026, 1, 2, tzinfo=timezone.utc)
+
+    bundle = fetch_relevant_news_bundle(terms, provider, now=now)
+    assert len(bundle["articles"]) == 1
+    merged = bundle["articles"][0]
+    assert set(merged["matched_queries"]) == {"Nestle SA", "Consumer Staples"}
+    assert set(merged["match_reasons"]) == {"top risk contributor", "SAA breach"}
+    assert set(merged["fact_ids"]) == {"1:risk_contributor:5", "1:saa_breach:AssetClass:0"}
+
+
+def test_fetch_relevant_news_bundle_enforces_max_articles_per_subject():
+    terms = [{"type": "security", "query": "Q", "reason": "r"}]
+    now = datetime(2026, 1, 2, tzinfo=timezone.utc)
+    many_articles = [
+        {"title": f"Article {i}", "publisher": "X", "link": f"http://x/{i}", "published_at": "2026-01-01"}
+        for i in range(10)
+    ]
+    provider = FakeNewsProvider({"Q": many_articles})
+    bundle = fetch_relevant_news_bundle(terms, provider, now=now)
+    assert len(bundle["articles"]) <= BUDGET_MAX_ARTICLES_PER_SUBJECT
+
+
+def test_fetch_relevant_news_bundle_enforces_max_total_retained_articles():
+    terms = [
+        {"type": "security", "query": f"Q{i}", "reason": "r"} for i in range(5)
+    ]
+    now = datetime(2026, 1, 2, tzinfo=timezone.utc)
+    canned = {
+        f"Q{i}": [
+            {"title": f"A{i}-1", "publisher": "X", "link": f"http://x/{i}/1", "published_at": "2026-01-01"},
+            {"title": f"A{i}-2", "publisher": "X", "link": f"http://x/{i}/2", "published_at": "2026-01-01"},
+        ]
+        for i in range(5)
+    }
+    provider = FakeNewsProvider(canned)
+    bundle = fetch_relevant_news_bundle(terms, provider, now=now)
+    assert len(bundle["articles"]) <= BUDGET_MAX_RETAINED_ARTICLES
+
+
+def test_fetch_relevant_news_bundle_no_terms_is_no_news_found_not_a_failure():
+    bundle = fetch_relevant_news_bundle([], FakeNewsProvider({}))
+    assert bundle["status"] == "no_news_found"
+    assert "no_search_terms_generated" in bundle["reasons"]

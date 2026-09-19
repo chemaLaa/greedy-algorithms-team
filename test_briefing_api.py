@@ -1,13 +1,20 @@
 """
-Smoke-test the Anthropic API call in synthesis/briefing_generator.py directly.
+Smoke-test the Anthropic API call in synthesis/briefing_generator.py directly,
+plus the market-news fetch step (relevant_search_terms + budget-capped
+fetch_relevant_news_bundle) timed separately — so a slow briefing can be
+attributed to the LLM call vs. the news search rather than lumped together.
 
 Usage:
     python test_briefing_api.py                  # uses first client in clients.json
     python test_briefing_api.py --client CASE-002
+    python test_briefing_api.py --skip-news       # LLM call only, no news fetch at all
+    python test_briefing_api.py --fake-news       # time the budget-cap/dedup overhead
+                                                   # in isolation, with zero network calls
 
 Requires:
     pip install anthropic certifi
     export ANTHROPIC_API_KEY=sk-ant-...
+    (real news fetch also needs: pip install yfinance, and network access)
 """
 import argparse
 import sys
@@ -22,11 +29,20 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--client", metavar="CASE-xxx", default=None,
                         help="ClientRef to use (e.g. CASE-002); defaults to first client")
+    parser.add_argument("--skip-news", action="store_true", help="skip the market-news fetch entirely")
+    parser.add_argument("--fake-news", action="store_true",
+                         help="use FakeNewsProvider (no network) to time budget-cap/dedup overhead in isolation")
     args = parser.parse_args()
 
     # -- data layer --
     from data_layer import load_clients, load_reference, ReferenceIndex, build_client_view
     from analysis_layer import build_client_priorities
+    from enrichment.market_news import (
+        FakeNewsProvider,
+        YahooFinanceNewsProvider,
+        fetch_relevant_news_bundle,
+        relevant_search_terms,
+    )
     from synthesis.context_builder import build_briefing_context
     from synthesis.briefing_generator import generate_briefing, BriefingGenerationError
 
@@ -49,12 +65,34 @@ def main():
     bundles = build_client_priorities(client_view, ref)
     bundle = bundles[0]
 
-    context = build_briefing_context(client_view, bundle)
-
     print(f"Client:    {client_view.get('display_name')} ({client.get('ClientRef')})")
     print(f"Portfolio: {bundle['portfolio_id']} — {bundle['portfolio_name']}")
     print(f"Priorities found: {len(bundle['priorities'])}")
     print("-" * 60)
+
+    # -- market-news fetch step, timed separately from the LLM call --
+    news_bundle = None
+    if not args.skip_news:
+        news_start = time.monotonic()
+        print(f"[+0.0s] Starting market-news fetch (relevant_search_terms + fetch_relevant_news_bundle)...")
+
+        terms = relevant_search_terms(bundle.get("portfolio") or {}, bundle, ref=ref)
+        terms_elapsed = time.monotonic() - news_start
+        print(f"[+{terms_elapsed:.3f}s] relevant_search_terms(): {len(terms)} subject(s) selected: "
+              f"{[t['query'] for t in terms]}")
+
+        provider = FakeNewsProvider({}) if args.fake_news else YahooFinanceNewsProvider()
+        fetch_start = time.monotonic()
+        news_bundle = fetch_relevant_news_bundle(terms, provider)
+        fetch_elapsed = time.monotonic() - fetch_start
+        total_news_elapsed = time.monotonic() - news_start
+        print(f"[+{time.monotonic() - news_start:.3f}s] fetch_relevant_news_bundle() done in {fetch_elapsed:.3f}s "
+              f"(provider={'FakeNewsProvider' if args.fake_news else 'YahooFinanceNewsProvider'}) "
+              f"— status={news_bundle['status']}, {len(news_bundle['articles'])} article(s) retained")
+        print(f"Market-news fetch step total: {total_news_elapsed:.3f}s")
+        print("-" * 60)
+
+    context = build_briefing_context(client_view, bundle, news_bundle=news_bundle)
 
     # -- API call --
     t_start = time.monotonic()

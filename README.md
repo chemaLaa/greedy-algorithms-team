@@ -50,7 +50,7 @@ and `synthesis`:
   persistence, diffing (including a manufactured-real-change check), and
   the empty-diff-on-repeat-call guarantee
 - `enrichment/house_view.py` — mock house-view comparison, all four outcomes
-  (`aligned`/`underexposed`/`overexposed`/`not_applicable`) verified to occur
+  (`aligned`/`opposite`/`at_target`/`not_applicable`) verified to occur
   across real clients
 - `enrichment/market_news.py` — security-name cleaning (95.8% real-data
   coverage, locked in by a regression test), search-term selection including
@@ -215,17 +215,54 @@ from enrichment.house_view import compare_portfolio_to_house_view
 
 result = compare_portfolio_to_house_view(portfolio)
 # [{"category": "Shares", "house_view_stance": "overweight",
-#   "relative_position": "aligned" | "underexposed" | "overexposed" | "not_applicable",
-#   "client_actual": 0.52, "client_target": 0.50, ...}, ...]
+#   "relative_position": "aligned" | "opposite" | "at_target" | "not_applicable",
+#   "client_actual": 0.52, "client_target": 0.50,
+#   "as_of": "2026-09-01", "source": "mock", "is_mock": True, ...}, ...]
 ```
 
-`HOUSE_VIEW` in `house_view.py` is mock data (the case brief explicitly
-allows this), not a real market forecast — category names match the real
-dataset's `SAA_*` vocabulary exactly, verified against `reference.json`, so
-no translation step is needed to compare against `data_layer`'s
-`saa_deviations` output directly.
+Four states, not two, and being exactly at the client's own SAA target is
+never conflated with "aligned": `aligned` means the client is already
+tilted the *same direction* as the bank's call, past their own target;
+`at_target` means the client is sitting exactly at that target — a
+tactical overweight/underweight call is a call to move AWAY from the
+baseline, so being exactly at it means the client hasn't acted on it in
+either direction, and narrating that as "aligned with an overweight call"
+would misrepresent the client's actual position. `opposite` covers both
+of the old `underexposed`/`overexposed` cases — the client tilted away
+from what the house view recommends, whichever direction that is.
+
+`compare_portfolio_to_house_view()` takes a `HouseViewProvider` (defaults
+to `MockHouseViewProvider()`, which returns `house_view.py`'s hardcoded
+mock list — the case brief explicitly allows mock CIO data). Every row it
+returns carries `as_of`, `source`, and `is_mock` — swapping in a real feed
+means writing a `HouseViewProvider` (or wrapping fetched rows in
+`StaticHouseViewProvider(rows, source="...", as_of="...")`), not touching
+comparison logic. Category names match the real dataset's `SAA_*`
+vocabulary exactly, verified against `reference.json`, so no translation
+step is needed to compare against `data_layer`'s `saa_deviations` output
+directly.
+
+**The precedence rule reaches the model, not just this code.** A tactical
+house view never overrides client suitability, active compliance
+violations, or the portfolio's own SAA targets — `HOUSE_VIEW_PRECEDENCE_NOTE`
+states this once, and `prompt_builder.py`'s `_format_house_view()` prepends
+it to the house-view section of every prompt unconditionally (even when
+there's nothing else to say about the house view at all), so it's an
+instruction the model actually receives rather than an assumption that
+only ever lived in code comments.
 
 ### Market news — network-dependent, split into testable and untested parts
+
+**Hard budgets** (`enrichment/market_news.py` constants): at most **5** search
+subjects per portfolio (`BUDGET_MAX_SEARCH_SUBJECTS`), at most **2** articles
+per subject (`BUDGET_MAX_ARTICLES_PER_SUBJECT`), at most **6** unique
+retained articles overall (`BUDGET_MAX_RETAINED_ARTICLES`), and a **7-day
+preferred / 14-day fallback** freshness window — an article with no
+parseable `published_at` is never assumed fresh and is excluded rather than
+guessed. When more than 5 candidate subjects exist, they're ranked by
+`priority_score` (reusing `analysis_layer` v2's own ranking for
+priority-derived subjects) before the cap is applied, so the budget never
+silently drops the most important subject.
 
 **Fully tested, no network needed:**
 - `clean_security_name()` — this dataset's security names follow Swiss/German
@@ -235,28 +272,57 @@ no translation step is needed to compare against `data_layer`'s
   Validated against all 504 real securities: **95.8% clean correctly**
   (locked in by a regression test — a drop below 90% fails CI). The
   remaining ~4% are structured products/derivatives and a handful of
-  apparently-truncated `Name` values in the source data itself — a small,
-  bounded, documented limitation, not a silent failure.
-- `relevant_search_terms()` — picks what to search for from the portfolio's
-  own top risk contributors and priority flags, not anything generic.
+  apparently-truncated `Name` values in the source data itself. These same
+  unresolved names are excluded from search-term generation entirely
+  (`_is_unresolved_security_name()`) — never guess an issuer from a raw,
+  unrecognizable string.
+- `relevant_search_terms()` — picks what to search for from: (1) the
+  portfolio's top risk contributors, but only when `analysis_layer` v2's own
+  `risk_attribution["status"]` says `ContributionVolatility` is usable
+  (`invalid`/`unavailable` risk attribution never generates a news search —
+  a data-quality problem must not get laundered into an apparently-confident
+  news subject); (2) concentration and SAA-breach priority flags, reusing
+  v2's `priority_score`; (3) material look-through industry exposure (≥10%
+  absolute weight) even when nothing breached an SAA bound.
+- `fetch_relevant_news_bundle()` — the full pipeline: fetch, apply the
+  freshness window, merge cross-query duplicate articles (by link, or
+  title+publisher) while **keeping every distinct match reason and
+  connected `fact_id`** rather than dropping provenance, enforce the
+  retention budget, and report one of four explicit statuses: `ok`,
+  `partial` (got articles despite some subject failures), `no_news_found`
+  (every subject fetched cleanly and genuinely found nothing usable), or
+  `fetch_failed` (zero articles AND at least one subject raised — a real
+  provider/network failure, which must never be narrated the same way as
+  "no relevant news exists"). `fetch_relevant_news()` remains as a
+  backward-compatible list-only wrapper around it.
 
-**Verified on the real API (by Hamza, not in this sandbox — no network
-access here):** individual operating companies (e.g. `"Novartis AG"`,
+**Verified on the real API** (originally by Hamza without network access;
+re-confirmed live during the house-view/market-news v2 integration —
+3 search subjects for a real client, `YahooFinanceNewsProvider`, budget
+caps applied, took ~8.2s end-to-end and returned `status="ok"` with 6
+articles retained): individual operating companies (e.g. `"Novartis AG"`,
 `"Sandoz Group AG"`) return real news reliably. **Fund/ETF/index names
 return nothing** (0/6 in testing) — they aren't "story" securities with
 their own coverage. Since a large share of this dataset's holdings are
 funds, `relevant_search_terms()` detects a fund position (via
 `IsUnbundlingEnabled`, when a `ReferenceIndex` is passed as `ref=`) and
-searches its **largest underlying sector exposure** instead of its own name:
+searches its **largest underlying sector exposure BY ABSOLUTE WEIGHT**
+instead of its own name — `abs()`, not a plain `max()`, because a fund's
+short/hedging positions can carry negative look-through weights, and a
+plain max would let a small long position beat a much larger short one
+just because of sign:
 
 ```python
-from enrichment.market_news import relevant_search_terms, fetch_relevant_news, YahooFinanceNewsProvider
+from enrichment.market_news import relevant_search_terms, fetch_relevant_news_bundle, YahooFinanceNewsProvider
 
 terms = relevant_search_terms(portfolio, priorities_bundle, ref=ref)
 # a fund position generates a "sector" term (e.g. "Health Care") instead of
 # a "security" term with its own unsearchable name
 
-articles = fetch_relevant_news(terms, YahooFinanceNewsProvider())
+bundle = fetch_relevant_news_bundle(terms, YahooFinanceNewsProvider())
+# {"status": "ok" | "partial" | "no_news_found" | "fetch_failed",
+#  "reasons": [...], "articles": [...], "term_results": [...],
+#  "freshness_window_used": "preferred_7d" | "fallback_14d" | "none"}
 ```
 
 This is not just a workaround for a bad hit rate — sector-level news is
@@ -282,7 +348,13 @@ exists for writing tests without hitting the network.
 from synthesis.context_builder import build_briefing_context
 from synthesis.prompt_builder import build_prompt
 
-context = build_briefing_context(client_view, priority_bundle, state_result, house_view_alignment, news_articles)
+context = build_briefing_context(
+    client_view, priority_bundle, state_result, house_view_alignment, news_bundle=news_bundle
+)
+# news_bundle (enrichment.market_news.fetch_relevant_news_bundle() output) is
+# preferred over the older news_articles=<list> form because it carries the
+# fetch status — build_briefing_context() never fabricates a fetch_failed
+# vs. no_news_found distinction that wasn't actually reported to it.
 prompt = build_prompt(context)
 # prompt["system"]  -> fixed instructions: 3 required sections, 4 required
 #                       questions, "one narrative" constraint, JSON output format
@@ -308,11 +380,14 @@ fixed system instructions. Nothing here calls a model; that's
   the fix is pushed to the layer that's actually meant to make judgment
   calls.
 - House view alignment is filtered before it reaches the prompt: only
-  `underexposed`/`overexposed` categories (capped at 5) get full detail,
-  `aligned` categories are compressed into one summary line. Without this,
-  a portfolio with many SAA categories produced a house-view section longer
-  than the rest of the prompt combined — almost entirely "nothing to act on
-  here" content that would've buried the genuinely interesting divergences.
+  `opposite` categories (capped at 5) get full detail; `aligned` and
+  `at_target` categories are each compressed into one summary line (kept
+  separate from each other — being at_target is not the same fact as being
+  aligned). Without this, a portfolio with many SAA categories produced a
+  house-view section longer than the rest of the prompt combined — almost
+  entirely "nothing to act on here" content that would've buried the
+  genuinely interesting divergences. `HOUSE_VIEW_PRECEDENCE_NOTE` is
+  prepended unconditionally regardless of this filtering.
 
 **Validated against all 47 real clients**: no crashes, every prompt stays
 well under a sanity-checked length ceiling (max observed ~4.8K characters),
