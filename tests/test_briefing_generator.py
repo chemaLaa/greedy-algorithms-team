@@ -23,23 +23,32 @@ class _FakeResponse:
 
 
 class _FakeMessages:
-    def __init__(self, response_text=None, raise_error=None, stop_reason="end_turn"):
+    def __init__(self, response_text=None, raise_error=None, stop_reason="end_turn", response_sequence=None):
         self._response_text = response_text
         self._raise_error = raise_error
         self._stop_reason = stop_reason
+        self._response_sequence = response_sequence  # list of (text, stop_reason) tuples, consumed in order
         self.last_call_kwargs = None
+        self.call_count = 0
 
     def create(self, **kwargs):
         self.last_call_kwargs = kwargs
+        self.call_count += 1
         if self._raise_error is not None:
             raise self._raise_error
+        if self._response_sequence is not None:
+            text, stop_reason = self._response_sequence[self.call_count - 1]
+            return _FakeResponse([_FakeTextBlock(text)], stop_reason=stop_reason)
         return _FakeResponse([_FakeTextBlock(self._response_text)], stop_reason=self._stop_reason)
 
 
 class _FakeClient:
-    def __init__(self, response_text=None, raise_error=None, stop_reason="end_turn"):
+    def __init__(self, response_text=None, raise_error=None, stop_reason="end_turn", response_sequence=None):
         self.messages = _FakeMessages(
-            response_text=response_text, raise_error=raise_error, stop_reason=stop_reason
+            response_text=response_text,
+            raise_error=raise_error,
+            stop_reason=stop_reason,
+            response_sequence=response_sequence,
         )
 
 
@@ -183,6 +192,50 @@ def test_generate_briefing_default_max_tokens_has_real_headroom():
     # Regression guard against reintroducing the original 1024 ceiling
     # that caused a real truncated response in testing.
     assert DEFAULT_MAX_TOKENS >= 2048
+
+
+# --- retry behavior ---
+
+
+def test_generate_briefing_retries_after_malformed_response_and_succeeds():
+    # Real bug found via live testing: one real client (CASE-002) got a
+    # response missing "outlook_and_actions" entirely, with stop_reason
+    # "end_turn" (not a max_tokens truncation) — genuine occasional LLM
+    # unreliability in structured output. A retry is the fix; confirm it
+    # actually works: first call malformed, second call valid.
+    malformed = '{"recent_development": "x", "health_check": "y"},'  # missing outlook_and_actions
+    client = _FakeClient(response_sequence=[(malformed, "end_turn"), (VALID_JSON_RESPONSE, "end_turn")])
+    result = generate_briefing(_minimal_context(), client=client)
+    assert result["recent_development"]
+    assert client.messages.call_count == 2
+
+
+def test_generate_briefing_raises_after_exhausting_all_attempts():
+    malformed = '{"recent_development": "x", "health_check": "y"},'
+    client = _FakeClient(response_text=malformed)  # every call returns the same malformed response
+    try:
+        generate_briefing(_minimal_context(), client=client, max_attempts=3)
+        assert False, "expected BriefingGenerationError"
+    except BriefingGenerationError:
+        pass
+    assert client.messages.call_count == 3
+
+
+def test_generate_briefing_max_attempts_one_disables_retrying():
+    malformed = '{"recent_development": "x", "health_check": "y"},'
+    client = _FakeClient(response_text=malformed)
+    try:
+        generate_briefing(_minimal_context(), client=client, max_attempts=1)
+        assert False, "expected BriefingGenerationError"
+    except BriefingGenerationError:
+        pass
+    assert client.messages.call_count == 1
+
+
+def test_generate_briefing_first_attempt_success_does_not_retry():
+    client = _FakeClient(response_text=VALID_JSON_RESPONSE)
+    generate_briefing(_minimal_context(), client=client)
+    assert client.messages.call_count == 1
 
 
 # --- _extract_text ---

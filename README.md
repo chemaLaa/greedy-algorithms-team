@@ -31,7 +31,7 @@ python3 run_tests.py          # zero dependencies, works anywhere
 pytest tests/                 # same test files, nicer output
 ```
 
-167 tests, covering `data_layer`, `analysis_layer`, `state`, `enrichment`,
+176 tests, covering `data_layer`, `analysis_layer`, `state`, `enrichment`,
 and `synthesis`:
 - `loader.py` — valid/invalid file shapes
 - `reference_index.py` — id lookups, the plain→SAA category translation,
@@ -352,14 +352,18 @@ briefing = generate_briefing(context)  # context from build_briefing_context()
 print(briefing)
 ```
 
-Raises `BriefingGenerationError` (never a raw exception) on any failure —
-API call, invalid JSON, a response missing a required section key, or a
-response **truncated by hitting `max_tokens`** (this happened in real
-testing at the original `1024` limit — three ~150-220 word sections plus
-JSON syntax overhead added up to more than that; `DEFAULT_MAX_TOKENS` is
-now `4096`, and a truncation is detected via `stop_reason` and reported
-clearly rather than surfacing as a confusing "invalid JSON" error). A demo
-should surface any of these loudly rather than silently show a broken
+Raises `BriefingGenerationError` (never a raw exception) if every retry
+attempt fails — API call, invalid JSON, a response missing a required
+section key, or a response truncated by hitting `max_tokens`. **Retries up
+to 3 times by default** (`max_attempts=`): confirmed necessary in practice —
+a real 4-client test run produced valid JSON for 3 clients and, for the
+4th, a response with `stop_reason: "end_turn"` (the model believed it was
+done) that was nonetheless missing a required key entirely. This is
+genuine, occasional unreliability in structured JSON generation, not a
+`max_tokens` issue (that's checked and reported separately) — a fresh
+attempt is the standard, effective fix, and testing confirmed a
+malformed-then-valid retry sequence resolves cleanly. A demo should still
+surface a final failure loudly rather than silently show a broken
 briefing.
 
 ## The one non-obvious piece: category translation

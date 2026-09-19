@@ -59,7 +59,11 @@ class BriefingGenerationError(Exception):
 
 
 def generate_briefing(
-    context: dict, model: str = DEFAULT_MODEL, client=None, max_tokens: int = DEFAULT_MAX_TOKENS
+    context: dict,
+    model: str = DEFAULT_MODEL,
+    client=None,
+    max_tokens: int = DEFAULT_MAX_TOKENS,
+    max_attempts: int = 3,
 ) -> dict:
     """
     context: a BriefingContext (synthesis.context_builder.build_briefing_context() output)
@@ -76,6 +80,15 @@ def generate_briefing(
         you see a "truncated" BriefingGenerationError (see below) —
         that's the model running out of room mid-response, not a bug in
         this code.
+    max_attempts: retries the full call (not just parsing) up to this
+        many times if the model returns malformed/incomplete JSON —
+        confirmed necessary in practice: a real run produced valid JSON
+        for 3 of 4 clients and, for the 4th, a response missing a
+        required key entirely with stop_reason "end_turn" (i.e. the
+        model itself believed it was done) — not a max_tokens
+        truncation, genuine occasional unreliability in structured JSON
+        generation. A fresh attempt is the standard, effective fix for
+        this failure mode. Set to 1 to disable retrying.
 
     Returns:
         {
@@ -86,14 +99,26 @@ def generate_briefing(
           "raw_model_response": str,
         }
 
-    Raises BriefingGenerationError on any failure — API call, a response
-    truncated by hitting max_tokens, JSON parsing, or missing required
-    keys.
+    Raises BriefingGenerationError if every attempt fails — API call, a
+    response truncated by hitting max_tokens, JSON parsing, or missing
+    required keys. The error message from the LAST attempt is the one
+    raised; earlier attempts' failures aren't otherwise surfaced.
     """
-    prompt = build_prompt(context)
-
     if client is None:
         client = _default_client()
+
+    last_error: Optional[BriefingGenerationError] = None
+    for _attempt in range(max_attempts):
+        try:
+            return _generate_once(context, model, client, max_tokens)
+        except BriefingGenerationError as e:
+            last_error = e
+
+    raise last_error
+
+
+def _generate_once(context: dict, model: str, client, max_tokens: int) -> dict:
+    prompt = build_prompt(context)
 
     try:
         response = client.messages.create(
