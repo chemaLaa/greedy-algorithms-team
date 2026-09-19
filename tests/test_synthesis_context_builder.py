@@ -196,3 +196,30 @@ def test_client_notes_capped_at_max():
     assert len(context["client_notes"]) == CLIENT_NOTES_MAX
     # And it kept the most recent ones, not an arbitrary slice.
     assert context["client_notes"][0]["text"] == "Note 9"
+
+
+# --- client_interests ---
+
+
+def test_client_interests_surfaces_the_fixture_client_tags():
+    # The shared fixture already has real Tags[] entries — confirms
+    # client_view["tags"] (previously computed and never read by
+    # anything) now actually reaches the BriefingContext.
+    view, bundle = _view_and_bundle()
+    context = build_briefing_context(view, bundle)
+    assert {"category": "Switzerland", "tag_type": "Region"} in context["client_interests"]
+    assert {"category": "Health Care", "tag_type": "Industry"} in context["client_interests"]
+
+
+def test_client_interests_empty_when_no_tags():
+    view, bundle = _view_and_bundle()
+    view_without_tags = {**view, "tags": []}
+    context = build_briefing_context(view_without_tags, bundle)
+    assert context["client_interests"] == []
+
+
+def test_client_interests_skips_tags_with_no_name():
+    view, bundle = _view_and_bundle()
+    view_with_tags = {**view, "tags": [{"TagName": None, "TagTypeName": "Region"}]}
+    context = build_briefing_context(view_with_tags, bundle)
+    assert context["client_interests"] == []

@@ -4,6 +4,7 @@ from enrichment.market_news import (
     BUDGET_MAX_ARTICLES_PER_SUBJECT,
     BUDGET_MAX_RETAINED_ARTICLES,
     BUDGET_MAX_SEARCH_SUBJECTS,
+    CLIENT_INTEREST_TAG_PRIORITY_SCORE,
     FailingNewsProvider,
     FakeNewsProvider,
     clean_security_name,
@@ -322,6 +323,67 @@ def test_relevant_search_terms_ignores_immaterial_industry_exposure():
     }
     terms = relevant_search_terms({}, priorities_bundle)
     assert terms == []
+
+
+def test_relevant_search_terms_uses_industry_client_tag_as_low_priority_subject():
+    priorities_bundle = {
+        "top_risk_contributors": [],
+        "priorities": [],
+        "client_tags": [
+            {"TagName": "Health Care", "TagTypeName": "Industry", "Scope": "Client"},
+        ],
+    }
+    terms = relevant_search_terms({}, priorities_bundle)
+    assert len(terms) == 1
+    assert terms[0]["query"] == "Health Care"
+    assert terms[0]["type"] == "sector"
+    assert terms[0]["priority_score"] == CLIENT_INTEREST_TAG_PRIORITY_SCORE
+
+
+def test_relevant_search_terms_ignores_region_client_tags():
+    # No evidence a broad region query returns relevant results on the
+    # real news API (built for companies/sectors) — never guess.
+    priorities_bundle = {
+        "top_risk_contributors": [],
+        "priorities": [],
+        "client_tags": [
+            {"TagName": "Switzerland", "TagTypeName": "Region", "Scope": "Client"},
+        ],
+    }
+    terms = relevant_search_terms({}, priorities_bundle)
+    assert terms == []
+
+
+def test_relevant_search_terms_client_tag_does_not_duplicate_existing_sector_term():
+    priorities_bundle = {
+        "top_risk_contributors": [],
+        "priorities": [
+            {"type": "saa_breach", "dimension": "Industry", "category": "Health Care", "breach": "max", "priority_score": 80.0},
+        ],
+        "client_tags": [
+            {"TagName": "Health Care", "TagTypeName": "Industry", "Scope": "Client"},
+        ],
+    }
+    terms = relevant_search_terms({}, priorities_bundle)
+    health_care_terms = [t for t in terms if t["query"] == "Health Care"]
+    assert len(health_care_terms) == 1
+    # The real SAA-breach term wins, not the low-priority client-interest one.
+    assert health_care_terms[0]["priority_score"] == 80.0
+
+
+def test_relevant_search_terms_client_tag_is_lower_priority_than_portfolio_signals():
+    priorities_bundle = {
+        "top_risk_contributors": [],
+        "priorities": [
+            {"type": "saa_breach", "dimension": "AssetClass", "category": "Bonds", "breach": "min", "priority_score": 78.0},
+        ],
+        "client_tags": [
+            {"TagName": "Health Care", "TagTypeName": "Industry", "Scope": "Client"},
+        ],
+    }
+    terms = relevant_search_terms({}, priorities_bundle)
+    assert terms[0]["query"] == "Bonds"  # portfolio-derived signal ranked first
+    assert terms[1]["query"] == "Health Care"
 
 
 def test_relevant_search_terms_ranks_by_priority_score_and_caps_at_budget():

@@ -75,6 +75,7 @@ def build_briefing_context(
     return {
         "client": _client_section(client_view),
         "client_notes": _client_notes_section(client_view),
+        "client_interests": _client_interests_section(client_view),
         "portfolio": _portfolio_section(client_view, portfolio, priority_bundle),
         "priorities": priority_bundle.get("priorities", []),
         "top_risk_contributors": priority_bundle.get("top_risk_contributors", []),
@@ -133,6 +134,27 @@ def _client_notes_section(client_view: dict, max_notes: int = CLIENT_NOTES_MAX) 
 
     parsed.sort(key=lambda n: n["date"] or "", reverse=True)
     return parsed[:max_notes]
+
+
+def _client_interests_section(client_view: dict) -> list[dict]:
+    """
+    CRM-style client-level interest tags (Tags[], Scope always "Client")
+    — a region or industry the CLIENT has personally expressed interest
+    in, independent of what the portfolio actually holds. Previously
+    loaded into client_view["tags"] by data_layer and never read by
+    anything downstream at all (confirmed dead data). Returned as plain
+    {category, tag_type} pairs — no filtering here; market_news.py
+    separately decides Industry tags are usable as news subjects while
+    Region tags aren't (no evidence a region-level query returns relevant
+    results), but the prompt-facing text still gets to mention both as
+    client context.
+    """
+    tags = client_view.get("tags") or []
+    return [
+        {"category": tag.get("TagName"), "tag_type": tag.get("TagTypeName")}
+        for tag in tags
+        if isinstance(tag, dict) and tag.get("TagName")
+    ]
 
 
 def _attribution_caveat_section(priority_bundle: dict) -> dict:

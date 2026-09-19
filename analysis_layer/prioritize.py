@@ -178,6 +178,11 @@ def build_portfolio_priorities(
         "saa_target_deviations": _saa_target_deviations(portfolio, n=5),
         "concentrations": concentration_snapshot(portfolio, ref=ref),
         "liquidity": liquidity,
+        # Client-level interest tags (Region/Industry) from the CRM side —
+        # the client's own stated interests, not derived from portfolio
+        # holdings. Passed through raw; market_news.relevant_search_terms()
+        # and synthesis.context_builder both consume this same field.
+        "client_tags": client_view.get("tags") or [],
     }
 
 

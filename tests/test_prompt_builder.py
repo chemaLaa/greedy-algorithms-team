@@ -3,6 +3,7 @@ from synthesis.prompt_builder import (
     context_to_prose,
     _format_attribution_caveat,
     _format_client_and_portfolio,
+    _format_client_interests,
     _format_client_notes,
     _format_performance,
     _format_priorities,
@@ -31,6 +32,7 @@ def _minimal_context(**overrides):
             },
         },
         "client_notes": [],
+        "client_interests": [],
         "priorities": [],
         "top_risk_contributors": [],
         "change_since_last_interaction": {"source": "state_diff", "is_first_interaction": True, "details": {}},
@@ -106,6 +108,26 @@ def test_client_notes_handles_non_iso_date_gracefully():
     text = _format_client_notes([{"date": "unparseable", "text": "Something the advisor wrote."}])
     assert "unparseable" in text
     assert "Something the advisor wrote." in text
+
+
+# --- _format_client_interests ---
+
+
+def test_client_interests_empty():
+    assert "No client interest tags" in _format_client_interests([])
+
+
+def test_client_interests_formats_category_and_type():
+    text = _format_client_interests([{"category": "Health Care", "tag_type": "Industry"}])
+    assert "Health Care (Industry)" in text
+
+
+def test_client_interests_joins_multiple_tags():
+    text = _format_client_interests(
+        [{"category": "Health Care", "tag_type": "Industry"}, {"category": "Switzerland", "tag_type": "Region"}]
+    )
+    assert "Health Care (Industry)" in text
+    assert "Switzerland (Region)" in text
 
 
 # --- _format_performance ---
@@ -445,7 +467,7 @@ def test_news_distinguishes_fetch_failed_from_no_news_found():
 def test_context_to_prose_has_all_expected_keys():
     fragments = context_to_prose(_minimal_context())
     assert set(fragments.keys()) == {
-        "client_and_portfolio", "client_notes", "performance", "attribution_caveat",
+        "client_and_portfolio", "client_notes", "client_interests", "performance", "attribution_caveat",
         "priorities", "risk_contributors", "change_since_last_interaction", "house_view", "news",
     }
 
@@ -498,6 +520,20 @@ def test_build_prompt_user_message_includes_client_notes_section():
     content = prompt["messages"][0]["content"]
     assert "CLIENT NOTES / CIRCUMSTANCES" in content
     assert "No direct positions in fossil fuels" in content
+
+
+def test_build_prompt_user_message_includes_client_interests_section():
+    prompt = build_prompt(
+        _minimal_context(client_interests=[{"category": "Health Care", "tag_type": "Industry"}])
+    )
+    content = prompt["messages"][0]["content"]
+    assert "CLIENT'S OWN STATED INTERESTS" in content
+    assert "Health Care (Industry)" in content
+
+
+def test_build_prompt_system_forbids_treating_interest_tags_as_holdings():
+    system = " ".join(build_prompt(_minimal_context())["system"].split())
+    assert "not a portfolio holding" in system or "NOT a portfolio holding" in system
 
 
 def test_build_prompt_system_mentions_client_circumstances_and_staleness_judgment():

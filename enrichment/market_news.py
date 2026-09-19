@@ -70,6 +70,13 @@ MAX_CONCURRENT_FETCHES = 8
 # just because nothing technically breached).
 INDUSTRY_MATERIALITY_THRESHOLD = 0.10
 
+# A client's own stated interest (a CRM Tags[] entry, not a portfolio
+# exposure) is real personalization worth a subject, but it isn't a risk
+# or compliance signal — kept below every portfolio-derived priority_score
+# so it only claims a budget slot when there's room, never displacing an
+# actual risk/breach subject.
+CLIENT_INTEREST_TAG_PRIORITY_SCORE = 35.0
+
 
 def clean_security_name(raw_name: str) -> str:
     """
@@ -288,6 +295,15 @@ def relevant_search_terms(
         even when nothing there breached an SAA bound — a large sector
         bet the portfolio's SAA happens to have no bound on is still
         worth a news subject
+      - the client's own stated interests (from
+        priorities_bundle["client_tags"], the CRM Tags[] passed through
+        analysis_layer.prioritize) — an Industry-type tag becomes a low-
+        priority sector subject. Region-type tags are deliberately NOT
+        used for search: this dataset's news provider is built for
+        companies/sectors, not broad geographies, and there's no
+        evidence a region-level query returns relevant results (see
+        module docstring's fund/company hit-rate findings) — never guess
+        at a query shape that hasn't been verified to work
 
     `ref` (a data_layer.ReferenceIndex) is optional but recommended: when
     supplied, a top risk contributor that's a FUND gets a sector-theme
@@ -400,6 +416,23 @@ def relevant_search_terms(
                 "query": category,
                 "reason": f"material look-through industry exposure ({abs_weight:.0%} of portfolio, no SAA breach)",
                 "priority_score": min(65.0, 30.0 + 100.0 * abs_weight),
+                "fact_id": None,
+            }
+        )
+        existing_sector_queries.add(category)
+
+    for tag in priorities_bundle.get("client_tags") or []:
+        if not isinstance(tag, dict) or tag.get("TagTypeName") != "Industry":
+            continue
+        category = tag.get("TagName")
+        if category is None or category in existing_sector_queries:
+            continue
+        terms.append(
+            {
+                "type": "sector",
+                "query": category,
+                "reason": "client has expressed personal interest in this industry (CRM tag)",
+                "priority_score": CLIENT_INTEREST_TAG_PRIORITY_SCORE,
                 "fact_id": None,
             }
         )

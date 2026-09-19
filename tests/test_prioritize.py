@@ -72,3 +72,24 @@ def test_target_only_saa_is_not_called_a_breach():
     result = build_portfolio_priorities(client, p, ref=None)
     assert not any(x["type"] == "saa_breach" for x in result["priorities"])
     assert result["saa_target_deviations"][0]["deviation_from_target_pp"] == 30.000000000000004
+
+
+def test_client_tags_pass_through_from_client_view():
+    p = portfolio()
+    client = {
+        "active_violations": [],
+        "notes": [],
+        "tags": [
+            {"TagName": "Switzerland", "TagTypeName": "Region", "Scope": "Client"},
+            {"TagName": "Health Care", "TagTypeName": "Industry", "Scope": "Client"},
+        ],
+    }
+    result = build_portfolio_priorities(client, p, ref=None)
+    assert result["client_tags"] == client["tags"]
+
+
+def test_client_tags_defaults_to_empty_list_when_absent():
+    p = portfolio()
+    client = {"active_violations": [], "notes": []}
+    result = build_portfolio_priorities(client, p, ref=None)
+    assert result["client_tags"] == []

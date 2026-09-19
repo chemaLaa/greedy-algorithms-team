@@ -88,6 +88,12 @@ Critical rules:
   Notes carry a date; use judgment about whether an old note still \
   applies rather than presenting it as current fact, and never invent a \
   circumstance beyond what a note actually says.
+- The "CLIENT'S OWN STATED INTERESTS" are CRM tags recording what the \
+  client is personally interested in — they are NOT a portfolio holding \
+  and NOT confirmed exposure. Never describe an interest tag as \
+  something the client "holds" or "is invested in"; if news happens to \
+  match one, frame it as relevant to the client's stated interest, not \
+  as commentary on an actual position.
 - Write in fluent English throughout, even where a source fact was in \
   German — translate rather than mixing languages in your output.
 - Plain prose, no markdown headers or bullet lists inside each section.
@@ -107,6 +113,7 @@ def context_to_prose(context: dict) -> dict[str, str]:
     return {
         "client_and_portfolio": _format_client_and_portfolio(context),
         "client_notes": _format_client_notes(context.get("client_notes", [])),
+        "client_interests": _format_client_interests(context.get("client_interests", [])),
         "performance": _format_performance(context["portfolio"].get("performance_trend")),
         "attribution_caveat": _format_attribution_caveat(context.get("attribution_caveat")),
         "priorities": _format_priorities(context.get("priorities", [])),
@@ -128,6 +135,8 @@ def build_prompt(context: dict) -> dict:
     user_message = (
         f"{fragments['client_and_portfolio']}\n\n"
         f"CLIENT NOTES / CIRCUMSTANCES (from CRM, most recent first):\n{fragments['client_notes']}\n\n"
+        f"CLIENT'S OWN STATED INTERESTS (CRM tags — personal interest, NOT necessarily a portfolio "
+        f"holding):\n{fragments['client_interests']}\n\n"
         f"RECENT PERFORMANCE:\n{fragments['performance']}\n\n"
         f"DATA AVAILABILITY FOR ATTRIBUTING THIS CHANGE:\n{fragments['attribution_caveat']}\n\n"
         f"CURRENT ISSUES AND RISKS (ranked by rule-based severity, not necessarily by "
@@ -189,6 +198,20 @@ def _format_client_notes(notes: list[dict]) -> str:
         date_str = date.split("T")[0] if isinstance(date, str) and "T" in date else (date or "unknown date")
         lines.append(f"- ({date_str}) {note.get('text')}")
     return "\n".join(lines)
+
+
+def _format_client_interests(interests: list[dict]) -> str:
+    """
+    CRM-level interest tags (synthesis.context_builder's client_interests)
+    — a region or industry the client has personally expressed interest
+    in, independent of what the portfolio actually holds. Labeled
+    explicitly as "personal interest, not a holding" both here and in the
+    prompt section header, so a model doesn't accidentally narrate one as
+    if it were a position in the portfolio.
+    """
+    if not interests:
+        return "No client interest tags on file."
+    return ", ".join(f"{item.get('category')} ({item.get('tag_type')})" for item in interests)
 
 
 def _format_performance(trend: Optional[dict]) -> str:
