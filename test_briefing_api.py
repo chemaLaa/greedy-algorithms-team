@@ -121,6 +121,10 @@ def main():
     print(briefing["health_check"])
     print("\n--- Outlook & Actions ---")
     print(briefing["outlook_and_actions"])
+    print("\n--- Sources (code-built, not model-generated) ---")
+    for source in briefing.get("sources") or []:
+        suffix = f" -> {source['url']}" if source.get("url") else ""
+        print(f"  [{source['type']}] {source['label']}{suffix}")
     print("\n--- Raw model response ---")
     print(briefing["raw_model_response"])
 

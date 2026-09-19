@@ -223,3 +223,92 @@ def test_client_interests_skips_tags_with_no_name():
     view_with_tags = {**view, "tags": [{"TagName": None, "TagTypeName": "Region"}]}
     context = build_briefing_context(view_with_tags, bundle)
     assert context["client_interests"] == []
+
+
+# --- sources ---
+
+
+def test_sources_includes_priority_facts_with_matching_fact_id():
+    # The shared fixture's bundle has real saa_breach, violation, and
+    # single_position_concentration priorities with fact_ids.
+    view, bundle = _view_and_bundle()
+    context = build_briefing_context(view, bundle)
+    priority_sources = [s for s in context["sources"] if s["type"] == "priority_fact"]
+    assert len(priority_sources) == len(bundle["priorities"])
+
+    saa_source = next(s for s in priority_sources if s["fact_id"] == "9001:saa_breach:AssetClass:Bonds:0")
+    assert "Bonds" in saa_source["label"]
+    assert "SAA deviation" in saa_source["label"]
+
+    concentration_source = next(
+        s for s in priority_sources if s["fact_id"] == "9001:single_position_concentration:1001"
+    )
+    # Cleaned, not the raw "Namen-Aktie..." style name.
+    assert "Nestle SA" in concentration_source["label"]
+
+    assert all(s["url"] is None for s in priority_sources)
+
+
+def test_sources_includes_risk_contributors():
+    view, bundle = _view_and_bundle()
+    bundle_with_contributor = {
+        **bundle,
+        "top_risk_contributors": [{"SecurityName": "Namen-Aktie Nestle SA", "share_of_portfolio_volatility": 0.3}],
+    }
+    context = build_briefing_context(view, bundle_with_contributor)
+    contributor_sources = [s for s in context["sources"] if s["type"] == "risk_contributor"]
+    assert len(contributor_sources) == 1
+    assert "Nestle SA" in contributor_sources[0]["label"]
+    assert "Namen-Aktie" not in contributor_sources[0]["label"]
+
+
+def test_sources_includes_house_view_entry_with_as_of_date():
+    view, bundle = _view_and_bundle()
+    house_view = [
+        {"category": "Shares", "relative_position": "aligned", "as_of": "2026-09-01", "source": "mock", "is_mock": True}
+    ]
+    context = build_briefing_context(view, bundle, house_view_alignment=house_view)
+    house_view_sources = [s for s in context["sources"] if s["type"] == "house_view"]
+    assert len(house_view_sources) == 1
+    assert house_view_sources[0]["date"] == "2026-09-01"
+    assert "mock" in house_view_sources[0]["label"].lower()
+
+
+def test_sources_includes_news_articles_with_real_links():
+    view, bundle = _view_and_bundle()
+    news_bundle = {
+        "status": "ok",
+        "reasons": [],
+        "articles": [
+            {"title": "Nestle earnings beat forecasts", "publisher": "Reuters", "link": "http://example.com/a", "published_at": "2026-09-01"}
+        ],
+    }
+    context = build_briefing_context(view, bundle, news_bundle=news_bundle)
+    news_sources = [s for s in context["sources"] if s["type"] == "news_article"]
+    assert len(news_sources) == 1
+    assert news_sources[0]["url"] == "http://example.com/a"
+    assert "Nestle earnings beat forecasts" in news_sources[0]["label"]
+    assert "Reuters" in news_sources[0]["label"]
+
+
+def test_sources_includes_client_notes_and_interests():
+    view, bundle = _view_and_bundle()
+    context = build_briefing_context(view, bundle)
+    note_sources = [s for s in context["sources"] if s["type"] == "client_note"]
+    interest_sources = [s for s in context["sources"] if s["type"] == "client_interest_tag"]
+    assert len(note_sources) == len(context["client_notes"]) > 0
+    assert "property purchase" in note_sources[0]["label"]
+    assert len(interest_sources) == len(context["client_interests"]) > 0
+
+
+def test_sources_empty_when_nothing_to_cite():
+    view, bundle = _view_and_bundle()
+    minimal_bundle = {
+        **bundle,
+        "priorities": [],
+        "top_risk_contributors": [],
+        "concentrations": {},
+    }
+    minimal_view = {**view, "notes": [], "tags": []}
+    context = build_briefing_context(minimal_view, minimal_bundle)
+    assert context["sources"] == []

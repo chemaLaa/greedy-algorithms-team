@@ -443,8 +443,20 @@ from synthesis.briefing_generator import generate_briefing
 
 briefing = generate_briefing(context)
 # {"recent_development": str, "health_check": str, "outlook_and_actions": str,
-#  "read_time_estimate_seconds": int, "raw_model_response": str}
+#  "read_time_estimate_seconds": int, "raw_model_response": str,
+#  "sources": list[dict]}  # see below — never written by the model
 ```
+
+**Sources are code-built, never model-generated.** `briefing["sources"]` is
+`context["sources"]` (from `context_builder._sources_section()`) passed
+through as-is — an LLM asked to cite its own sources will happily invent
+plausible-looking ones, so this list is instead assembled directly from
+the same facts the rest of the pipeline already computed: every priority
+(with its v2 `fact_id`), every risk contributor, the house view feed
+(with `as_of`/mock status), every retained news article (with its real
+`url`), and every CRM note/interest tag actually used. Each entry is
+`{"type", "label", "url", "date", "fact_id"}` — `url` is only ever
+populated for a genuine news-article link.
 
 Defaults to OpenAI's Chat Completions API (`DEFAULT_MODEL = "gpt-4o"` —
 **verify this model string is still current for your API key before a
